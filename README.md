@@ -33,7 +33,7 @@ npm run test:e2e:webkit:container:pull
 npm run test:e2e:webkit:container
 ```
 
-Keep the image tag synchronized with the installed Playwright version. The container gate is explicit rather than part of ordinary `npm run check`, avoiding a large image/runtime requirement for every local check. `npm run test:e2e:system` additionally verifies the server-installed `/usr/sbin/chromium-browser`; override `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` when it is installed elsewhere.
+Keep the image tag synchronized with the installed Playwright version. The container gate is explicit rather than part of ordinary `npm run check`, avoiding a large image/runtime requirement for every local check. `npm run test:e2e:system` additionally verifies the server-installed `/usr/sbin/chromium-browser`; override `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` when it is installed elsewhere. CI and release workflows set `PLAYWRIGHT_SKIP_SCREENSHOTS=1` because distro font rasterization is not pixel-identical; Chromium screenshot baselines remain enforced on the pinned local baseline host while CI enforces browser behavior, accessibility, performance, layout overflow, and computed CSS.
 
 The local component workbench runs at `http://localhost:5173/`.
 
