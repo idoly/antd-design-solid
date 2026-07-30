@@ -2,6 +2,14 @@
   "name": "ant-design-solid",
   "version": "0.1.0",
   "description": "Ant Design v6 components for Solid 2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/idoly/antd-design-solid.git"
+  },
+  "homepage": "https://github.com/idoly/antd-design-solid#readme",
+  "bugs": {
+    "url": "https://github.com/idoly/antd-design-solid/issues"
+  },
   "type": "module",
   "sideEffects": [
     "**/*.css"
