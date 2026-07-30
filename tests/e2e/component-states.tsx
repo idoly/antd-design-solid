@@ -13,6 +13,7 @@ import {
   Radio,
   Select,
   Skeleton,
+  Slider,
   Spin,
   Switch,
   Tag,
@@ -31,7 +32,12 @@ function StateMatrix() {
       components: customTokens ? {
         InputNumber: { controlWidth: 112 },
         Switch: { handleBg: '#ffeecc', handleSize: 20, trackHeight: 24, trackMinWidth: 48 },
+        Slider: { handleColor: '#654321', handleSize: 18, railSize: 8, trackBg: '#abcdef' },
+        Radio: { buttonPaddingInline: 19, buttonSolidCheckedBg: '#123456' },
         Progress: { defaultColor: '#345678', lineBorderRadius: 7, remainingColor: '#ddeeff' },
+        Alert: { withDescriptionIconSize: 26, withDescriptionPadding: '18px 20px' },
+        Spin: { dotSize: 24 },
+        Skeleton: { blockRadius: 7, paragraphLiHeight: 14, titleHeight: 18 },
       } : undefined,
     } : undefined}>
       <main class="min-h-screen bg-surface-layout p-5">
@@ -66,13 +72,15 @@ function StateMatrix() {
             </div>
           </section>
 
-          <section class="space-y-3 border-t border-border pt-4" aria-labelledby="choices-heading">
+          <section data-testid="choice-states" class="space-y-3 border-t border-border pt-4" aria-labelledby="choices-heading">
             <h2 id="choices-heading" class="text-base font-semibold">Choices</h2>
             <div class="flex flex-wrap items-center gap-5">
               <Checkbox checked>Checked</Checkbox>
               <Checkbox indeterminate>Mixed</Checkbox>
               <Checkbox disabled>Disabled</Checkbox>
               <Radio checked>Selected</Radio>
+              <Radio.Group optionType="button" buttonStyle="solid" defaultValue="grid" options={[{ value: 'list', label: 'List' }, { value: 'grid', label: 'Grid' }]} />
+              <div class="w-48"><Slider aria-label="Choice slider" defaultValue={62} /></div>
               <Switch checked checkedChildren="On" unCheckedChildren="Off" />
               <Switch loading aria-label="Loading switch" />
               <Tag color="green">Success</Tag>
@@ -81,11 +89,11 @@ function StateMatrix() {
             </div>
           </section>
 
-          <section class="space-y-3 border-t border-border pt-4" aria-labelledby="feedback-heading">
+          <section data-testid="feedback-states" class="space-y-3 border-t border-border pt-4" aria-labelledby="feedback-heading">
             <h2 id="feedback-heading" class="text-base font-semibold">Feedback</h2>
             <div class="grid gap-3 md:grid-cols-2">
               <Alert type="success" showIcon message="Deployment complete" />
-              <Alert type="info" showIcon message="New version available" />
+              <Alert type="info" showIcon message="New version available" description="Version 6 compatibility metadata is ready." />
               <Alert type="warning" showIcon message="Configuration needs review" />
               <Alert type="error" showIcon message="Build failed" />
             </div>

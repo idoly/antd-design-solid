@@ -148,6 +148,8 @@ for (const mode of ['light', 'dark'] as const) {
       await expect(page).toHaveScreenshot(`component-states-${mode}-${testInfo.project.name}.png`);
       await expect(page.getByTestId('action-states')).toHaveScreenshot(`action-states-${mode}-${testInfo.project.name}.png`);
       await expect(page.getByTestId('field-states')).toHaveScreenshot(`field-states-${mode}-${testInfo.project.name}.png`);
+      await expect(page.getByTestId('choice-states')).toHaveScreenshot(`choice-states-${mode}-${testInfo.project.name}.png`);
+      await expect(page.getByTestId('feedback-states')).toHaveScreenshot(`feedback-states-${mode}-${testInfo.project.name}.png`);
     }
   });
 }
@@ -162,9 +164,20 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(checkedSwitch).toHaveCSS('height', '24px');
   await expect(checkedSwitch.locator('span').first()).toHaveCSS('width', '20px');
   await expect(checkedSwitch.locator('span').first()).toHaveCSS('background-color', 'rgb(255, 238, 204)');
+  const slider = page.getByRole('slider', { name: 'Choice slider' });
+  await expect(slider.locator('..').locator('[aria-hidden="true"]')).toHaveCSS('width', '18px');
+  await expect(slider.locator('..')).toHaveCSS('height', '8px');
+  const radioButton = page.getByRole('radio', { name: 'Grid' }).locator('..');
+  await expect(radioButton).toHaveCSS('padding-left', '19px');
+  await expect(radioButton).toHaveCSS('background-color', 'rgb(18, 52, 86)');
   const progressRail = page.getByRole('progressbar', { name: 'Build progress' }).locator('.overflow-hidden');
   await expect(progressRail).toHaveCSS('background-color', 'rgb(221, 238, 255)');
   await expect(progressRail).toHaveCSS('border-radius', '7px');
+  const describedAlert = page.getByText('Version 6 compatibility metadata is ready.').locator('..').locator('..');
+  await expect(describedAlert).toHaveCSS('padding-top', '18px');
+  await expect(describedAlert.locator('[aria-hidden="true"]')).toHaveCSS('width', '26px');
+  await expect(page.getByRole('status', { name: 'Loading data' }).locator('.ads-spin')).toHaveCSS('width', '24px');
+  await expect(page.locator('.ads-skeleton .h-4')).toHaveCSS('height', '18px');
 });
 
 test('keeps light and dark component state matrices free of serious accessibility violations', async ({ page }, testInfo) => {
