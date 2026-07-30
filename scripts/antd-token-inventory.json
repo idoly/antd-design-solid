@@ -1,0 +1,4208 @@
+{
+  "version": "6.5.2",
+  "globalTokens": [
+    {
+      "name": "borderRadius",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "colorBgBase",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorError",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfo",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorLink",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccess",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextBase",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarning",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlHeight",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "fontFamily",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "fontFamilyCode",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "fontSize",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineType",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "lineWidth",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "motion",
+      "type": "boolean",
+      "default": ""
+    },
+    {
+      "name": "motionBase",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "motionEaseInBack",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseInOut",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseInOutCirc",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseInQuint",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseOut",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseOutBack",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseOutCirc",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionEaseOutQuint",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionUnit",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "opacityImage",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizePopupArrow",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeStep",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeUnit",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "wireframe",
+      "type": "boolean",
+      "default": ""
+    },
+    {
+      "name": "zIndexBase",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "zIndexPopupBase",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "blue",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "purple",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "cyan",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "green",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "magenta",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "pink",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "red",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "orange",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "yellow",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "volcano",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "geekblue",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "lime",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "gold",
+      "type": "color",
+      "default": ""
+    },
+    {
+      "name": "borderRadiusLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "borderRadiusOuter",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "borderRadiusSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "borderRadiusXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "colorBgBlur",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgContainer",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgElevated",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgLayout",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgMask",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgSolid",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgSolidActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgSolidHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgSpotlight",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBorder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBorderDisabled",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBorderSecondary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorBg",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorBgActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorBgFilledHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorBgHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorBorder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorBorderHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorTextActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorTextHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFill",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFillQuaternary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFillSecondary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFillTertiary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoBg",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoBgHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoBorder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoBorderHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoTextActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorInfoTextHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorLinkActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorLinkHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryBg",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryBgHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryBorder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryBorderHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryTextActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorPrimaryTextHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessBg",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessBgHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessBorder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessBorderHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessTextActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSuccessTextHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextQuaternary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextSecondary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextTertiary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningBg",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningBgHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningBorder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningBorderHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningText",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningTextActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningTextHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWhite",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlHeightLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "controlHeightSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "controlHeightXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeHeading1",
+      "type": "string | number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeHeading2",
+      "type": "string | number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeHeading3",
+      "type": "string | number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeHeading4",
+      "type": "string | number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeHeading5",
+      "type": "string | number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeight",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightHeading1",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightHeading2",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightHeading3",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightHeading4",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightHeading5",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineHeightSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineWidthBold",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "motionDurationFast",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionDurationMid",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "motionDurationSlow",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "size",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeMD",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeMS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeXXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "sizeXXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "boxShadow",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "boxShadowSecondary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "boxShadowTertiary",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgContainerDisabled",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgTextActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBgTextHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorBorderBg",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorAffix",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorErrorOutline",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFillAlter",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFillContent",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorFillContentHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorHighlight",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorIcon",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorIconHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorSplit",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextDescription",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextDisabled",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextHeading",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextLabel",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextLightSolid",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorTextPlaceholder",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningAffix",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "colorWarningOutline",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlInteractiveSize",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "controlItemBgActive",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlItemBgActiveDisabled",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlItemBgActiveHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlItemBgHover",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlOutline",
+      "type": "string",
+      "default": ""
+    },
+    {
+      "name": "controlOutlineWidth",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "controlPaddingHorizontal",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "controlPaddingHorizontalSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "fontSizeIcon",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "fontWeightStrong",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "lineWidthFocus",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "linkDecoration",
+      "type": "TextDecoration<string | number> | undefined",
+      "default": ""
+    },
+    {
+      "name": "linkFocusDecoration",
+      "type": "TextDecoration<string | number> | undefined",
+      "default": ""
+    },
+    {
+      "name": "linkHoverDecoration",
+      "type": "TextDecoration<string | number> | undefined",
+      "default": ""
+    },
+    {
+      "name": "margin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginMD",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginXXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "marginXXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "opacityLoading",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "padding",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingContentHorizontal",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingContentHorizontalLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingContentHorizontalSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingContentVertical",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingContentVerticalLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingContentVerticalSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingMD",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "paddingXXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenLG",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenLGMax",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenLGMin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenMD",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenMDMax",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenMDMin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenSM",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenSMMax",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenSMMin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXLMax",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXLMin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXS",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXSMax",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXSMin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXXLMax",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXXLMin",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXXXL",
+      "type": "number",
+      "default": ""
+    },
+    {
+      "name": "screenXXXLMin",
+      "type": "number",
+      "default": ""
+    }
+  ],
+  "components": {
+    "Affix": [
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Alert": [
+      {
+        "name": "defaultPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "withDescriptionIconSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "withDescriptionPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      }
+    ],
+    "Anchor": [
+      {
+        "name": "linkPaddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "linkPaddingInlineStart",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "App": [],
+    "AutoComplete": [],
+    "Avatar": [
+      {
+        "name": "containerSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "containerSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "containerSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "groupBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "groupOverlapping",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "groupSpace",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "iconFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "iconFontSizeLG",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "iconFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textFontSizeSM",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Badge": [
+      {
+        "name": "dotSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "indicatorHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "indicatorHeightSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "indicatorZIndex",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "paddingInline",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "statusSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textFontWeight",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "BorderBeam": [],
+    "Breadcrumb": [
+      {
+        "name": "iconFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "lastItemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "linkColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "linkHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "separatorColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "separatorMargin",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Button": [
+      {
+        "name": "contentFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "contentFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "contentFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dangerColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dangerShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dashedBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultActiveBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultActiveColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultGhostBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultGhostColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultHoverBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "fontWeight",
+        "type": "FontWeight | undefined",
+        "default": ""
+      },
+      {
+        "name": "ghostBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "iconGap",
+        "type": "Gap<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "linkHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "onlyIconSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "onlyIconSizeLG",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "onlyIconSizeSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "paddingInline",
+        "type": "PaddingInline<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineLG",
+        "type": "PaddingInline<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineSM",
+        "type": "PaddingInline<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "primaryColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "primaryShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "solidTextColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "textHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "textTextActiveColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "textTextColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "textTextHoverColor",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "Calendar": [
+      {
+        "name": "fullBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "fullPanelBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "miniContentHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "monthControlWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "yearControlWidth",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Card": [
+      {
+        "name": "actionsBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "actionsLiMargin",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "bodyPadding",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "bodyPaddingSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "extraColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerFontSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "headerFontSizeSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "headerHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "headerHeightSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "headerPadding",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "headerPaddingSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "tabsMarginBottom",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Carousel": [
+      {
+        "name": "arrowOffset",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "arrowSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotActiveWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dotGap",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dotOffset",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotWidth",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Cascader": [
+      {
+        "name": "controlItemWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "controlWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dropdownHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "menuPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "optionPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "optionSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "optionSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "optionSelectedFontWeight",
+        "type": "FontWeight | undefined",
+        "default": ""
+      }
+    ],
+    "Checkbox": [],
+    "Collapse": [
+      {
+        "name": "borderlessContentBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "borderlessContentPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "contentBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "contentPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "contentPaddingLG",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "contentPaddingSM",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "headerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "headerPaddingLG",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "headerPaddingSM",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      }
+    ],
+    "ColorPicker": [],
+    "ConfigProvider": [],
+    "DatePicker": [
+      {
+        "name": "activeBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "addonBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellActiveWithRangeBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellHoverWithRangeBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellRangeBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "errorActiveShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "inputFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleItemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemBorderColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleItemHeightLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleItemHeightSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleSelectorBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "paddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "presetsMaxWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "presetsWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "timeCellHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "timeColumnHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "timeColumnWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "warningActiveShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "withoutTimeCellHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Descriptions": [
+      {
+        "name": "colonMarginLeft",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "colonMarginRight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "contentColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "extraColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingBottom",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingEnd",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "labelBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "labelColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "titleColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "titleMarginBottom",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Divider": [
+      {
+        "name": "orientationMargin",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "textPaddingInline",
+        "type": "PaddingInline<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "verticalMarginInline",
+        "type": "MarginInline<string | number> | undefined",
+        "default": ""
+      }
+    ],
+    "Drawer": [
+      {
+        "name": "draggerSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "footerPaddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "footerPaddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Dropdown": [
+      {
+        "name": "paddingBlock",
+        "type": "PaddingBlock<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Empty": [],
+    "Flex": [],
+    "FloatButton": [],
+    "Form": [
+      {
+        "name": "inlineItemMarginBottom",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemMarginBottom",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "labelColonMarginInlineEnd",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "labelColonMarginInlineStart",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "labelColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "labelFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "labelHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "labelRequiredMarkColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "verticalLabelMargin",
+        "type": "Margin<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "verticalLabelPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      }
+    ],
+    "Grid": [],
+    "Icon": [],
+    "Image": [
+      {
+        "name": "previewOperationColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "previewOperationColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "previewOperationHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "previewOperationSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "progressAnimationDuration",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Input": [
+      {
+        "name": "activeBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "addonBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "errorActiveShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "inputFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "warningActiveShadow",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "InputNumber": [
+      {
+        "name": "activeBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "addonBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "controlWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "errorActiveShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "filledHandleBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "handleHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleVisible",
+        "type": "true | \"auto\"",
+        "default": ""
+      },
+      {
+        "name": "handleWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "hoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "inputFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "warningActiveShadow",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "Layout": [
+      {
+        "name": "bodyBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "footerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "footerPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "headerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "headerPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "lightSiderBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "lightTriggerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "lightTriggerColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "siderBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "triggerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "triggerColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "triggerHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "zeroTriggerHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "zeroTriggerWidth",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "List": [
+      {
+        "name": "avatarMarginRight",
+        "type": "MarginRight<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "contentWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "descriptionFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "emptyTextPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "footerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemPadding",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingLG",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingSM",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "metaMarginBottom",
+        "type": "MarginBottom<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "titleMarginBottom",
+        "type": "MarginBottom<string | number> | undefined",
+        "default": ""
+      }
+    ],
+    "Masonry": [],
+    "Mentions": [
+      {
+        "name": "activeBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "addonBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "controlItemWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dropdownHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "errorActiveShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "inputFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "inputFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingBlockSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paddingInlineSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "warningActiveShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Menu": [
+      {
+        "name": "activeBarBorderWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "activeBarHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "activeBarWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "collapsedIconSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "collapsedWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dangerItemActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dangerItemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dangerItemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dangerItemSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dangerItemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkDangerItemActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkDangerItemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkDangerItemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkDangerItemSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkDangerItemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkGroupTitleColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemDisabledColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkItemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkPopupBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "darkSubMenuItemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dropdownWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "groupTitleColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "groupTitleFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "groupTitleLineHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemBorderRadius",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalLineHeight",
+        "type": "LineHeight<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "iconMarginInlineEnd",
+        "type": "MarginInlineEnd<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "iconSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemBorderRadius",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemDisabledColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "itemHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemMarginBlock",
+        "type": "MarginBlock<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "itemMarginInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingInline",
+        "type": "PaddingInline<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "itemSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "popupBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "subMenuItemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "subMenuItemBorderRadius",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "subMenuItemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Message": [
+      {
+        "name": "contentBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "contentPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Modal": [
+      {
+        "name": "contentBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "footerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "titleColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "titleFontSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "titleLineHeight",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Notification": [
+      {
+        "name": "colorErrorBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "colorInfoBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "colorSuccessBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "colorWarningBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "progressBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "width",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Pagination": [
+      {
+        "name": "itemActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemActiveBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemActiveColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemActiveColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemActiveColorHover",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemInputBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemLinkBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "itemSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "miniOptionsSizeChangerTop",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Popconfirm": [
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Popover": [
+      {
+        "name": "titleMinWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Progress": [
+      {
+        "name": "circleIconFontSize",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "circleTextColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "circleTextFontSize",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "lineBorderRadius",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "remainingColor",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "QRCode": [],
+    "Radio": [
+      {
+        "name": "buttonBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonCheckedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonCheckedBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonCheckedColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonPaddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "buttonSolidCheckedActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonSolidCheckedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonSolidCheckedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "buttonSolidCheckedHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dotColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dotSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "radioSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "wrapperMarginInlineEnd",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Rate": [
+      {
+        "name": "starBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "starColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "starHoverScale",
+        "type": "readonly string[] | Transform | readonly Transform[] | { _multi_value_?: boolean; _skip_check_?: boolean; value: readonly string[] | Transform | (readonly string[] | Transform | undefined)[] | undefined } | undefined",
+        "default": ""
+      },
+      {
+        "name": "starSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "starSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "starSizeSM",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Result": [
+      {
+        "name": "extraMargin",
+        "type": "Margin<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "iconFontSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "subtitleFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "titleFontSize",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Segmented": [
+      {
+        "name": "itemActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "trackBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "trackPadding",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Select": [
+      {
+        "name": "activeBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "activeOutlineColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "clearBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "hoverBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemBorderColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "multipleItemHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleItemHeightLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleItemHeightSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "multipleSelectorBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "optionActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "optionFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "optionHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "optionLineHeight",
+        "type": "LineHeight<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "optionPadding",
+        "type": "Padding<string | number> | undefined",
+        "default": ""
+      },
+      {
+        "name": "optionSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "optionSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "optionSelectedFontWeight",
+        "type": "FontWeight | undefined",
+        "default": ""
+      },
+      {
+        "name": "selectorBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "showArrowPaddingInlineEnd",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "singleItemHeightLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Skeleton": [
+      {
+        "name": "blockRadius",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "gradientFromColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "gradientToColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "paragraphLiHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "paragraphMarginTop",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "titleHeight",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Slider": [
+      {
+        "name": "controlSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotActiveBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dotBorderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dotSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "handleActiveColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleActiveOutlineColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleColorDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleLineWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "handleLineWidthHover",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "handleSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "handleSizeHover",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "railBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "railHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "railSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "trackBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "trackBgDisabled",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "trackHoverBg",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "Space": [],
+    "Spin": [
+      {
+        "name": "contentHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dotSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotSizeSM",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Splitter": [
+      {
+        "name": "splitBarDraggableSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "splitBarSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "splitTriggerSize",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Statistic": [
+      {
+        "name": "contentFontSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "titleFontSize",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Steps": [
+      {
+        "name": "customIconFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "customIconSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "customIconTop",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotCurrentSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "dotSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "iconFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "iconSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "iconSizeSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "iconTop",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "navArrowColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "navContentMaxWidth",
+        "type": "MaxWidth<string | number> | undefined",
+        "default": ""
+      }
+    ],
+    "Switch": [
+      {
+        "name": "handleBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleShadow",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "handleSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "handleSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "innerMaxMargin",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "innerMaxMarginSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "innerMinMargin",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "innerMinMarginSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "trackHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "trackHeightSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "trackMinWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "trackMinWidthSM",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "trackPadding",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Table": [
+      {
+        "name": "bodySortBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "borderColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cellFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellFontSizeMD",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellPaddingBlock",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellPaddingBlockMD",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellPaddingBlockSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellPaddingInline",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellPaddingInlineMD",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cellPaddingInlineSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "expandIconBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "filterDropdownBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "filterDropdownMenuBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "fixedHeaderSortActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "footerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "footerColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerBorderRadius",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "headerColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerFilterHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerSortActiveBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerSortHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "headerSplitColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "rowExpandedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "rowHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "rowSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "rowSelectedHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "selectionColumnWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "stickyScrollBarBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "stickyScrollBarBorderRadius",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Tabs": [
+      {
+        "name": "cardBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cardGutter",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cardHeight",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cardHeightLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cardHeightSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "cardPadding",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cardPaddingLG",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "cardPaddingSM",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemGutter",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemMargin",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemMarginRTL",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemPadding",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemPaddingLG",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalItemPaddingSM",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "horizontalMargin",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "inkBarColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemActiveColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "itemSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "titleFontSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "titleFontSizeLG",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "titleFontSizeSM",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "verticalItemMargin",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "verticalItemPadding",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Tag": [
+      {
+        "name": "defaultBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "defaultColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "solidTextColor",
+        "type": "string",
+        "default": ""
+      }
+    ],
+    "Timeline": [
+      {
+        "name": "dotBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "dotBorderWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "dotSize",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingBottom",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "tailColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "tailWidth",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "TimePicker": [],
+    "Tooltip": [
+      {
+        "name": "maxWidth",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Tour": [
+      {
+        "name": "closeBtnSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "primaryNextBtnHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "primaryPrevBtnBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "zIndexPopup",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Transfer": [
+      {
+        "name": "headerHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "itemHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "itemPaddingBlock",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "listHeight",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "listWidth",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "listWidthLG",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Tree": [
+      {
+        "name": "directoryNodeSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "directoryNodeSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "indentSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "nodeHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "nodeHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "nodeSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "nodeSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "switcherSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "titleHeight",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "TreeSelect": [
+      {
+        "name": "indentSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "nodeHoverBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "nodeHoverColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "nodeSelectedBg",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "nodeSelectedColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "switcherSize",
+        "type": "number",
+        "default": ""
+      },
+      {
+        "name": "titleHeight",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Typography": [
+      {
+        "name": "titleMarginBottom",
+        "type": "string | number",
+        "default": ""
+      },
+      {
+        "name": "titleMarginTop",
+        "type": "string | number",
+        "default": ""
+      }
+    ],
+    "Upload": [
+      {
+        "name": "actionsColor",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "name": "pictureCardSize",
+        "type": "number",
+        "default": ""
+      }
+    ],
+    "Watermark": []
+  }
+}

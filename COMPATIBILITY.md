@@ -1,0 +1,47 @@
+# Ant Design compatibility status
+
+Reference: `antd@6.5.2`, queried with `@ant-design/cli@6.5.2` and checked against the published package declarations.
+
+## Current level
+
+- Component families: all 71 visual families reported by the official CLI have Solid implementations.
+- Compound and compatibility APIs: public static members, root utility types, service APIs, generators, theme, version, refs, locale, and aliases are present.
+- Distribution: root and 76 component/alias subpaths provide default and named exports for browser and SSR builds.
+- Locale: 72 official locale data subpaths are published and consumed by common component defaults and Form validation.
+- Verification: controlled/uncontrolled workflows, keyboard and ARIA behavior, Form binding, portals, services, SSR, and package consumption are covered by 271 automated behavior tests plus Chromium desktop/mobile and Firefox browser gates. WebKit passes locally in the Playwright `1.62.0` Noble container and remains enforced in Ubuntu CI. Light, dark, compact, and RTL screenshot baselines remain pinned to Chromium, with focused desktop/mobile action and field state baselines for loading, disabled, danger, focus, error, and warning controls.
+
+This is broad component coverage, not complete behavioral parity with React antd. The Solid port does not use the rc-component implementation stack, so advanced behavior must be implemented and tested independently.
+
+## CLI audit
+
+Run:
+
+```bash
+npm run audit:antd
+```
+
+The audit compares official top-level prop names with explicitly declared props in the highest-complexity components. It is a lower-bound signal: inherited JSX attributes, aliases, ref methods, deprecated names, and React-only props require manual classification.
+
+Current major candidate gaps are concentrated in:
+
+1. Select and TreeSelect: both cover all CLI-reported top-level props (`64/64` and `65/65`). Field mapping, label-in-value, tokenization, checked strategies, async loaded keys, popup customization, semantic slots, custom renderers, lifecycle callbacks, and TanStack-backed virtualization are implemented.
+2. DatePicker: all 58 CLI-reported top-level props are declared. Presets, panel/cell/footer rendering, semantic slots, controlled picker state, confirmation, typed input, invalid preservation, multiple values, ordering, date-time selection, disabled time with reactive confirmation disabling, week display, locale overrides, custom panels/inputs, preview, popup containers, editable RangePicker endpoint inputs, strict endpoint parsing, endpoint-specific disabled-time handling with opposite-endpoint context, controlled tuple picker values/modes, deduplicated controlled/uncontrolled open lifecycle, tuple disabled state, open intervals, endpoint IDs/focus metadata, RangePicker locale/preset/panel/Semantic DOM parity, generated single/multiple/RangePicker value, panel, disabled-time, cell, selection, and confirmation callback adaptation, keyboard calendar navigation and axe-verified popup semantics, panel-mode drill-down, locale week rules, and string/array/function/mask formats are implemented.
+3. Tree: all 46 CLI-reported top-level props are declared. Field mapping, title/filter rendering, semantic slots, constrained scrolling, ancestor expansion, positional drag/drop, immutable mutation helpers, motion hooks, and TanStack-backed virtualization are implemented.
+4. Upload: all 31 CLI-reported top-level props are explicitly declared. Semantic slots, custom icons/items/image detection, preview generation, configurable progress, paste handling, and drop callbacks are implemented; built-in preview generation remains intentionally lightweight.
+5. Form: semantic styles, layout grid options, external fields, preserve/clear behavior, validation triggers, dependencies and rule factories, stale async-validation suppression, nested Form.List paths, touched/validating state, field focus/scroll APIs, out-of-date submit protection, and scroll-to-error are implemented; deep merge and Provider sibling lifecycle behavior are covered; normalize, transformed enum rules, hex/tel rules, rule-level validation triggers, callback validators, warning-only validation, serial/parallel first-error validation, debounced validation, `validateFields` validate-only/recursive/dirty modes, registered/all/filtered store reads, nested array/object rules, and custom native-control `valuePropName`/`trigger`/value adapter binding are covered; Select array and RangePicker Dayjs tuple submission/reset plus compound-control consumption are covered; remaining work is exhaustive third-party component binding parity.
+6. Table: all JSX props are explicit; the audit reports `31/33` because `nativeElement` and `scrollTo` are ref members. Filters, prioritized multi-column sorting, fixed columns, cascading tree selection, preserved/pruned selection keys, default/custom selection action menus, left/right-fixed selection stacks, shift-click range selection, custom selection header/cell hooks with native/ARIA checkbox prop forwarding, nested tree rows, detail expansion, shared column defaults, custom internal components, popup containers, sorter tooltips, official semantic slots, O(1) nested-record indexing, custom virtual body rows, and TanStack-backed virtualization are implemented. Fixed selection/expand/data columns use continuous sticky offsets. The imperative ref supports index/key/top scrolling in normal and virtual modes, and virtual expanded rows feed measured dynamic heights back to TanStack.
+7. ConfigProvider: all 18 CLI-reported top-level props are declared; the pinned CLI token inventory covers 233 global and 582 component tokens with generated TypeScript names and scoped CSS variables that propagate through nested body-mounted portals; Table and DatePicker geometry/state plus Button, Input, InputNumber, Select, Switch, Slider, Radio, Progress, Alert, Spin, Skeleton, Modal, and Form geometry/focus/state consume component variables directly. Numeric length tokens are emitted with valid CSS units while z-index, opacity, font-weight, line-height, and scale remain unitless; disabled and variant inheritance, popup container/width policy, virtual policy, and renderEmpty are consumed by core controls. Nested per-component defaults are implemented for Button, Checkbox, Radio, Switch, Slider, Progress, Steps, Divider, Empty, Masonry, QRCode, Result, Segmented, Anchor, Breadcrumb, Layout, Space, Spin, Statistic, Calendar, ColorPicker, Dropdown, Popconfirm, Popover, Skeleton, Timeline, Typography, Input, InputNumber, Select, DatePicker, Table, Modal, Form, Upload, Tree, TreeSelect, Pagination, Drawer, and Tooltip with local-prop precedence.
+8. Input: all 22 CLI-reported top-level props are declared, including semantic slots, count configuration, clear/change callbacks, and Enter handling.
+9. Modal: all 34 CLI-reported top-level props are declared. Default state preservation, opt-in destruction, forced rendering, focus configuration, object mask/closable forms, loading skeletons, footer/modal render functions, lifecycle callbacks, scroll locking, portal selectors, and all 9 semantic slots are implemented.
+10. Menu: all 25 CLI-reported top-level props are declared. Semantic slots, delayed hover, forced submenu rendering, popup renderers and offsets, collapsed tooltips, custom expand/overflow indicators, and ResizeObserver-backed horizontal overflow are implemented.
+11. Cross-component v6 semantic DOM: consistent `classNames` and `styles` slots are present on the highest-complexity components and now follow official CLI slot names on Button, Alert, InputNumber, Drawer, Tooltip, Pagination, Collapse, Descriptions, Tabs, Checkbox, Radio, Switch, Slider, Progress, Steps, Divider, Empty, Masonry, QRCode, Result, Segmented, Anchor, Breadcrumb, Layout.Sider, Space, Spin, Statistic, Calendar, ColorPicker, Dropdown, Popconfirm, Popover, Skeleton, List.Item, Typography, FloatButton, Image, Mentions, Splitter, Tour, Transfer, and Timeline. Every component family for which the official 6.5.2 CLI reports Semantic DOM slots is covered. The remaining families are tracked by the full inventory and are not yet exhaustive.
+12. Design fidelity: desktop/mobile screenshot regression is active for light, dark, compact, and RTL modes with overflow checks. Interactive controls now use a shared Solid renderer backed by the official `@ant-design/icons-svg` definitions. Remaining fidelity work is limited to deeper motion-curve parity and exhaustive component-state screenshots.
+
+## Recommended order
+
+- P0: finish the remaining Table selection/column combinations, DatePicker range date-time combinations, and advanced Form rule options.
+- P1: consume more of the generated 233 global and 582 component token variables directly in component-specific geometry and state styling.
+- P2: broaden focused state screenshots beyond the new light/dark action, field, choice, feedback, loading, and validation matrix.
+- P3: migrate from Solid `2.0.0-beta.28` when a stable Solid 2 runtime is published, then initialize Git/remote release provenance when repository metadata becomes available.
+
+A feature should only move from this list to complete after implementation, declarations, controlled and uncontrolled behavior, accessibility, tests, demo coverage, browser build, and SSR package verification are all present.

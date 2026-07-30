@@ -1,0 +1,127 @@
+{
+  "name": "ant-design-solid",
+  "version": "0.1.0",
+  "description": "Ant Design v6 components for Solid 2",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/ssr/index.js",
+  "module": "./dist/index.js",
+  "browser": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "browser": "./dist/index.js",
+      "import": "./dist/ssr/index.js",
+      "default": "./dist/ssr/index.js"
+    },
+    "./styles.css": "./dist/ant-design-solid.css",
+    "./reset.css": "./dist/ant-design-solid.css",
+    "./dist/reset.css": "./dist/ant-design-solid.css",
+    "./style": "./dist/ant-design-solid.css",
+    "./back-top": {
+      "types": "./dist/entries/back-top.d.ts",
+      "browser": "./dist/entries/back-top.js",
+      "import": "./dist/ssr/entries/back-top.js"
+    },
+    "./col": {
+      "types": "./dist/entries/col.d.ts",
+      "browser": "./dist/entries/col.js",
+      "import": "./dist/ssr/entries/col.js"
+    },
+    "./qrcode": {
+      "types": "./dist/entries/qrcode.d.ts",
+      "browser": "./dist/entries/qrcode.js",
+      "import": "./dist/ssr/entries/qrcode.js"
+    },
+    "./row": {
+      "types": "./dist/entries/row.d.ts",
+      "browser": "./dist/entries/row.js",
+      "import": "./dist/ssr/entries/row.js"
+    },
+    "./package.json": "./package.json",
+    "./locale": {
+      "types": "./dist/locale/index.d.ts",
+      "browser": "./dist/locale/index.js",
+      "import": "./dist/locale/index.js"
+    },
+    "./locale/*": {
+      "types": "./dist/locale/*/index.d.ts",
+      "import": "./dist/locale/*.js"
+    },
+    "./*": {
+      "types": "./dist/entries/*.d.ts",
+      "browser": "./dist/entries/*.js",
+      "import": "./dist/ssr/entries/*.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vite build --config vite.locale.config.ts && vite build --config vite.ssr.config.ts && node scripts/generate-ssr-entries.mjs && tsc -p tsconfig.build.json && node scripts/fix-declaration-specifiers.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test --workers=1",
+    "test:e2e:system": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/sbin/chromium-browser PLAYWRIGHT_SKIP_SCREENSHOTS=1 playwright test --workers=1",
+    "test:e2e:webkit:container:pull": "podman pull mcr.microsoft.com/playwright:v1.62.0-noble",
+    "test:e2e:webkit:container": "podman run --rm --ipc=host -v \"$PWD:/work:Z\" -w /work -e CI=1 -e PLAYWRIGHT_INCLUDE_WEBKIT=1 mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --project=webkit --workers=1",
+    "test:e2e:update": "playwright test --workers=1 --update-snapshots",
+    "check": "npm run audit:tokens && npm run typecheck && npm run test && npm run build && npm run test:e2e",
+    "check:package": "node scripts/verify-package.mjs",
+    "prepublishOnly": "npm run check && npm run check:package",
+    "audit:antd": "node scripts/audit-antd.mjs 6.5.2",
+    "tokens:update": "node scripts/generate-antd-token-inventory.mjs",
+    "audit:tokens": "node scripts/generate-antd-token-inventory.mjs --check"
+  },
+  "peerDependencies": {
+    "@solidjs/web": "2.0.0-beta.28",
+    "solid-js": "2.0.0-beta.28"
+  },
+  "dependencies": {
+    "@ant-design/icons-svg": "^4.5.0",
+    "@floating-ui/dom": "^1.8.0",
+    "@tanstack/virtual-core": "^3.17.7",
+    "dayjs": "^1.11.21",
+    "qrcode": "^1.5.4",
+    "tailwind-merge": "^3.3.1",
+    "tailwind-variants": "^3.3.0"
+  },
+  "devDependencies": {
+    "@ant-design/cli": "^6.5.2",
+    "@axe-core/playwright": "^4.12.1",
+    "@playwright/test": "^1.62.0",
+    "@solidjs/testing-library": "^1.0.0-beta.2",
+    "@solidjs/web": "2.0.0-beta.28",
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@types/qrcode": "^1.5.6",
+    "babel-preset-solid": "2.0.0-beta.28",
+    "jsdom": "^27.4.0",
+    "solid-js": "2.0.0-beta.28",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.1.5",
+    "vite-plugin-solid": "3.0.0-next.20",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "keywords": [
+    "ant-design",
+    "solid",
+    "solidjs",
+    "components",
+    "design-system"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "license": "MIT"
+}

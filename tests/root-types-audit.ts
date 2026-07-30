@@ -1,0 +1,31 @@
+import type {
+  AffixProps, AffixRef, AlertProps, AnchorLinkProps, AnchorProps, AppProps, AutoCompleteProps,
+  AvatarProps, BackTopProps, BadgeProps, BorderBeamColor, BorderBeamGradient, BorderBeamProps,
+  BreadcrumbItemProps, BreadcrumbProps, Breakpoint, ButtonProps, CalendarMode, CalendarProps,
+  CardMetaProps, CardProps, CarouselProps, CascaderAutoProps, CascaderPanelAutoProps,
+  CascaderPanelProps, CascaderProps, CheckboxChangeEvent, CheckboxOptionType, CheckboxProps,
+  CheckboxRef, CollapsePanelProps, CollapseProps, ColorPickerProps, ColProps, ComponentTokenNameMap, ConfigComponentThemes, ConfigProviderProps,
+  CountdownProps, DatePickerProps, DescriptionsProps, DividerProps, DividerSemanticStyles, DraggerProps, DrawerProps,
+  DropdownProps, DropDownProps, EmptyProps, ErrorBoundaryProps, FlexProps, FloatButtonGroupProps,
+  FloatButtonProps, FloatButtonRef, FormInstance, FormItemProps, FormListFieldData,
+  FormListOperation, FormProps, FormRule, GetProp, GetProps, GetRef, GlobalThemeTokenOverrides, GlobalToken,
+  ImageProgressConfig, ImageProps, ImageSemanticName, InputNumberProps, InputProps, InputRef, LayoutProps, ListProps,
+  MappingAlgorithm, MasonryProps, MentionProps, MentionsProps, MentionsSemanticClassNames, MenuItemProps, MenuProps, MenuRef,
+  MenuTheme, MessageArgsProps, ModalFuncProps, ModalLocale, ModalProps, NotificationArgsProps,
+  PaginationProps, PlaceholderType, PopconfirmProps, PopoverProps, ProgressProps, QRCodeProps,
+  QRPropsCanvas, QRPropsSvg, RadioChangeEvent, RadioGroupProps, RadioProps, RateProps,
+  RefSelectProps, ResultProps, RowProps, SegmentedProps, SelectProps, SiderProps, SkeletonProps,
+  SliderSingleProps, SpaceProps, SpinProps, SplitterProps, StatisticProps, StatisticTimerProps,
+  StepsProps, SubMenuProps, SwitchProps, TableColumnGroupType, TableColumnProps, TableColumnsType,
+  TableColumnType, TablePaginationConfig, TableProps, TabPaneProps, TabsProps, TagProps, TagType,
+  ThemeConfig, TimelineItemProps, TimelineProps, TimelineSemanticName, TimePickerProps, TimeRangePickerProps,
+  TooltipProps, TourProps, TourSemanticClassNames, TourStepProps, TransferProps, TransferSemanticStyles, TreeDataNode, TreeNodeProps, TreeProps,
+  TreeSelectProps, TypographyProps, UploadFile, UploadProps, WatermarkContent, WatermarkFont,
+  WatermarkProps, WatermarkText,
+} from '../src';
+
+export type RootTypeCompatibilityAudit = [
+  GetProp<GetProps<any>, never>, GetRef<any>, AffixProps, WatermarkProps,
+  TimelineSemanticName, TransferSemanticStyles, TourSemanticClassNames, ImageSemanticName,
+  MentionsSemanticClassNames, DividerSemanticStyles, ComponentTokenNameMap, ConfigComponentThemes, GlobalThemeTokenOverrides,
+];
