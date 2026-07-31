@@ -142,7 +142,10 @@ export interface RangePickerProps extends Omit<DatePickerProps, 'value' | 'defau
 }
 
 const defaultFormat = (picker: PickerMode) => picker === 'year' ? 'YYYY' : picker === 'month' ? 'YYYY-MM' : 'YYYY-MM-DD';
-const defaultDateTimeFormat = (showTime: boolean | DatePickerShowTime | RangePickerShowTime | undefined) => `YYYY-MM-DD HH:mm:ss${typeof showTime === 'object' && showTime.showMillisecond ? '.SSS' : ''}`;
+const defaultDateTimeFormat = (showTime: boolean | DatePickerShowTime | RangePickerShowTime | undefined) => {
+  const time = typeof showTime === 'object' && showTime.use12Hours ? 'hh:mm:ss A' : 'HH:mm:ss';
+  return `YYYY-MM-DD ${time}${typeof showTime === 'object' && showTime.showMillisecond ? '.SSS' : ''}`;
+};
 const pickerInputTokenStyle = (size: 'small' | 'middle' | 'large'): JSX.CSSProperties => {
   const suffix = size === 'small' ? '-sm' : size === 'large' ? '-lg' : '';
   return {
@@ -152,14 +155,33 @@ const pickerInputTokenStyle = (size: 'small' | 'middle' | 'large'): JSX.CSSPrope
   };
 };
 type TimeUnit = 'hour' | 'minute' | 'second' | 'millisecond';
-type TimeDisplayConfig = Pick<DatePickerShowTime, 'showHour' | 'showMinute' | 'showSecond' | 'showMillisecond' | 'hourStep' | 'minuteStep' | 'secondStep' | 'millisecondStep'>;
+type TimeDisplayConfig = Pick<DatePickerShowTime, 'showHour' | 'showMinute' | 'showSecond' | 'showMillisecond' | 'use12Hours' | 'hourStep' | 'minuteStep' | 'secondStep' | 'millisecondStep'>;
 const timeValue = (date: Dayjs, unit: TimeUnit) => unit === 'hour' ? date.hour() : unit === 'minute' ? date.minute() : unit === 'second' ? date.second() : date.millisecond();
 const timeMaximum = (unit: TimeUnit) => unit === 'hour' ? 23 : unit === 'millisecond' ? 999 : 59;
-function TimeInputPanel(props: { date: Dayjs; config?: TimeDisplayConfig; labelPrefix?: string; onInput: (event: InputEvent & { currentTarget: HTMLInputElement }, unit: TimeUnit) => void }) {
+function TimeInputPanel(props: { date: Dayjs; config?: TimeDisplayConfig; labelPrefix?: string; onChange: (unit: TimeUnit, value: number) => boolean }) {
+  let currentDate = untrack(() => props.date);
+  createEffect(() => props.date, (date) => { currentDate = date; });
+  const date = () => (props.date, currentDate);
   const units = () => (['hour', 'minute', 'second', 'millisecond'] as const).filter((unit) => unit === 'millisecond' ? props.config?.showMillisecond === true : props.config?.[`show${unit[0].toUpperCase()}${unit.slice(1)}` as 'showHour' | 'showMinute' | 'showSecond'] !== false);
   const label = (unit: TimeUnit) => props.labelPrefix ? `${props.labelPrefix} ${unit}` : `${unit[0].toUpperCase()}${unit.slice(1)}`;
+  const meridiemLabel = () => props.labelPrefix ? `${props.labelPrefix} meridiem` : 'Meridiem';
   const step = (unit: TimeUnit) => props.config?.[`${unit}Step` as 'hourStep' | 'minuteStep' | 'secondStep' | 'millisecondStep'] ?? 1;
-  return <div class="flex items-center justify-center gap-1 border-t border-border-secondary px-3 py-2"><For each={units()}>{(unit, index) => <><Show when={index() > 0}><span>:</span></Show><input type="number" aria-label={label(unit)} min="0" max={timeMaximum(unit)} step={step(unit)} value={timeValue(props.date, unit)} class={['h-8 rounded-control border border-border px-1 text-center', unit === 'millisecond' ? 'w-16' : 'w-14']} onInput={(event) => props.onInput(event, unit)} /></>}</For></div>;
+  const displayValue = (unit: TimeUnit) => unit === 'hour' && props.config?.use12Hours ? date().hour() % 12 || 12 : timeValue(date(), unit);
+  const apply = (unit: TimeUnit, value: number) => {
+    if (!props.onChange(unit, value)) return false;
+    currentDate = unit === 'hour' ? currentDate.hour(value) : unit === 'minute' ? currentDate.minute(value) : unit === 'second' ? currentDate.second(value) : currentDate.millisecond(value);
+    return true;
+  };
+  const update = (event: InputEvent & { currentTarget: HTMLInputElement }, unit: TimeUnit) => {
+    const displayed = Number(event.currentTarget.value);
+    const value = unit === 'hour' && props.config?.use12Hours ? displayed % 12 + (currentDate.hour() >= 12 ? 12 : 0) : displayed;
+    if (!apply(unit, value)) event.currentTarget.value = String(displayValue(unit));
+  };
+  const updateMeridiem = (event: Event & { currentTarget: HTMLSelectElement }) => {
+    const value = currentDate.hour() % 12 + (event.currentTarget.value === 'PM' ? 12 : 0);
+    if (!apply('hour', value)) event.currentTarget.value = currentDate.hour() >= 12 ? 'PM' : 'AM';
+  };
+  return <div class="flex items-center justify-center gap-1 border-t border-border-secondary px-3 py-2"><For each={units()}>{(unit, index) => <><Show when={index() > 0}><span>:</span></Show><input type="number" aria-label={label(unit)} min={unit === 'hour' && props.config?.use12Hours ? 1 : 0} max={unit === 'hour' && props.config?.use12Hours ? 12 : timeMaximum(unit)} step={step(unit)} value={displayValue(unit)} class={['h-8 rounded-control border border-border px-1 text-center', unit === 'millisecond' ? 'w-16' : 'w-14']} onInput={(event) => update(event, unit)} /></>}</For><Show when={props.config?.use12Hours}><select aria-label={meridiemLabel()} value={date().hour() >= 12 ? 'PM' : 'AM'} class="h-8 rounded-control border border-border bg-surface px-1" onChange={updateMeridiem}><option value="AM">AM</option><option value="PM">PM</option></select></Show></div>;
 }
 const startOfLocaleWeek = (date: Dayjs, weekStartsOn: number) => date.startOf('day').subtract((date.day() - weekStartsOn + 7) % 7, 'day');
 const localeWeek = (date: Dayjs, weekStartsOn = 1, firstWeekContainsDate = 4): { year: number; week: number } => {
@@ -378,14 +400,9 @@ export function DatePicker(inputProps: DatePickerProps) {
     const next: DatePickerValue = props.multiple ? [...draftValues().slice(0, -1), updated] : updated;
     pendingValue = next; setDraft(next); setView(updated); return true;
   };
-  const updateTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }, part: TimeUnit) => {
-    if (updateTime(part, Number(event.currentTarget.value))) return;
-    const current = draftValues().at(-1) ?? values().at(-1) ?? dayjs();
-    event.currentTarget.value = String(timeValue(current, part));
-  };
   const calendar = () => <Show keyed when={panelPicker()}>{(picker) => <Dynamic component={props.components?.[picker] ?? 'div'}><CalendarPanel value={(props.needConfirm || props.showTime || props.multiple ? draftValues() : values()).at(-1)} values={props.multiple ? draftValues() : undefined} view={view()} picker={picker} modeControlled={inputProps.mode !== undefined} minDate={props.minDate} maxDate={props.maxDate} disabledDate={props.disabledDate} onViewChange={setView} onModeChange={setPanelPicker} onSelect={selectPanel} showWeek={props.showWeek} locale={props.locale} onHover={(date) => setPreview(props.previewValue === false ? null : date)} previousLabel={config.locale().DatePicker?.previous} nextLabel={config.locale().DatePicker?.next} previousIcon={props.prevIcon ?? props.superPrevIcon} nextIcon={props.nextIcon ?? props.superNextIcon} cellRender={props.cellRender} dateRender={props.dateRender} classes={semanticClasses()} styles={semanticStyles()} /></Dynamic>}</Show>;
   const panel = () => {
-    const content = <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => select(typeof preset.value === 'function' ? preset.value() : preset.value)}>{preset.label}</button>}</For></div></Show><div>{calendar()}<Show when={props.showTime}><TimeInputPanel date={draftValues().at(-1) ?? values().at(-1) ?? dayjs()} config={typeof props.showTime === 'object' ? props.showTime : undefined} onInput={updateTimeInput} /></Show><Show when={props.renderExtraFooter || props.showNow || props.needConfirm || props.showTime || props.multiple}><div class={['flex min-h-10 items-center justify-between gap-2 border-t border-border-secondary px-3 py-1', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}><span>{props.renderExtraFooter?.(props.picker)}</span><span class="flex gap-2"><Show when={props.showNow}><button type="button" class="text-primary" onClick={() => select(dayjs())}>Now</button></Show><Show when={props.needConfirm ?? Boolean(props.showTime || props.multiple)}><button type="button" disabled={confirmationDisabled()} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={confirm}>OK</button></Show></span></div></Show></div></div>;
+    const content = <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => select(typeof preset.value === 'function' ? preset.value() : preset.value)}>{preset.label}</button>}</For></div></Show><div>{calendar()}<Show when={props.showTime}><TimeInputPanel date={draftValues().at(-1) ?? values().at(-1) ?? dayjs()} config={typeof props.showTime === 'object' ? props.showTime : undefined} onChange={updateTime} /></Show><Show when={props.renderExtraFooter || props.showNow || props.needConfirm || props.showTime || props.multiple}><div class={['flex min-h-10 items-center justify-between gap-2 border-t border-border-secondary px-3 py-1', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}><span>{props.renderExtraFooter?.(props.picker)}</span><span class="flex gap-2"><Show when={props.showNow}><button type="button" class="text-primary" onClick={() => select(dayjs())}>Now</button></Show><Show when={props.needConfirm ?? Boolean(props.showTime || props.multiple)}><button type="button" disabled={confirmationDisabled()} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={confirm}>OK</button></Show></span></div></Show></div></div>;
     return <div class={['ads-date-picker-theme', config.themeScopeClass(), semanticClasses().popupRoot, props.popupClassName, props.dropdownClassName]} style={semanticStyles().popupRoot}>{props.panelRender?.(content) ?? content}</div>;
   };
   const parseInput = (text: string): DatePickerValue => {
@@ -535,12 +552,6 @@ export function RangePicker(inputProps: RangePickerProps) {
     publishDraft(next);
     return true;
   };
-  const updateRangeTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }, unit: TimeUnit) => {
-    if (updateRangeTime(unit, Number(event.currentTarget.value))) return;
-    const part = activePart();
-    const current = value()[part === 'start' ? 0 : 1] ?? defaultRangeTime(part) ?? dayjs();
-    event.currentTarget.value = String(timeValue(current, unit));
-  };
   const parseRangeInput = (text: string): Dayjs | null => {
     const patterns = formatPatterns(format());
     if (patterns.length === 0) patterns.push(props.showTime ? 'YYYY-MM-DD HH:mm:ss' : defaultFormat(props.picker));
@@ -603,7 +614,7 @@ export function RangePicker(inputProps: RangePickerProps) {
     publishDraft(next);
     commitRange(next);
   };
-  const panelContent = () => <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => applyPreset(preset)}>{preset.label}</button>}</For></div></Show><div><Show keyed when={panelPicker()}>{(picker) => <Dynamic component={props.components?.[picker] ?? 'div'}><CalendarPanel value={activePart() === 'start' ? value()[0] : value()[1]} view={view()} picker={picker} modeControlled={inputProps.mode !== undefined} minDate={props.minDate} maxDate={props.maxDate} disabledDate={props.disabledDate} onViewChange={changeView} onModeChange={changePanelPicker} onSelect={choosePanel} range={activePart()} from={value()[activePart() === 'start' ? 1 : 0] ?? undefined} showWeek={props.showWeek} locale={props.locale} previousLabel={config.locale().DatePicker?.previous} nextLabel={config.locale().DatePicker?.next} previousIcon={props.prevIcon ?? props.superPrevIcon} nextIcon={props.nextIcon ?? props.superNextIcon} cellRender={props.cellRender} dateRender={props.dateRender} classes={semanticClasses()} styles={semanticStyles()} /></Dynamic>}</Show><Show when={props.showTime}><TimeInputPanel date={value()[activePart() === 'start' ? 0 : 1] ?? defaultRangeTime(activePart()) ?? dayjs()} config={typeof props.showTime === 'object' ? props.showTime : undefined} labelPrefix={activePart() === 'start' ? 'Start' : 'End'} onInput={updateRangeTimeInput} /></Show><Show when={(props.needConfirm ?? Boolean(props.showTime)) && rangeComplete(value())}><div class="flex justify-end border-t border-border-secondary p-2"><button type="button" disabled={rangeConfirmationDisabled(value())} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={() => commitRange(value())}>OK</button></div></Show><Show when={props.renderExtraFooter}><div class={['min-h-10 border-t border-border-secondary px-3 py-2', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}>{props.renderExtraFooter?.(props.picker)}</div></Show></div></div>;
+  const panelContent = () => <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => applyPreset(preset)}>{preset.label}</button>}</For></div></Show><div><Show keyed when={panelPicker()}>{(picker) => <Dynamic component={props.components?.[picker] ?? 'div'}><CalendarPanel value={activePart() === 'start' ? value()[0] : value()[1]} view={view()} picker={picker} modeControlled={inputProps.mode !== undefined} minDate={props.minDate} maxDate={props.maxDate} disabledDate={props.disabledDate} onViewChange={changeView} onModeChange={changePanelPicker} onSelect={choosePanel} range={activePart()} from={value()[activePart() === 'start' ? 1 : 0] ?? undefined} showWeek={props.showWeek} locale={props.locale} previousLabel={config.locale().DatePicker?.previous} nextLabel={config.locale().DatePicker?.next} previousIcon={props.prevIcon ?? props.superPrevIcon} nextIcon={props.nextIcon ?? props.superNextIcon} cellRender={props.cellRender} dateRender={props.dateRender} classes={semanticClasses()} styles={semanticStyles()} /></Dynamic>}</Show><Show when={props.showTime}><TimeInputPanel date={value()[activePart() === 'start' ? 0 : 1] ?? defaultRangeTime(activePart()) ?? dayjs()} config={typeof props.showTime === 'object' ? props.showTime : undefined} labelPrefix={activePart() === 'start' ? 'Start' : 'End'} onChange={updateRangeTime} /></Show><Show when={(props.needConfirm ?? Boolean(props.showTime)) && rangeComplete(value())}><div class="flex justify-end border-t border-border-secondary p-2"><button type="button" disabled={rangeConfirmationDisabled(value())} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={() => commitRange(value())}>OK</button></div></Show><Show when={props.renderExtraFooter}><div class={['min-h-10 border-t border-border-secondary px-3 py-2', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}>{props.renderExtraFooter?.(props.picker)}</div></Show></div></div>;
   const panel = () => { const content = panelContent(); return <div class={['ads-date-picker-theme', config.themeScopeClass(), semanticClasses().popupRoot, props.popupClassName, props.dropdownClassName]} style={semanticStyles().popupRoot}>{props.panelRender?.(content) ?? content}</div>; };
   return (
     <Popover open={disabled() ? false : props.open ?? open()} trigger={[]} aria-label="Date range picker dialog" placement={props.placement ?? 'bottom-start'} getPopupContainer={props.getPopupContainer} content={panel()} onOpenChange={setRangeOpen}>

@@ -3324,6 +3324,37 @@ describe('Ant Design Solid primitives', () => {
     expect(onChange.mock.calls[0][0].format('YYYY-MM-DD HH:mm:ss.SSS')).toBe('2026-03-01 13:05:06.124');
   });
 
+  it('maps 12-hour DatePicker input and meridiem changes to disabled 24-hour values', async () => {
+    const onChange = vi.fn();
+    render(() => <DatePicker
+      aria-label="Twelve hour date"
+      showTime={{ use12Hours: true }}
+      defaultValue={dayjs('2026-03-01T13:05:06')}
+      disabledTime={() => ({ disabledHours: () => [2] })}
+      onChange={onChange}
+    />);
+    const picker = screen.getByRole('textbox', { name: 'Twelve hour date' });
+    expect(picker).toHaveValue('2026-03-01 01:05:06 PM');
+    fireEvent.click(picker);
+    const hour = await screen.findByRole('spinbutton', { name: 'Hour' });
+    const meridiem = screen.getByRole('combobox', { name: 'Meridiem' });
+    expect(hour).toHaveValue(1);
+    expect(hour).toHaveAttribute('min', '1');
+    expect(hour).toHaveAttribute('max', '12');
+
+    fireEvent.change(meridiem, { target: { value: 'AM' } });
+    await waitFor(() => expect(meridiem).toHaveValue('AM'));
+    fireEvent.input(hour, { target: { value: '2' } });
+    expect(hour).toHaveValue(1);
+    fireEvent.change(meridiem, { target: { value: 'PM' } });
+    fireEvent.input(hour, { target: { value: '2' } });
+    await waitFor(() => expect(hour).toHaveValue(2));
+    fireEvent.click(screen.getByRole('button', { name: /^OK$/ }));
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    expect(onChange.mock.calls[0][0].hour()).toBe(14);
+    expect(onChange.mock.calls[0][1]).toBe('2026-03-01 02:05:06 PM');
+  });
+
   it('returns directly from the DatePicker year panel to the date panel', async () => {
     const onChange = vi.fn();
     const onPanelChange = vi.fn();
