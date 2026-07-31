@@ -203,7 +203,7 @@ export function Menu(inputProps: MenuProps) {
       if (item.type === 'divider') return <li role="separator" class={['my-1 border-t', dark() ? 'border-white/15' : 'border-border-secondary', item.class]} />;
       if (item.type === 'group') return (
         <li role="presentation" class={item.class}>
-          <div class={['px-3 py-1 text-xs', dark() ? 'text-white/45' : 'text-text-disabled']}>{item.label}</div>
+          <div class={['ads-menu-group-title px-3 py-1 text-xs', dark() ? 'text-white/45' : 'text-text-disabled']}>{item.label}</div>
           <ul role="group" class={semanticClasses().list} style={semanticStyles().list}>{renderItems(item.children ?? [], level + 1, path)}</ul>
         </li>
       );
@@ -211,7 +211,7 @@ export function Menu(inputProps: MenuProps) {
       const open = () => openKeys().includes(item.key);
       const selected = () => selectedKeys().includes(item.key);
       const itemClass = () => [
-        'flex min-h-10 w-full min-w-0 items-center gap-2 rounded-control px-3 text-left outline-none transition-colors duration-[var(--ads-motion-fast)] focus-visible:ring-2 focus-visible:ring-primary/20',
+        'ads-menu-item flex min-h-10 w-full min-w-0 items-center gap-2 rounded-control px-3 text-left outline-none transition-colors duration-[var(--ads-motion-fast)] focus-visible:ring-2 focus-visible:ring-primary/20',
         item.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         item.danger ? 'text-error hover:bg-[#fff2f0]' : '',
         selected() ? (dark() ? 'bg-primary text-white' : 'bg-[#e6f4ff] text-primary') : dark() ? 'text-white/85 hover:bg-white/10' : 'text-text hover:bg-surface-container',
@@ -234,6 +234,8 @@ export function Menu(inputProps: MenuProps) {
             aria-disabled={item.disabled ? 'true' : undefined}
             aria-haspopup={submenu() ? 'menu' : undefined}
             aria-expanded={submenu() ? (open() ? 'true' : 'false') : undefined}
+            data-selected={selected() ? 'true' : undefined}
+            data-danger={item.danger ? 'true' : undefined}
             tabindex={item.disabled ? -1 : 0}
             title={props.inlineCollapsed && level === 0 && props.tooltip !== false ? String(props.tooltip?.title ?? item.title ?? item.label ?? '') : item.title}
             class={itemClass()}
@@ -242,7 +244,7 @@ export function Menu(inputProps: MenuProps) {
             onPointerEnter={() => { if (!item.disabled && submenu() && props.triggerSubMenuAction === 'hover') scheduleOpen(item.key, true); }}
             onPointerLeave={() => { if (!item.disabled && submenu() && props.triggerSubMenuAction === 'hover') scheduleOpen(item.key, false); }}
           >
-            <Show when={item.icon}><span aria-hidden="true" class={['inline-flex shrink-0', level > 0 ? semanticClasses()['subMenu.itemIcon'] : semanticClasses().itemIcon]} style={semanticStyles()[level > 0 ? 'subMenu.itemIcon' : 'itemIcon']}>{item.icon}</span></Show>
+            <Show when={item.icon}><span aria-hidden="true" class={['ads-menu-item-icon inline-flex shrink-0', level > 0 ? semanticClasses()['subMenu.itemIcon'] : semanticClasses().itemIcon]} style={semanticStyles()[level > 0 ? 'subMenu.itemIcon' : 'itemIcon']}>{item.icon}</span></Show>
             <Show when={!props.inlineCollapsed || level > 0}><span class={['min-w-0 flex-1 truncate', level > 0 ? semanticClasses()['subMenu.itemContent'] : semanticClasses().itemContent]} style={semanticStyles()[level > 0 ? 'subMenu.itemContent' : 'itemContent']}>{item.label}</span></Show>
             <Show when={item.extra}><span class="ml-auto shrink-0 text-text-secondary">{item.extra}</span></Show>
             <Show when={submenu() && !props.inlineCollapsed}><span aria-hidden="true" class={['text-xs transition-transform', open() ? 'rotate-90' : '']}>{typeof props.expandIcon === 'function' ? props.expandIcon({ item, isSubMenu: true, open: open() }) : (props.expandIcon ?? <RightIcon />)}</span></Show>
@@ -251,7 +253,7 @@ export function Menu(inputProps: MenuProps) {
             {(item.popupRender ?? props.popupRender ?? ((node: JSX.Element) => node))(
               <ul
                 role="menu"
-                class={[props.mode === 'inline' ? 'mt-1' : ['z-20 min-w-40 rounded-surface p-1 shadow-popup', level === 0 && props.mode === 'horizontal' ? 'absolute left-0 top-full' : 'ml-4', dark() ? 'bg-[#001529]' : 'border border-border-secondary bg-surface', item.popupClassName, semanticClasses().popup], semanticClasses()['subMenu.list'], !open() && 'hidden']}
+                class={[props.mode === 'inline' ? 'mt-1' : ['ads-menu-popup z-20 min-w-40 rounded-surface p-1 shadow-popup', level === 0 && props.mode === 'horizontal' ? 'absolute left-0 top-full' : 'ml-4', dark() ? 'bg-[#001529]' : 'border border-border-secondary bg-surface', item.popupClassName, semanticClasses().popup], semanticClasses()['subMenu.list'], !open() && 'hidden']}
                 style={{ ...semanticStyles()['subMenu.list'], ...(props.mode !== 'inline' ? semanticStyles().popup : {}), transform: item.popupOffset && props.mode !== 'inline' ? `translate(${item.popupOffset[0]}px, ${item.popupOffset[1]}px)` : undefined }}
                 onPointerEnter={() => { if (props.triggerSubMenuAction === 'hover') { clearTimeout(hoverTimers.get(item.key)); updateOpen(item.key, true); } }}
                 onPointerLeave={() => { if (props.triggerSubMenuAction === 'hover') scheduleOpen(item.key, false); }}
@@ -277,9 +279,9 @@ export function Menu(inputProps: MenuProps) {
       aria-orientation={props.mode === 'horizontal' ? 'horizontal' : 'vertical'}
       class={[
         'ads-menu min-w-0 p-1 text-sm',
-        props.mode === 'horizontal' ? 'flex items-center border-b border-border-secondary' : '',
-        dark() ? 'bg-[#001529]' : 'bg-surface',
-        props.inlineCollapsed ? 'w-12' : '',
+        props.mode === 'horizontal' ? 'ads-menu-horizontal flex items-center border-b border-border-secondary' : '',
+        dark() ? 'ads-menu-dark bg-[#001529]' : 'bg-surface',
+        props.inlineCollapsed ? 'ads-menu-collapsed w-12' : '',
         props.class,
         semanticClasses().root,
       ]}

@@ -244,3 +244,41 @@
 }
 .ads-form[data-layout="vertical"] .ads-form-label { margin: var(--ads-form-vertical-label-margin, 0 0 8px); padding: var(--ads-form-vertical-label-padding, 0); }
 .ads-form-label > span[aria-hidden="true"]:first-child { color: var(--ads-form-label-required-mark-color, var(--ads-color-error)); }
+
+.ads-menu { background-color: var(--ads-menu-item-bg, var(--ads-color-surface)); }
+.ads-menu-item {
+  min-height: var(--ads-menu-item-height, 40px);
+  height: var(--ads-menu-item-height, auto);
+  margin-block: var(--ads-menu-item-margin-block, 0);
+  margin-inline: var(--ads-menu-item-margin-inline, 0px);
+  padding-inline: var(--ads-menu-item-padding-inline, 12px);
+  border-radius: var(--ads-menu-item-border-radius, var(--ads-radius-control));
+  color: var(--ads-menu-item-color, var(--ads-color-text));
+  background-color: var(--ads-menu-item-bg, transparent);
+}
+.ads-menu-item:not([aria-disabled="true"]):hover { color: var(--ads-menu-item-hover-color, var(--ads-color-text)); background-color: var(--ads-menu-item-hover-bg, var(--ads-color-surface-container)); }
+.ads-menu-item:active { background-color: var(--ads-menu-item-active-bg, var(--ads-color-surface-container)); }
+.ads-menu-item[aria-disabled="true"] { color: var(--ads-menu-item-disabled-color, var(--ads-color-text-disabled)); }
+.ads-menu-item[data-selected="true"] { color: var(--ads-menu-item-selected-color, var(--ads-color-primary)); background-color: var(--ads-menu-item-selected-bg, #e6f4ff); }
+.ads-menu-item[data-danger="true"] { color: var(--ads-menu-danger-item-color, var(--ads-color-error)); }
+.ads-menu-item[data-danger="true"]:not([aria-disabled="true"]):hover { color: var(--ads-menu-danger-item-hover-color, var(--ads-color-error)); background-color: var(--ads-menu-danger-item-active-bg, #fff2f0); }
+.ads-menu-item[data-danger="true"][data-selected="true"] { color: var(--ads-menu-danger-item-selected-color, var(--ads-color-error)); background-color: var(--ads-menu-danger-item-selected-bg, #fff2f0); }
+.ads-menu-item-icon { width: var(--ads-menu-icon-size, 14px); height: var(--ads-menu-icon-size, 14px); margin-inline-end: var(--ads-menu-icon-margin-inline-end, 0); font-size: var(--ads-menu-icon-size, 14px); }
+.ads-menu-group-title { color: var(--ads-menu-group-title-color, var(--ads-color-text-disabled)); font-size: var(--ads-menu-group-title-font-size, 12px); line-height: var(--ads-menu-group-title-line-height, 20px); }
+.ads-menu-popup { min-width: var(--ads-menu-dropdown-width, 160px); z-index: var(--ads-menu-z-index-popup, 1050); background-color: var(--ads-menu-popup-bg, var(--ads-color-surface)); }
+.ads-menu-collapsed { width: var(--ads-menu-collapsed-width, 48px); }
+.ads-menu-collapsed .ads-menu-item-icon { width: var(--ads-menu-collapsed-icon-size, 16px); height: var(--ads-menu-collapsed-icon-size, 16px); font-size: var(--ads-menu-collapsed-icon-size, 16px); }
+.ads-menu-horizontal .ads-menu-item { border-radius: var(--ads-menu-horizontal-item-border-radius, var(--ads-menu-item-border-radius, var(--ads-radius-control))); line-height: var(--ads-menu-horizontal-line-height, normal); }
+.ads-menu-horizontal .ads-menu-item:not([aria-disabled="true"]):hover { color: var(--ads-menu-horizontal-item-hover-color, var(--ads-color-primary)); background-color: var(--ads-menu-horizontal-item-hover-bg, transparent); }
+.ads-menu-horizontal .ads-menu-item[data-selected="true"] { color: var(--ads-menu-horizontal-item-selected-color, var(--ads-color-primary)); background-color: var(--ads-menu-horizontal-item-selected-bg, transparent); }
+.ads-menu-dark { background-color: var(--ads-menu-dark-item-bg, #001529); }
+.ads-menu-dark .ads-menu-item { color: var(--ads-menu-dark-item-color, rgb(255 255 255 / 85%)); background-color: var(--ads-menu-dark-item-bg, transparent); }
+.ads-menu-dark .ads-menu-item:not([aria-disabled="true"]):hover { color: var(--ads-menu-dark-item-hover-color, #fff); background-color: var(--ads-menu-dark-item-hover-bg, rgb(255 255 255 / 10%)); }
+.ads-menu-dark .ads-menu-item[aria-disabled="true"] { color: var(--ads-menu-dark-item-disabled-color, rgb(255 255 255 / 25%)); }
+.ads-menu-dark .ads-menu-item[data-selected="true"] { color: var(--ads-menu-dark-item-selected-color, #fff); background-color: var(--ads-menu-dark-item-selected-bg, var(--ads-color-primary)); }
+.ads-menu-dark .ads-menu-item[data-danger="true"] { color: var(--ads-menu-dark-danger-item-color, var(--ads-color-error)); }
+.ads-menu-dark .ads-menu-item[data-danger="true"]:not([aria-disabled="true"]):hover { color: var(--ads-menu-dark-danger-item-hover-color, var(--ads-color-error)); background-color: var(--ads-menu-dark-danger-item-active-bg, rgb(255 255 255 / 10%)); }
+.ads-menu-dark .ads-menu-item[data-danger="true"][data-selected="true"] { color: var(--ads-menu-dark-danger-item-selected-color, #fff); background-color: var(--ads-menu-dark-danger-item-selected-bg, var(--ads-color-error)); }
+.ads-menu-dark .ads-menu-group-title { color: var(--ads-menu-dark-group-title-color, rgb(255 255 255 / 45%)); }
+.ads-menu-dark .ads-menu-popup { background-color: var(--ads-menu-dark-popup-bg, #001529); }
+.ads-menu-dark [role="group"] { background-color: var(--ads-menu-dark-sub-menu-item-bg, transparent); }

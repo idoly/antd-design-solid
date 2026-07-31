@@ -164,6 +164,12 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(checkedSwitch).toHaveCSS('height', '24px');
   await expect(checkedSwitch.locator('span').first()).toHaveCSS('width', '20px');
   await expect(checkedSwitch.locator('span').first()).toHaveCSS('background-color', 'rgb(255, 238, 204)');
+  const selectedMenuItem = page.getByRole('menu', { name: 'Token menu' }).getByRole('menuitem', { name: 'Overview' });
+  await expect(selectedMenuItem).toHaveCSS('height', '37px');
+  await expect(selectedMenuItem).toHaveCSS('padding-left', '17px');
+  await expect(selectedMenuItem).toHaveCSS('border-radius', '7px');
+  await expect(selectedMenuItem).toHaveCSS('background-color', 'rgb(18, 58, 188)');
+  await expect(selectedMenuItem).toHaveCSS('color', 'rgb(254, 220, 186)');
   const slider = page.getByRole('slider', { name: 'Choice slider' });
   await expect(slider.locator('..').locator('[aria-hidden="true"]')).toHaveCSS('width', '18px');
   await expect(slider.locator('..')).toHaveCSS('height', '8px');
