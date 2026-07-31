@@ -2850,6 +2850,13 @@ describe('Ant Design Solid primitives', () => {
     expect(document.querySelectorAll('.ads-list-item')).toHaveLength(5);
   });
 
+  it('renders declarative List children and root compatibility props', () => {
+    const { container } = render(() => <List rootClassName="list-root" extra="Summary"><List.Item>Declarative member</List.Item></List>);
+    expect(container.querySelector('.ads-list')).toHaveClass('list-root');
+    expect(screen.getByRole('listitem')).toHaveTextContent('Declarative member');
+    expect(screen.getByText('Summary')).toHaveClass('ads-list-extra');
+  });
+
   it('registers declarative Menu subcomponents', async () => {
     const onSelect = vi.fn();
     render(() => <Menu onSelect={onSelect}><Menu.Item itemKey="home">Home</Menu.Item><Menu.SubMenu itemKey="settings" title="Settings"><Menu.Item itemKey="profile">Profile</Menu.Item><Menu.Divider /><Menu.ItemGroup title="Security"><Menu.Item itemKey="access">Access</Menu.Item></Menu.ItemGroup></Menu.SubMenu></Menu>);

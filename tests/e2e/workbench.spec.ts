@@ -185,6 +185,18 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(stateCard.locator('.ads-card-tabs')).toHaveCSS('margin-bottom', '-14px');
   await expect(stateCard.locator('.ads-card-actions')).toHaveCSS('background-color', 'rgb(241, 248, 233)');
   await expect(stateCard.getByRole('button', { name: 'Approve' })).toHaveCSS('margin-top', '4px');
+  const list = page.getByTestId('state-list');
+  await expect(list.locator('.ads-list-header')).toHaveCSS('background-color', 'rgb(231, 243, 255)');
+  await expect(list.locator('.ads-list-footer')).toHaveCSS('background-color', 'rgb(248, 232, 239)');
+  await expect(list.locator('.ads-list-row')).toHaveCSS('padding', '19px 27px');
+  await expect(page.getByTestId('state-list-default').locator('.ads-list-row')).toHaveCSS('padding', '9px 17px');
+  await expect(page.getByTestId('state-list-small').locator('.ads-list-row')).toHaveCSS('padding', '7px 13px');
+  await expect(page.getByTestId('state-list-empty').locator('.ads-list-empty')).toHaveCSS('padding', '18px');
+  await expect(list.locator('.ads-list-item-main')).toHaveCSS('min-width', '234px');
+  await expect(list.locator('.ads-list-item-meta')).toHaveCSS('margin-bottom', '14px');
+  await expect(list.locator('.ads-list-item-meta-avatar')).toHaveCSS('margin-right', '13px');
+  await expect(list.locator('.ads-list-item-meta-title')).toHaveCSS('margin-bottom', '6px');
+  await expect(list.locator('.ads-list-item-meta-description')).toHaveCSS('font-size', '15px');
   const layoutHeader = page.getByText('Release workspace');
   await expect(layoutHeader).toHaveCSS('height', '44px');
   await expect(layoutHeader).toHaveCSS('padding-left', '17px');

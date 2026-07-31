@@ -12,6 +12,7 @@ import {
   Input,
   InputNumber,
   Layout,
+  List,
   Menu,
   Mentions,
   Pagination,
@@ -41,6 +42,7 @@ function StateMatrix() {
         Card: { actionsBg: '#f1f8e9', actionsLiMargin: '4px 0', bodyPadding: 19, bodyPaddingSM: 13, extraColor: '#8b2f4c', headerBg: '#e8f2ff', headerFontSize: 18, headerFontSizeSM: 15, headerHeight: 48, headerHeightSM: 34, headerPadding: 20, headerPaddingSM: 11, tabsMarginBottom: 14 },
         InputNumber: { controlWidth: 112 },
         Layout: { bodyBg: '#eaf2f8', footerBg: '#d5e5f2', footerPadding: '7px 13px', headerBg: '#17324d', headerColor: '#f7d774', headerHeight: 44, headerPadding: '0 17px', siderBg: '#234f63', triggerBg: '#102f3d', triggerColor: '#f7d774', triggerHeight: 34 },
+        List: { avatarMarginRight: 13, contentWidth: 234, descriptionFontSize: 15, emptyTextPadding: 18, footerBg: '#f8e8ef', headerBg: '#e7f3ff', itemPadding: '9px 17px', itemPaddingLG: '19px 27px', itemPaddingSM: '7px 13px', metaMarginBottom: 14, titleMarginBottom: 6 },
         Menu: { itemHeight: 37, itemBorderRadius: 7, itemPaddingInline: 17, horizontalItemSelectedBg: '#123abc', horizontalItemSelectedColor: '#fedcba' },
         Mentions: { activeBg: '#f0ffee', inputFontSize: 17, paddingBlock: 9, paddingInline: 18 },
         Pagination: { itemActiveBg: '#123456', itemActiveColor: '#fedcba', itemInputBg: '#eef7ff', itemSize: 36 },
@@ -131,6 +133,12 @@ function StateMatrix() {
               <Pagination aria-label="State pagination" total={30} defaultCurrent={2} showQuickJumper />
               <Card data-testid="state-card-small" size="small" loading title="Loading card" />
               <Card data-testid="state-card" class="md:col-span-2" title="Release card" extra="Review" defaultActiveTabKey="summary" tabList={[{ key: 'summary', label: 'Summary' }, { key: 'activity', label: 'Activity' }]} actions={[<Button type="text">Approve</Button>, <Button type="text">Archive</Button>]}>Version 6 compatibility is ready.</Card>
+              {customTokens && <>
+                <List data-testid="state-list" size="large" bordered header="Token members" footer="2 members" itemLayout="vertical" dataSource={[{ id: 1, name: 'Ada' }]} rowKey="id" renderItem={(item) => <List.Item><List.Item.Meta avatar={<Avatar>{item.name[0]}</Avatar>} title={item.name} description="Release owner" /></List.Item>} />
+                <List data-testid="state-list-default"><List.Item>Default token row</List.Item></List>
+                <List data-testid="state-list-small" size="small"><List.Item>Small token row</List.Item></List>
+                <List data-testid="state-list-empty" locale={{ emptyText: 'No token members' }} />
+              </>}
               <Layout class="h-40 overflow-hidden md:col-span-2">
                 <Layout.Header class="flex items-center">Release workspace</Layout.Header>
                 <Layout hasSider>
