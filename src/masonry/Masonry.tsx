@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, merge, omit } from 'solid-js';
+import { createEffect, createProjection, createSignal, For, merge, omit } from 'solid-js';
 import type { JSX } from '@solidjs/web';
 import { useConfig } from '../config-provider';
 import type { Breakpoint, Gutter } from '../grid';
@@ -45,20 +45,20 @@ export function Masonry<T = unknown>(inputProps: MasonryProps<T>) {
   const verticalGutter = () => Array.isArray(props.gutter) ? props.gutter[1] : props.gutter;
   const gutter = (value: Gutter) => responsiveValue(value, viewportWidth(), 0);
   const columnCount = () => Math.max(1, Math.floor(responsiveValue(props.columns, viewportWidth(), 1)));
-  const layout = () => {
-    const columns = Array.from({ length: columnCount() }, () => [] as { item: MasonryItemType<T>; index: number }[]);
+  const layout = createProjection(() => {
+    const columns = Array.from({ length: columnCount() }, (_, column) => ({ key: column, column, items: [] as { key: string | number; item: MasonryItemType<T>; index: number }[] }));
     const heights = Array.from({ length: columnCount() }, () => 0);
     props.items.forEach((item, index) => {
       const requested = item.column === undefined ? -1 : Math.min(columnCount() - 1, Math.max(0, item.column));
       const column = requested >= 0 ? requested : heights.indexOf(Math.min(...heights));
-      columns[column].push({ item, index });
+      columns[column].items.push({ key: item.key, item, index });
       heights[column] += (item.height ?? 0) + gutter(verticalGutter());
     });
     return columns;
-  };
+  }, [], { key: 'key' });
 
   createEffect(
-    () => layout().flatMap((column, columnIndex) => column.map(({ item }) => ({ key: item.key, column: columnIndex }))),
+    () => layout.flatMap(({ column, items }) => items.map(({ item }) => ({ key: item.key, column }))),
     (sortInfo) => { props.onLayoutChange?.(sortInfo); },
   );
   createEffect(
@@ -72,9 +72,9 @@ export function Masonry<T = unknown>(inputProps: MasonryProps<T>) {
 
   return (
     <div {...others} class={['ads-masonry flex min-w-0 items-start', props.class, props.classNames?.root]} style={{ ...(typeof props.style === 'object' ? props.style : {}), gap: `${gutter(horizontalGutter())}px`, ...props.styles?.root }}>
-      <For each={layout()}>{(column, columnIndex) => (
-        <div class="flex min-w-0 flex-1 flex-col" style={{ gap: `${gutter(verticalGutter())}px` }} data-column={columnIndex()}>
-          <For each={column}>{({ item, index }) => (
+      <For each={layout}>{(column) => (
+        <div class="flex min-w-0 flex-1 flex-col" style={{ gap: `${gutter(verticalGutter())}px` }} data-column={column.column}>
+          <For each={column.items}>{({ item, index }) => (
             <div class={['ads-masonry-item min-w-0', props.classNames?.item]} style={{ height: item.height ? `${item.height}px` : undefined, ...props.styles?.item }} data-key={String(item.key)}>
               {props.itemRender ? props.itemRender({ ...item, index }) : item.children}
             </div>

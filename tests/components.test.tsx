@@ -3190,6 +3190,22 @@ describe('Ant Design Solid primitives', () => {
     await waitFor(() => expect(onLayoutChange).toHaveBeenCalledWith([{ key: 'a', column: 0 }, { key: 'b', column: 1 }, { key: 'c', column: 1 }]));
   });
 
+  it('preserves Masonry item DOM through keyed Solid projections', async () => {
+    const [gutter, setGutter] = createSignal(8);
+    const { container } = render(() => (
+      <Masonry
+        columns={2}
+        gutter={gutter()}
+        itemRender={(item) => <span data-testid={`masonry-${item.key}`}>{String(item.data)}</span>}
+        items={[{ key: 'a', data: 'A', height: 80 }, { key: 'b', data: 'B', height: 60 }]}
+      />
+    ));
+    const item = screen.getByTestId('masonry-a').closest('.ads-masonry-item');
+    setGutter(20);
+    await waitFor(() => expect(container.querySelector('.ads-masonry')).toHaveStyle({ gap: '20px' }));
+    expect(screen.getByTestId('masonry-a').closest('.ads-masonry-item')).toBe(item);
+  });
+
   it('selects ColorPicker presets and submits through Form', async () => {
     const onFinish = vi.fn();
     const onChange = vi.fn();
