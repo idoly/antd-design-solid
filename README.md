@@ -1,4 +1,4 @@
-# ant-design-solid
+# @idoly/ant-design-solid
 
 An Ant Design v6 component port for Solid `2.0.0-beta.29`, styled with Tailwind CSS v4 and `tailwind-variants`.
 
@@ -39,6 +39,10 @@ The local component workbench runs at `http://localhost:5173/`.
 
 ## Usage
 
+```bash
+npm install @idoly/ant-design-solid solid-js@2.0.0-beta.29 @solidjs/web@2.0.0-beta.29
+```
+
 ```tsx
 import {
   App,
@@ -47,8 +51,8 @@ import {
   Form,
   Input,
   message,
-} from "ant-design-solid";
-import "ant-design-solid/styles.css";
+} from "@idoly/ant-design-solid";
+import "@idoly/ant-design-solid/styles.css";
 
 export function WorkspaceForm() {
   return (
@@ -77,16 +81,16 @@ The package is precompiled with Tailwind. Consumers do not need to scan package 
 Component subpaths resolve to the same shared runtime, so contexts and service singletons are not duplicated:
 
 ```tsx
-import Button, { type ButtonProps } from "ant-design-solid/button";
-import Select, { type SelectProps } from "ant-design-solid/select";
-import theme from "ant-design-solid/theme";
+import Button, { type ButtonProps } from "@idoly/ant-design-solid/button";
+import Select, { type SelectProps } from "@idoly/ant-design-solid/select";
+import theme from "@idoly/ant-design-solid/theme";
 ```
 
 Input components bind automatically to the nearest named `Form.Item`. Form rules support required, type, length, range, pattern, whitespace, and custom async validation. Form supports nested name paths, dynamic `Form.List`, Provider events, `useForm`, `useFormInstance`, `useWatch`, and `Form.Item.useStatus`.
 
 Compatibility-style compound APIs are implemented, including declarative Select/AutoComplete/Mentions options, Menu and Tree child nodes, Tabs.TabPane, Cascader.Panel, Table columns/groups/summary, DatePicker shortcuts and generators, Grid.useBreakpoint, Statistic.Timer, and Tooltip.UniqueProvider.
 
-All component subpaths provide Ant-compatible default exports and named exports. Browser and SSR subpaths share the same ConfigContext and service singletons. The package also provides `reset.css` and the complete official locale directory, for example `import frFR from 'ant-design-solid/locale/fr_FR'`.
+All component subpaths provide Ant-compatible default exports and named exports. Browser and SSR subpaths share the same ConfigContext and service singletons. The package also provides `reset.css` and the complete official locale directory, for example `import frFR from '@idoly/ant-design-solid/locale/fr_FR'`.
 
 Portaled components preserve scoped `ConfigProvider` token values. ConfigProvider accepts flat legacy tokens or `{ token, algorithm, components }`; component token overrides produce nested, CSP-aware scoped variables. `theme` exports default, dark, and compact algorithms plus `useToken` and `getDesignToken`. Floating controls use Floating UI for collision-aware positioning. `App.useApp()` exposes message, notification, and modal services from component context. `Modal.confirm/info/success/error/warning`, `Modal.destroyAll()`, and `Modal.useModal()` share the same imperative service implementation.
 
