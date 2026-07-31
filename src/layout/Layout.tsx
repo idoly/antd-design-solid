@@ -1,4 +1,4 @@
-import { createContext, createEffect, createSignal, createUniqueId, merge, omit, onCleanup, Show, useContext } from 'solid-js';
+import { createContext, createEffect, createSignal, createUniqueId, merge, omit, onCleanup, Show, untrack, useContext } from 'solid-js';
 import type { JSX } from '@solidjs/web';
 import { useConfig } from '../config-provider';
 
@@ -99,7 +99,7 @@ export function Sider(inputProps: SiderProps) {
   const numericWidth = () => collapsed() ? props.collapsedWidth : props.width;
   const width = () => typeof numericWidth() === 'number' ? `${numericWidth()}px` : numericWidth();
   const setCollapsed = (next: boolean, type: 'clickTrigger' | 'responsive') => {
-    if (collapsed() === next) return;
+    if (untrack(collapsed) === next) return;
     if (props.collapsed === undefined) setInternalCollapsed(next);
     props.onCollapse?.(next, type);
   };

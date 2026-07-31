@@ -67,17 +67,24 @@ export function Masonry<T = unknown>(inputProps: MasonryProps<T>) {
     return () => window.removeEventListener('resize', resize);
   });
 
+  const projectedLayout = () => layout;
   return (
     <div {...others} class={['ads-masonry flex min-w-0 items-start', props.class, props.classNames?.root]} style={{ ...(typeof props.style === 'object' ? props.style : {}), gap: `${gutter(horizontalGutter())}px`, ...props.styles?.root }}>
-      <For each={layout}>{(column) => (
-        <div class="flex min-w-0 flex-1 flex-col" style={{ gap: `${gutter(verticalGutter())}px` }} data-column={column.column}>
-          <For each={column.items}>{({ item, index }) => (
-            <div class={['ads-masonry-item min-w-0', props.classNames?.item]} style={{ height: item.height ? `${item.height}px` : undefined, ...props.styles?.item }} data-key={String(item.key)}>
-              {props.itemRender ? props.itemRender({ ...item, index }) : item.children}
-            </div>
-          )}</For>
-        </div>
-      )}</For>
+      <For each={projectedLayout()} keyed={(column) => column.key}>{(column) => {
+        const items = () => column().items;
+        return (
+          <div class="flex min-w-0 flex-1 flex-col" style={{ gap: `${gutter(verticalGutter())}px` }} data-column={column().column}>
+            <For each={items()} keyed={(entry) => entry.key}>{(entry) => {
+              const item = () => entry().item;
+              return (
+                <div class={['ads-masonry-item min-w-0', props.classNames?.item]} style={{ height: item().height ? `${item().height}px` : undefined, ...props.styles?.item }} data-key={String(item().key)}>
+                  {props.itemRender ? props.itemRender({ ...item(), index: entry().index }) : item().children}
+                </div>
+              );
+            }}</For>
+          </div>
+        );
+      }}</For>
     </div>
   );
 }
