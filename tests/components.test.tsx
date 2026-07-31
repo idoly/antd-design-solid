@@ -3302,6 +3302,28 @@ describe('Ant Design Solid primitives', () => {
     expect(onChange.mock.calls[0][0].format('YYYY-MM-DD HH:mm:ss')).toBe('2026-03-18 14:05:06');
   });
 
+  it('enforces disabled milliseconds and time field visibility in DatePicker', async () => {
+    const onChange = vi.fn();
+    render(() => <DatePicker
+      aria-label="Precise date"
+      showTime={{ showMinute: false, showMillisecond: true, millisecondStep: 5 }}
+      defaultValue={dayjs('2026-03-01T13:05:06.123')}
+      disabledTime={() => ({ disabledMilliseconds: (hour, minute, second) => hour === 13 && minute === 5 && second === 6 ? [123] : [] })}
+      onChange={onChange}
+    />);
+    expect(screen.getByRole('textbox', { name: 'Precise date' })).toHaveValue('2026-03-01 13:05:06.123');
+    fireEvent.click(screen.getByRole('textbox', { name: 'Precise date' }));
+    expect(screen.queryByRole('spinbutton', { name: 'Minute' })).not.toBeInTheDocument();
+    const milliseconds = await screen.findByRole('spinbutton', { name: 'Millisecond' });
+    expect(milliseconds).toHaveAttribute('step', '5');
+    expect(screen.getByRole('button', { name: /^OK$/ })).toBeDisabled();
+    fireEvent.input(milliseconds, { target: { value: '124' } });
+    await waitFor(() => expect(screen.getByRole('button', { name: /^OK$/ })).toBeEnabled());
+    fireEvent.click(screen.getByRole('button', { name: /^OK$/ }));
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    expect(onChange.mock.calls[0][0].format('YYYY-MM-DD HH:mm:ss.SSS')).toBe('2026-03-01 13:05:06.124');
+  });
+
   it('returns directly from the DatePicker year panel to the date panel', async () => {
     const onChange = vi.fn();
     const onPanelChange = vi.fn();
@@ -3447,6 +3469,38 @@ describe('Ant Design Solid primitives', () => {
     expect(onChange.mock.calls.at(-1)?.[0][1].format('YYYY-MM-DD HH:mm:ss')).toBe('2026-02-11 21:30:00');
     expect(disabledTime.mock.calls.some((call) => call[1] === 'start')).toBe(true);
     expect(disabledTime.mock.calls.some((call) => call[1] === 'end')).toBe(true);
+  });
+
+  it('validates disabled milliseconds across both RangePicker endpoints', async () => {
+    const onChange = vi.fn();
+    const disabledTime = vi.fn((date: dayjs.Dayjs, type: 'start' | 'end', info: { from?: dayjs.Dayjs }) => ({
+      disabledMilliseconds: () => type === 'start' && date.date() === 10 && info.from?.date() === 11 ? [111] : type === 'end' && date.date() === 11 && info.from?.date() === 10 ? [222] : [],
+    }));
+    render(() => <DatePicker.RangePicker
+      showTime={{ showMillisecond: true, millisecondStep: 10 }}
+      defaultValue={[dayjs('2026-02-10T08:00:00.111'), dayjs('2026-02-11T09:00:00.222')]}
+      disabledTime={disabledTime}
+      onChange={onChange}
+    />);
+
+    expect(screen.getByRole('textbox', { name: 'Start date' })).toHaveValue('2026-02-10 08:00:00.111');
+    expect(screen.getByRole('textbox', { name: 'End date' })).toHaveValue('2026-02-11 09:00:00.222');
+    fireEvent.click(screen.getByRole('textbox', { name: 'Start date' }));
+    const startMilliseconds = await screen.findByRole('spinbutton', { name: 'Start millisecond' });
+    expect(startMilliseconds).toHaveAttribute('step', '10');
+    expect(screen.getByRole('button', { name: /^OK$/ })).toBeDisabled();
+    fireEvent.input(startMilliseconds, { target: { value: '112' } });
+    expect(screen.getByRole('button', { name: /^OK$/ })).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('textbox', { name: 'End date' }));
+    const endMilliseconds = await screen.findByRole('spinbutton', { name: 'End millisecond' });
+    fireEvent.input(endMilliseconds, { target: { value: '223' } });
+    await waitFor(() => expect(screen.getByRole('button', { name: /^OK$/ })).toBeEnabled());
+    fireEvent.click(screen.getByRole('button', { name: /^OK$/ }));
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    expect(onChange.mock.calls[0][0].map((date: dayjs.Dayjs) => date.millisecond())).toEqual([112, 223]);
+    expect(disabledTime.mock.calls.some((call) => call[1] === 'start' && call[2].from?.date() === 11)).toBe(true);
+    expect(disabledTime.mock.calls.some((call) => call[1] === 'end' && call[2].from?.date() === 10)).toBe(true);
   });
 
   it('applies RangePicker locale, semantic popup slots, panel rendering, and presets', async () => {

@@ -14,9 +14,33 @@ export type PickerMode = 'date' | 'week' | 'month' | 'quarter' | 'year';
 export type DatePickerPanelMode = 'time' | 'date' | 'week' | 'month' | 'quarter' | 'year' | 'decade';
 export type DatePickerValue = Dayjs | readonly Dayjs[] | null;
 export type DatePickerFormat = string | readonly string[] | ((value: Dayjs) => string) | { format: string; type?: 'mask' };
-export interface DatePickerDisabledTime { disabledHours?: () => number[]; disabledMinutes?: (hour: number) => number[]; disabledSeconds?: (hour: number, minute: number) => number[] }
-const isDisabledTimeValue = (date: Dayjs, limits?: DatePickerDisabledTime) => Boolean(limits?.disabledHours?.().includes(date.hour()) || limits?.disabledMinutes?.(date.hour()).includes(date.minute()) || limits?.disabledSeconds?.(date.hour(), date.minute()).includes(date.second()));
-export interface DatePickerShowTime { format?: string; defaultOpenValue?: Dayjs; defaultValue?: Dayjs; hideDisabledOptions?: boolean; hourStep?: number; minuteStep?: number; secondStep?: number }
+export interface DatePickerDisabledTime {
+  disabledHours?: () => number[];
+  disabledMinutes?: (hour: number) => number[];
+  disabledSeconds?: (hour: number, minute: number) => number[];
+  disabledMilliseconds?: (hour: number, minute: number, second: number) => number[];
+}
+const isDisabledTimeValue = (date: Dayjs, limits?: DatePickerDisabledTime) => Boolean(
+  limits?.disabledHours?.().includes(date.hour())
+  || limits?.disabledMinutes?.(date.hour()).includes(date.minute())
+  || limits?.disabledSeconds?.(date.hour(), date.minute()).includes(date.second())
+  || limits?.disabledMilliseconds?.(date.hour(), date.minute(), date.second()).includes(date.millisecond()),
+);
+export interface DatePickerShowTime {
+  format?: string;
+  defaultOpenValue?: Dayjs;
+  defaultValue?: Dayjs;
+  hideDisabledOptions?: boolean;
+  showHour?: boolean;
+  showMinute?: boolean;
+  showSecond?: boolean;
+  showMillisecond?: boolean;
+  use12Hours?: boolean;
+  hourStep?: number;
+  minuteStep?: number;
+  secondStep?: number;
+  millisecondStep?: number;
+}
 export interface DatePickerLocale { lang?: { placeholder?: string; yearPlaceholder?: string; monthPlaceholder?: string; weekPlaceholder?: string; shortWeekDays?: string[]; shortMonths?: string[]; weekStartsOn?: number; firstWeekContainsDate?: number } }
 export interface DatePickerComponents { input?: (props: JSX.InputHTMLAttributes<HTMLInputElement>) => JSX.Element; date?: (props: { children?: JSX.Element }) => JSX.Element; week?: (props: { children?: JSX.Element }) => JSX.Element; month?: (props: { children?: JSX.Element }) => JSX.Element; quarter?: (props: { children?: JSX.Element }) => JSX.Element; year?: (props: { children?: JSX.Element }) => JSX.Element; time?: (props: { children?: JSX.Element }) => JSX.Element }
 export type DatePickerSemanticName = 'root' | 'prefix' | 'input' | 'suffix' | 'popupRoot' | 'popupContainer' | 'popupHeader' | 'popupBody' | 'popupContent' | 'popupItem' | 'popupFooter';
@@ -118,6 +142,7 @@ export interface RangePickerProps extends Omit<DatePickerProps, 'value' | 'defau
 }
 
 const defaultFormat = (picker: PickerMode) => picker === 'year' ? 'YYYY' : picker === 'month' ? 'YYYY-MM' : 'YYYY-MM-DD';
+const defaultDateTimeFormat = (showTime: boolean | DatePickerShowTime | RangePickerShowTime | undefined) => `YYYY-MM-DD HH:mm:ss${typeof showTime === 'object' && showTime.showMillisecond ? '.SSS' : ''}`;
 const pickerInputTokenStyle = (size: 'small' | 'middle' | 'large'): JSX.CSSProperties => {
   const suffix = size === 'small' ? '-sm' : size === 'large' ? '-lg' : '';
   return {
@@ -126,6 +151,16 @@ const pickerInputTokenStyle = (size: 'small' | 'middle' | 'large'): JSX.CSSPrope
     'font-size': `var(--ads-date-picker-input-font-size${suffix}, ${size === 'large' ? '16px' : '14px'})`,
   };
 };
+type TimeUnit = 'hour' | 'minute' | 'second' | 'millisecond';
+type TimeDisplayConfig = Pick<DatePickerShowTime, 'showHour' | 'showMinute' | 'showSecond' | 'showMillisecond' | 'hourStep' | 'minuteStep' | 'secondStep' | 'millisecondStep'>;
+const timeValue = (date: Dayjs, unit: TimeUnit) => unit === 'hour' ? date.hour() : unit === 'minute' ? date.minute() : unit === 'second' ? date.second() : date.millisecond();
+const timeMaximum = (unit: TimeUnit) => unit === 'hour' ? 23 : unit === 'millisecond' ? 999 : 59;
+function TimeInputPanel(props: { date: Dayjs; config?: TimeDisplayConfig; labelPrefix?: string; onInput: (event: InputEvent & { currentTarget: HTMLInputElement }, unit: TimeUnit) => void }) {
+  const units = () => (['hour', 'minute', 'second', 'millisecond'] as const).filter((unit) => unit === 'millisecond' ? props.config?.showMillisecond === true : props.config?.[`show${unit[0].toUpperCase()}${unit.slice(1)}` as 'showHour' | 'showMinute' | 'showSecond'] !== false);
+  const label = (unit: TimeUnit) => props.labelPrefix ? `${props.labelPrefix} ${unit}` : `${unit[0].toUpperCase()}${unit.slice(1)}`;
+  const step = (unit: TimeUnit) => props.config?.[`${unit}Step` as 'hourStep' | 'minuteStep' | 'secondStep' | 'millisecondStep'] ?? 1;
+  return <div class="flex items-center justify-center gap-1 border-t border-border-secondary px-3 py-2"><For each={units()}>{(unit, index) => <><Show when={index() > 0}><span>:</span></Show><input type="number" aria-label={label(unit)} min="0" max={timeMaximum(unit)} step={step(unit)} value={timeValue(props.date, unit)} class={['h-8 rounded-control border border-border px-1 text-center', unit === 'millisecond' ? 'w-16' : 'w-14']} onInput={(event) => props.onInput(event, unit)} /></>}</For></div>;
+}
 const startOfLocaleWeek = (date: Dayjs, weekStartsOn: number) => date.startOf('day').subtract((date.day() - weekStartsOn + 7) % 7, 'day');
 const localeWeek = (date: Dayjs, weekStartsOn = 1, firstWeekContainsDate = 4): { year: number; week: number } => {
   const weekYearStart = (year: number) => startOfLocaleWeek(dayjs().year(year).month(0).date(firstWeekContainsDate), weekStartsOn);
@@ -277,7 +312,7 @@ export function DatePicker(inputProps: DatePickerProps) {
   const value = (): DatePickerValue => props.value !== undefined ? props.value : field?.value() !== undefined ? field.value() as DatePickerValue : internalValue();
   const values = (): readonly Dayjs[] => Array.isArray(value()) ? value() as readonly Dayjs[] : value() ? [value() as Dayjs] : [];
   const draftValues = (): readonly Dayjs[] => Array.isArray(draft()) ? draft() as readonly Dayjs[] : draft() ? [draft() as Dayjs] : [];
-  const format = () => props.format;
+  const format = () => props.format ?? (props.showTime ? defaultDateTimeFormat(props.showTime) : undefined);
   const open = () => props.open ?? internalOpen();
   const view = () => props.pickerValue ?? internalView();
   const semanticClasses = () => typeof props.classNames === 'function' ? props.classNames({ props }) : props.classNames ?? {};
@@ -304,7 +339,7 @@ export function DatePicker(inputProps: DatePickerProps) {
   const panelPicker = (): PickerMode => props.mode === 'month' || props.mode === 'year' ? props.mode : props.mode === 'decade' ? 'year' : props.mode === 'date' ? 'date' : internalPanelPicker();
   const setView = (date: Dayjs) => { if (props.pickerValue === undefined) setInternalView(date); props.onPanelChange?.(date, panelPicker()); };
   const setPanelPicker = (next: PickerMode) => { props.onPanelChange?.(view(), next); };
-  const mergeTime = (date: Dayjs) => { const source = draftValues().at(-1) ?? values().at(-1) ?? (typeof props.showTime === 'object' ? props.showTime.defaultOpenValue ?? props.showTime.defaultValue : undefined); return source ? date.hour(source.hour()).minute(source.minute()).second(source.second()) : date; };
+  const mergeTime = (date: Dayjs) => { const source = draftValues().at(-1) ?? values().at(-1) ?? (typeof props.showTime === 'object' ? props.showTime.defaultOpenValue ?? props.showTime.defaultValue : undefined); return source ? date.hour(source.hour()).minute(source.minute()).second(source.second()).millisecond(source.millisecond()) : date; };
   const select = (rawDate: Dayjs) => {
     const date = props.showTime ? mergeTime(rawDate) : rawDate;
     props.onSelect?.(date); setView(date);
@@ -331,25 +366,26 @@ export function DatePicker(inputProps: DatePickerProps) {
   };
   const clear = () => { change(props.multiple ? [] : null); props.onClear?.(); };
   const size = () => props.size ?? config.componentSize();
-  const updateTime = (part: 'hour' | 'minute' | 'second', raw: number): boolean => {
-    if (!Number.isInteger(raw) || raw < 0 || raw > (part === 'hour' ? 23 : 59)) return false;
+  const updateTime = (part: TimeUnit, raw: number): boolean => {
+    if (!Number.isInteger(raw) || raw < 0 || raw > timeMaximum(part)) return false;
     const current = (isDateArray(pendingValue) ? pendingValue.at(-1) : pendingValue) ?? draftValues().at(-1) ?? values().at(-1) ?? dayjs();
     const limits = props.disabledTime?.(current);
     if (part === 'hour' && limits?.disabledHours?.().includes(raw)) return false;
     if (part === 'minute' && limits?.disabledMinutes?.(current.hour()).includes(raw)) return false;
     if (part === 'second' && limits?.disabledSeconds?.(current.hour(), current.minute()).includes(raw)) return false;
-    const updated = part === 'hour' ? current.hour(raw) : part === 'minute' ? current.minute(raw) : current.second(raw);
+    if (part === 'millisecond' && limits?.disabledMilliseconds?.(current.hour(), current.minute(), current.second()).includes(raw)) return false;
+    const updated = part === 'hour' ? current.hour(raw) : part === 'minute' ? current.minute(raw) : part === 'second' ? current.second(raw) : current.millisecond(raw);
     const next: DatePickerValue = props.multiple ? [...draftValues().slice(0, -1), updated] : updated;
     pendingValue = next; setDraft(next); setView(updated); return true;
   };
-  const updateTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }, part: 'hour' | 'minute' | 'second') => {
+  const updateTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }, part: TimeUnit) => {
     if (updateTime(part, Number(event.currentTarget.value))) return;
     const current = draftValues().at(-1) ?? values().at(-1) ?? dayjs();
-    event.currentTarget.value = String(part === 'hour' ? current.hour() : part === 'minute' ? current.minute() : current.second());
+    event.currentTarget.value = String(timeValue(current, part));
   };
   const calendar = () => <Show keyed when={panelPicker()}>{(picker) => <Dynamic component={props.components?.[picker] ?? 'div'}><CalendarPanel value={(props.needConfirm || props.showTime || props.multiple ? draftValues() : values()).at(-1)} values={props.multiple ? draftValues() : undefined} view={view()} picker={picker} modeControlled={inputProps.mode !== undefined} minDate={props.minDate} maxDate={props.maxDate} disabledDate={props.disabledDate} onViewChange={setView} onModeChange={setPanelPicker} onSelect={selectPanel} showWeek={props.showWeek} locale={props.locale} onHover={(date) => setPreview(props.previewValue === false ? null : date)} previousLabel={config.locale().DatePicker?.previous} nextLabel={config.locale().DatePicker?.next} previousIcon={props.prevIcon ?? props.superPrevIcon} nextIcon={props.nextIcon ?? props.superNextIcon} cellRender={props.cellRender} dateRender={props.dateRender} classes={semanticClasses()} styles={semanticStyles()} /></Dynamic>}</Show>;
   const panel = () => {
-    const content = <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => select(typeof preset.value === 'function' ? preset.value() : preset.value)}>{preset.label}</button>}</For></div></Show><div>{calendar()}<Show when={props.showTime}><div class="flex items-center justify-center gap-1 border-t border-border-secondary px-3 py-2"><input type="number" aria-label="Hour" min="0" max="23" step={typeof props.showTime === 'object' ? props.showTime.hourStep ?? 1 : 1} value={(draftValues().at(-1) ?? values().at(-1) ?? dayjs()).hour()} class="h-8 w-14 rounded-control border border-border px-1 text-center" onInput={(event) => updateTimeInput(event, 'hour')} /><span>:</span><input type="number" aria-label="Minute" min="0" max="59" step={typeof props.showTime === 'object' ? props.showTime.minuteStep ?? 1 : 1} value={(draftValues().at(-1) ?? values().at(-1) ?? dayjs()).minute()} class="h-8 w-14 rounded-control border border-border px-1 text-center" onInput={(event) => updateTimeInput(event, 'minute')} /><span>:</span><input type="number" aria-label="Second" min="0" max="59" step={typeof props.showTime === 'object' ? props.showTime.secondStep ?? 1 : 1} value={(draftValues().at(-1) ?? values().at(-1) ?? dayjs()).second()} class="h-8 w-14 rounded-control border border-border px-1 text-center" onInput={(event) => updateTimeInput(event, 'second')} /></div></Show><Show when={props.renderExtraFooter || props.showNow || props.needConfirm || props.showTime || props.multiple}><div class={['flex min-h-10 items-center justify-between gap-2 border-t border-border-secondary px-3 py-1', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}><span>{props.renderExtraFooter?.(props.picker)}</span><span class="flex gap-2"><Show when={props.showNow}><button type="button" class="text-primary" onClick={() => select(dayjs())}>Now</button></Show><Show when={props.needConfirm ?? Boolean(props.showTime || props.multiple)}><button type="button" disabled={confirmationDisabled()} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={confirm}>OK</button></Show></span></div></Show></div></div>;
+    const content = <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => select(typeof preset.value === 'function' ? preset.value() : preset.value)}>{preset.label}</button>}</For></div></Show><div>{calendar()}<Show when={props.showTime}><TimeInputPanel date={draftValues().at(-1) ?? values().at(-1) ?? dayjs()} config={typeof props.showTime === 'object' ? props.showTime : undefined} onInput={updateTimeInput} /></Show><Show when={props.renderExtraFooter || props.showNow || props.needConfirm || props.showTime || props.multiple}><div class={['flex min-h-10 items-center justify-between gap-2 border-t border-border-secondary px-3 py-1', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}><span>{props.renderExtraFooter?.(props.picker)}</span><span class="flex gap-2"><Show when={props.showNow}><button type="button" class="text-primary" onClick={() => select(dayjs())}>Now</button></Show><Show when={props.needConfirm ?? Boolean(props.showTime || props.multiple)}><button type="button" disabled={confirmationDisabled()} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={confirm}>OK</button></Show></span></div></Show></div></div>;
     return <div class={['ads-date-picker-theme', config.themeScopeClass(), semanticClasses().popupRoot, props.popupClassName, props.dropdownClassName]} style={semanticStyles().popupRoot}>{props.panelRender?.(content) ?? content}</div>;
   };
   const parseInput = (text: string): DatePickerValue => {
@@ -444,7 +480,7 @@ export function RangePicker(inputProps: RangePickerProps) {
   };
   const [activePart, setActivePart] = createSignal<'start' | 'end'>(initialRange[0] && !initialRange[1] ? 'end' : 'start', { ownedWrite: true });
   const value = (): [Dayjs | null, Dayjs | null] => props.value !== undefined ? normalizeRange(props.value) : field?.value() !== undefined ? normalizeRange(field.value()) : (internalValue(), currentInternalValue);
-  const format = () => props.format ?? (props.showTime ? 'YYYY-MM-DD HH:mm:ss' : undefined);
+  const format = () => props.format ?? (props.showTime ? defaultDateTimeFormat(props.showTime) : undefined);
   const stringsFor = (range: [Dayjs | null, Dayjs | null]): [string, string] => [range[0] ? formatPickerValue(range[0], props.picker, format()) : '', range[1] ? formatPickerValue(range[1], props.picker, format()) : ''];
   const publishDraft = (next: [Dayjs | null, Dayjs | null]) => {
     if (props.value === undefined) { if (field) field.setValue(next); else { currentInternalValue = next; setInternalValue(next); } }
@@ -462,7 +498,7 @@ export function RangePicker(inputProps: RangePickerProps) {
   const defaultRangeTime = (part: 'start' | 'end') => typeof props.showTime === 'object' ? (props.showTime.defaultOpenValue ?? props.showTime.defaultValue)?.[part === 'start' ? 0 : 1] : undefined;
   const mergeRangeTime = (date: Dayjs, part: 'start' | 'end') => {
     const source = value()[part === 'start' ? 0 : 1] ?? defaultRangeTime(part);
-    return source ? date.hour(source.hour()).minute(source.minute()).second(source.second()) : date;
+    return source ? date.hour(source.hour()).minute(source.minute()).second(source.second()).millisecond(source.millisecond()) : date;
   };
   const choose = (rawDate: Dayjs) => {
     const current = value();
@@ -482,8 +518,8 @@ export function RangePicker(inputProps: RangePickerProps) {
     if (current === 'month' && (props.picker === 'date' || props.picker === 'week')) { changeView(date); changePanelPicker(props.picker); return props.picker; }
     choose(date);
   };
-  const updateRangeTime = (unit: 'hour' | 'minute' | 'second', raw: number): boolean => {
-    if (!Number.isInteger(raw) || raw < 0 || raw > (unit === 'hour' ? 23 : 59)) return false;
+  const updateRangeTime = (unit: TimeUnit, raw: number): boolean => {
+    if (!Number.isInteger(raw) || raw < 0 || raw > timeMaximum(unit)) return false;
     const part = activePart();
     const index = part === 'start' ? 0 : 1;
     const current = value();
@@ -492,17 +528,18 @@ export function RangePicker(inputProps: RangePickerProps) {
     if (unit === 'hour' && limits?.disabledHours?.().includes(raw)) return false;
     if (unit === 'minute' && limits?.disabledMinutes?.(date.hour()).includes(raw)) return false;
     if (unit === 'second' && limits?.disabledSeconds?.(date.hour(), date.minute()).includes(raw)) return false;
-    const updated = unit === 'hour' ? date.hour(raw) : unit === 'minute' ? date.minute(raw) : date.second(raw);
+    if (unit === 'millisecond' && limits?.disabledMilliseconds?.(date.hour(), date.minute(), date.second()).includes(raw)) return false;
+    const updated = unit === 'hour' ? date.hour(raw) : unit === 'minute' ? date.minute(raw) : unit === 'second' ? date.second(raw) : date.millisecond(raw);
     const next = [...current] as [Dayjs | null, Dayjs | null];
     next[index] = updated;
     publishDraft(next);
     return true;
   };
-  const updateRangeTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }, unit: 'hour' | 'minute' | 'second') => {
+  const updateRangeTimeInput = (event: InputEvent & { currentTarget: HTMLInputElement }, unit: TimeUnit) => {
     if (updateRangeTime(unit, Number(event.currentTarget.value))) return;
     const part = activePart();
     const current = value()[part === 'start' ? 0 : 1] ?? defaultRangeTime(part) ?? dayjs();
-    event.currentTarget.value = String(unit === 'hour' ? current.hour() : unit === 'minute' ? current.minute() : current.second());
+    event.currentTarget.value = String(timeValue(current, unit));
   };
   const parseRangeInput = (text: string): Dayjs | null => {
     const patterns = formatPatterns(format());
@@ -566,7 +603,7 @@ export function RangePicker(inputProps: RangePickerProps) {
     publishDraft(next);
     commitRange(next);
   };
-  const panelContent = () => <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => applyPreset(preset)}>{preset.label}</button>}</For></div></Show><div><Show keyed when={panelPicker()}>{(picker) => <Dynamic component={props.components?.[picker] ?? 'div'}><CalendarPanel value={activePart() === 'start' ? value()[0] : value()[1]} view={view()} picker={picker} modeControlled={inputProps.mode !== undefined} minDate={props.minDate} maxDate={props.maxDate} disabledDate={props.disabledDate} onViewChange={changeView} onModeChange={changePanelPicker} onSelect={choosePanel} range={activePart()} from={value()[activePart() === 'start' ? 1 : 0] ?? undefined} showWeek={props.showWeek} locale={props.locale} previousLabel={config.locale().DatePicker?.previous} nextLabel={config.locale().DatePicker?.next} previousIcon={props.prevIcon ?? props.superPrevIcon} nextIcon={props.nextIcon ?? props.superNextIcon} cellRender={props.cellRender} dateRender={props.dateRender} classes={semanticClasses()} styles={semanticStyles()} /></Dynamic>}</Show><Show when={props.showTime}><div class="flex items-center justify-center gap-1 border-t border-border-secondary px-3 py-2"><input type="number" aria-label={`${activePart() === 'start' ? 'Start' : 'End'} hour`} min="0" max="23" value={(value()[activePart() === 'start' ? 0 : 1] ?? defaultRangeTime(activePart()) ?? dayjs()).hour()} class="h-8 w-14 rounded-control border border-border px-1 text-center" onInput={(event) => updateRangeTimeInput(event, 'hour')} /><span>:</span><input type="number" aria-label={`${activePart() === 'start' ? 'Start' : 'End'} minute`} min="0" max="59" value={(value()[activePart() === 'start' ? 0 : 1] ?? defaultRangeTime(activePart()) ?? dayjs()).minute()} class="h-8 w-14 rounded-control border border-border px-1 text-center" onInput={(event) => updateRangeTimeInput(event, 'minute')} /><span>:</span><input type="number" aria-label={`${activePart() === 'start' ? 'Start' : 'End'} second`} min="0" max="59" value={(value()[activePart() === 'start' ? 0 : 1] ?? defaultRangeTime(activePart()) ?? dayjs()).second()} class="h-8 w-14 rounded-control border border-border px-1 text-center" onInput={(event) => updateRangeTimeInput(event, 'second')} /></div></Show><Show when={(props.needConfirm ?? Boolean(props.showTime)) && rangeComplete(value())}><div class="flex justify-end border-t border-border-secondary p-2"><button type="button" disabled={rangeConfirmationDisabled(value())} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={() => commitRange(value())}>OK</button></div></Show><Show when={props.renderExtraFooter}><div class={['min-h-10 border-t border-border-secondary px-3 py-2', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}>{props.renderExtraFooter?.(props.picker)}</div></Show></div></div>;
+  const panelContent = () => <div class={['flex', semanticClasses().popupContainer]} style={{ ...semanticStyles().popupContainer, ...props.popupStyle }}><Show when={props.presets?.length}><div class="ads-date-picker-presets w-32 border-r border-border-secondary p-2"><For each={props.presets}>{(preset) => <button type="button" class="block h-8 w-full truncate rounded-control px-2 text-left text-sm hover:bg-surface-container" onClick={() => applyPreset(preset)}>{preset.label}</button>}</For></div></Show><div><Show keyed when={panelPicker()}>{(picker) => <Dynamic component={props.components?.[picker] ?? 'div'}><CalendarPanel value={activePart() === 'start' ? value()[0] : value()[1]} view={view()} picker={picker} modeControlled={inputProps.mode !== undefined} minDate={props.minDate} maxDate={props.maxDate} disabledDate={props.disabledDate} onViewChange={changeView} onModeChange={changePanelPicker} onSelect={choosePanel} range={activePart()} from={value()[activePart() === 'start' ? 1 : 0] ?? undefined} showWeek={props.showWeek} locale={props.locale} previousLabel={config.locale().DatePicker?.previous} nextLabel={config.locale().DatePicker?.next} previousIcon={props.prevIcon ?? props.superPrevIcon} nextIcon={props.nextIcon ?? props.superNextIcon} cellRender={props.cellRender} dateRender={props.dateRender} classes={semanticClasses()} styles={semanticStyles()} /></Dynamic>}</Show><Show when={props.showTime}><TimeInputPanel date={value()[activePart() === 'start' ? 0 : 1] ?? defaultRangeTime(activePart()) ?? dayjs()} config={typeof props.showTime === 'object' ? props.showTime : undefined} labelPrefix={activePart() === 'start' ? 'Start' : 'End'} onInput={updateRangeTimeInput} /></Show><Show when={(props.needConfirm ?? Boolean(props.showTime)) && rangeComplete(value())}><div class="flex justify-end border-t border-border-secondary p-2"><button type="button" disabled={rangeConfirmationDisabled(value())} class="h-7 rounded-control bg-primary px-3 text-white disabled:bg-border disabled:text-text-disabled" onClick={() => commitRange(value())}>OK</button></div></Show><Show when={props.renderExtraFooter}><div class={['min-h-10 border-t border-border-secondary px-3 py-2', semanticClasses().popupFooter]} style={semanticStyles().popupFooter}>{props.renderExtraFooter?.(props.picker)}</div></Show></div></div>;
   const panel = () => { const content = panelContent(); return <div class={['ads-date-picker-theme', config.themeScopeClass(), semanticClasses().popupRoot, props.popupClassName, props.dropdownClassName]} style={semanticStyles().popupRoot}>{props.panelRender?.(content) ?? content}</div>; };
   return (
     <Popover open={disabled() ? false : props.open ?? open()} trigger={[]} aria-label="Date range picker dialog" placement={props.placement ?? 'bottom-start'} getPopupContainer={props.getPopupContainer} content={panel()} onOpenChange={setRangeOpen}>
