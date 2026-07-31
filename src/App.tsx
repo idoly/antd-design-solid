@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import { createSignal } from 'solid-js';
+import productStudioImage from './assets/product-studio.jpg';
+import teamWorkspaceImage from './assets/team-workspace.jpg';
 import {
   Alert,
   App as DesignApp,
@@ -281,8 +283,8 @@ export default function App() {
                 </Card>
                 <Card title="Media carousel">
                   <Carousel arrows draggable>
-                    <div class="relative h-64 overflow-hidden bg-[#dce6f2]"><Image preview={false} class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80" alt="Team workspace" /><div class="absolute inset-x-0 bottom-0 bg-black/55 p-4 text-white">Workspace</div></div>
-                    <div class="relative h-64 overflow-hidden bg-[#e4eadf]"><Image preview={false} class="h-full w-full object-cover" src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=80" alt="Product studio" /><div class="absolute inset-x-0 bottom-0 bg-black/55 p-4 text-white">Product studio</div></div>
+                    <div class="relative h-64 overflow-hidden bg-[#dce6f2]"><Image preview={false} class="h-full w-full object-cover" src={teamWorkspaceImage} alt="Team workspace" /><div class="absolute inset-x-0 bottom-0 bg-black/55 p-4 text-white">Workspace</div></div>
+                    <div class="relative h-64 overflow-hidden bg-[#e4eadf]"><Image preview={false} class="h-full w-full object-cover" src={productStudioImage} alt="Product studio" /><div class="absolute inset-x-0 bottom-0 bg-black/55 p-4 text-white">Product studio</div></div>
                   </Carousel>
                   <div class="mt-4"><Typography.Title level={4}>Component composition</Typography.Title><Typography.Paragraph ellipsis={{ rows: 2, expandable: 'collapsible' }}>The catalog combines production-oriented controls into realistic workflows while keeping every component available for focused inspection.</Typography.Paragraph></div>
                 </Card>
