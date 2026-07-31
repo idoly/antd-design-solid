@@ -2435,15 +2435,26 @@ describe('Ant Design Solid primitives', () => {
   it('falls back from a failed avatar image and limits avatar groups', async () => {
     render(() => (
       <div>
-        <Avatar src="/missing.png" alt="Profile">AD</Avatar>
-        <Avatar.Group max={2}>
+        <Avatar src="/missing.png" alt="Profile" draggable={false} crossOrigin="anonymous">AD</Avatar>
+        <Avatar.Group size={{ xs: 28, md: 44 }} max={{ count: 2, style: { color: 'rgb(255, 0, 0)' }, popover: { trigger: 'click' } }}>
           <Avatar>A</Avatar><Avatar>B</Avatar><Avatar>C</Avatar><Avatar>D</Avatar>
         </Avatar.Group>
       </div>
     ));
-    fireEvent.error(screen.getByRole('img', { name: 'Profile' }));
+    const image = screen.getByRole('img', { name: 'Profile' });
+    expect(image).toHaveAttribute('draggable', 'false');
+    expect(image).toHaveAttribute('crossorigin', 'anonymous');
+    fireEvent.error(image);
     await waitFor(() => expect(screen.getByText('AD')).toBeInTheDocument());
-    expect(screen.getByText('+2')).toBeInTheDocument();
+    expect(screen.getByText('+2').closest('.ads-avatar')).toHaveStyle({ color: 'rgb(255, 0, 0)' });
+    expect(screen.getByText('A').closest('.ads-avatar')).toHaveAttribute('data-responsive', 'true');
+    const responsiveAvatar = screen.getByText('A').closest('.ads-avatar') as HTMLElement;
+    expect(responsiveAvatar.style.getPropertyValue('--ads-avatar-responsive-xs')).toBe('28px');
+    expect(responsiveAvatar.style.getPropertyValue('--ads-avatar-responsive-md')).toBe('44px');
+    fireEvent.click(screen.getByText('+2'));
+    const overflow = await screen.findByRole('dialog', { name: 'Hidden avatars' });
+    expect(within(overflow).getByText('C')).toBeInTheDocument();
+    expect(within(overflow).getByText('D')).toBeInTheDocument();
   });
 
   it('renders Empty presets, descriptions, and actions', () => {

@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import { render } from '@solidjs/web';
 import {
   Alert,
+  Avatar,
   Button,
   Card,
   Checkbox,
@@ -36,6 +37,7 @@ function StateMatrix() {
     <ConfigProvider theme={dark || customTokens ? {
       algorithm: dark ? theme.darkAlgorithm : undefined,
       components: customTokens ? {
+        Avatar: { containerSize: 36, containerSizeLG: 48, containerSizeSM: 26, groupBorderColor: '#f7d774', groupOverlapping: -10, groupSpace: 6, iconFontSize: 20, iconFontSizeLG: 26, iconFontSizeSM: 13, textFontSize: 16, textFontSizeLG: 18, textFontSizeSM: 12 },
         Card: { actionsBg: '#f1f8e9', actionsLiMargin: '4px 0', bodyPadding: 19, bodyPaddingSM: 13, extraColor: '#8b2f4c', headerBg: '#e8f2ff', headerFontSize: 18, headerFontSizeSM: 15, headerHeight: 48, headerHeightSM: 34, headerPadding: 20, headerPaddingSM: 11, tabsMarginBottom: 14 },
         InputNumber: { controlWidth: 112 },
         Layout: { bodyBg: '#eaf2f8', footerBg: '#d5e5f2', footerPadding: '7px 13px', headerBg: '#17324d', headerColor: '#f7d774', headerHeight: 44, headerPadding: '0 17px', siderBg: '#234f63', triggerBg: '#102f3d', triggerColor: '#f7d774', triggerHeight: 34 },
@@ -88,6 +90,15 @@ function StateMatrix() {
           <section data-testid="choice-states" class="space-y-3 border-t border-border pt-4" aria-labelledby="choices-heading">
             <h2 id="choices-heading" class="text-base font-semibold">Choices</h2>
             <div class="flex flex-wrap items-center gap-5">
+              <div data-testid="state-avatars" class="flex flex-wrap items-center gap-4">
+                <Avatar>A</Avatar>
+                <Avatar icon={<span>+</span>} />
+                <Avatar size="small">S</Avatar>
+                <Avatar size="small" icon={<span>+</span>} />
+                <Avatar size="large">LG</Avatar>
+                <Avatar size="large" icon={<span>+</span>} />
+                <Avatar.Group max={{ count: 2, popover: { trigger: 'click' } }}><Avatar>1</Avatar><Avatar>2</Avatar><Avatar>3</Avatar><Avatar>4</Avatar></Avatar.Group>
+              </div>
               <Checkbox checked>Checked</Checkbox>
               <Checkbox indeterminate>Mixed</Checkbox>
               <Checkbox disabled>Disabled</Checkbox>

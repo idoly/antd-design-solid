@@ -355,3 +355,20 @@
 .ads-card[data-size="small"] .ads-card-header-wrapper { min-height: var(--ads-card-header-height-sm, 38px); }
 .ads-card[data-size="small"] .ads-card-title { font-size: var(--ads-card-header-font-size-sm, 14px); }
 .ads-card[data-size="small"] .ads-card-body { padding: var(--ads-card-body-padding-sm, 12px); }
+
+.ads-avatar[data-size="default"] { width: var(--ads-avatar-container-size, 32px); height: var(--ads-avatar-container-size, 32px); font-size: var(--ads-avatar-text-font-size, 14px); }
+.ads-avatar[data-size="large"] { width: var(--ads-avatar-container-size-lg, 40px); height: var(--ads-avatar-container-size-lg, 40px); font-size: var(--ads-avatar-text-font-size-lg, 14px); }
+.ads-avatar[data-size="small"] { width: var(--ads-avatar-container-size-sm, 24px); height: var(--ads-avatar-container-size-sm, 24px); font-size: var(--ads-avatar-text-font-size-sm, 14px); }
+.ads-avatar[data-size="default"] [data-avatar-content="icon"] { font-size: var(--ads-avatar-icon-font-size, 18px); }
+.ads-avatar[data-size="large"] [data-avatar-content="icon"] { font-size: var(--ads-avatar-icon-font-size-lg, 24px); }
+.ads-avatar[data-size="small"] [data-avatar-content="icon"] { font-size: var(--ads-avatar-icon-font-size-sm, 14px); }
+.ads-avatar[data-responsive="true"] { width: var(--ads-avatar-responsive-xs); height: var(--ads-avatar-responsive-xs); font-size: max(12px, calc(var(--ads-avatar-responsive-xs) / 2)); }
+.ads-avatar-group > .ads-avatar,
+.ads-avatar-group > span .ads-avatar { border-color: var(--ads-avatar-group-border-color, var(--ads-color-surface)); }
+.ads-avatar-group > *:not(:first-child) { margin-inline-start: var(--ads-avatar-group-overlapping, -8px); }
+.ads-avatar-group-popover .ads-avatar + .ads-avatar { margin-inline-start: var(--ads-avatar-group-space, 4px); }
+@media (min-width: 576px) { .ads-avatar[data-responsive="true"] { width: var(--ads-avatar-responsive-sm); height: var(--ads-avatar-responsive-sm); font-size: max(12px, calc(var(--ads-avatar-responsive-sm) / 2)); } }
+@media (min-width: 768px) { .ads-avatar[data-responsive="true"] { width: var(--ads-avatar-responsive-md); height: var(--ads-avatar-responsive-md); font-size: max(12px, calc(var(--ads-avatar-responsive-md) / 2)); } }
+@media (min-width: 992px) { .ads-avatar[data-responsive="true"] { width: var(--ads-avatar-responsive-lg); height: var(--ads-avatar-responsive-lg); font-size: max(12px, calc(var(--ads-avatar-responsive-lg) / 2)); } }
+@media (min-width: 1200px) { .ads-avatar[data-responsive="true"] { width: var(--ads-avatar-responsive-xl); height: var(--ads-avatar-responsive-xl); font-size: max(12px, calc(var(--ads-avatar-responsive-xl) / 2)); } }
+@media (min-width: 1600px) { .ads-avatar[data-responsive="true"] { width: var(--ads-avatar-responsive-xxl); height: var(--ads-avatar-responsive-xxl); font-size: max(12px, calc(var(--ads-avatar-responsive-xxl) / 2)); } }
