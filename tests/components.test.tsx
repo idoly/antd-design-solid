@@ -882,6 +882,18 @@ describe('Ant Design Solid primitives', () => {
     expect(onFieldsChange).toHaveBeenCalledWith([expect.objectContaining({ name: 'account', value: 'Grace' })], expect.arrayContaining([expect.objectContaining({ name: 'account', value: 'Grace' })]));
   });
 
+  it('reports Form field validating lifecycle through onFieldsChange', async () => {
+    const onFieldsChange = vi.fn();
+    let finishValidation: (() => void) | undefined;
+    render(() => <Form onFieldsChange={onFieldsChange}><Form.Item name="account" rules={[{ validator: () => new Promise<void>((resolve) => { finishValidation = resolve; }) }]}><Input aria-label="Lifecycle account" /></Form.Item></Form>);
+
+    fireEvent.input(screen.getByRole('textbox', { name: 'Lifecycle account' }), { target: { value: 'Ada' } });
+    await waitFor(() => expect(onFieldsChange.mock.calls.some((call) => call[0][0].validating === true)).toBe(true));
+    finishValidation?.();
+    await waitFor(() => expect(onFieldsChange.mock.calls.map((call) => call[0][0].validating)).toEqual([false, true, false]));
+    expect(onFieldsChange.mock.calls.map((call) => call[1].find((field: { name: string }) => field.name === 'account')?.validating)).toEqual([false, true, false]);
+  });
+
   it('deep-merges Form.setFieldsValue and invalidates nested field metadata', () => {
     const [form] = Form.useForm({ profile: { name: 'Ada', role: 'Owner', settings: { locale: 'en', compact: false } }, tags: ['one', 'two'] });
     render(() => <Form form={form}><Form.Item name={['profile', 'name']}><Input /></Form.Item><Form.Item name={['profile', 'role']}><Input /></Form.Item></Form>);

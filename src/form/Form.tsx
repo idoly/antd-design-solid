@@ -211,11 +211,15 @@ function FormRoot<Values extends FormValues = FormValues>(inputProps: FormProps<
       if (props.name && provider) provider.onFormChange?.(props.name, { changedFields: [{ name, value }], forms: provider.forms });
     },
     async validateField(name, trigger) {
-      if (trigger) return form._validateField(name, trigger);
+      const notify = () => props.onFieldsChange?.(form._getFieldData([name]), form._getFieldData());
+      const validation = trigger ? form._validateField(name, trigger) : form.validateFields([name]);
+      notify();
       try {
-        await form.validateFields([name]);
+        await validation;
       } catch {
         // Field errors are available through the form instance.
+      } finally {
+        notify();
       }
       return form.getFieldError(name);
     },

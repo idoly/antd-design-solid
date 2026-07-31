@@ -146,7 +146,7 @@ export default function App() {
 
               <div class="grid border-y border-border-secondary bg-surface sm:grid-cols-2 lg:grid-cols-4">
                 <div class="border-b border-border-secondary p-5 sm:border-r lg:border-b-0"><Statistic title="Component families" value={71} /></div>
-                <div class="border-b border-border-secondary p-5 lg:border-b-0 lg:border-r"><Statistic title="Automated tests" value={275} suffix="passing" /></div>
+                <div class="border-b border-border-secondary p-5 lg:border-b-0 lg:border-r"><Statistic title="Automated tests" value={276} suffix="passing" /></div>
                 <div class="border-b border-border-secondary p-5 sm:border-b-0 sm:border-r"><Statistic title="Locale packs" value={72} /></div>
                 <div class="p-5"><Statistic title="Bundle status" value="Ready" /></div>
               </div>
@@ -266,7 +266,7 @@ export default function App() {
                 <Card title="Release details">
                   <Descriptions bordered column={2} items={[{ label: 'Package', children: 'ant-design-solid' }, { label: 'Version', children: <Tag color="blue">0.1.0</Tag> }, { label: 'Runtime', children: 'Solid 2 beta' }, { label: 'Status', children: <Badge status="success" text="Ready" /> }, { label: 'Distribution', children: 'Client, SSR, declarations, and locale packs', span: 2 }]} />
                   <Divider orientation="start">Activity</Divider>
-                  <Timeline items={[{ children: 'Build completed', color: 'green' }, { children: '275 tests passed', color: 'green' }, { children: 'Package verified', color: 'blue' }]} pending="Awaiting publish" />
+                  <Timeline items={[{ children: 'Build completed', color: 'green' }, { children: '276 tests passed', color: 'green' }, { children: 'Package verified', color: 'blue' }]} pending="Awaiting publish" />
                 </Card>
                 <Card title="Repository tree">
                   <Tree checkable draggable defaultExpandAll height={220} fieldNames={{ key: 'id', title: 'name', children: 'nodes' }} filterTreeNode={(node) => node.id === 'table'} titleRender={(node) => <span>{node.name as string}</span>} treeData={[{ id: 'src', name: 'src', nodes: [{ id: 'components', name: 'components', nodes: [{ id: 'form', name: 'form' }, { id: 'table', name: 'table' }, { id: 'tree', name: 'tree' }] }, { id: 'locales', name: 'locale' }] }, { id: 'tests', name: 'tests' }, { id: 'dist', name: 'dist' }]} />
@@ -328,7 +328,7 @@ export default function App() {
                 </Card>
 
                 <Card title="Masonry">
-                  <Masonry columns={{ xs: 2, sm: 3 }} gutter={[12, 12]} items={[{ key: 'a', data: 'API', height: 76, children: <div class="h-full rounded-control bg-[#e6f4ff] p-3 text-primary">API surface</div> }, { key: 'b', data: 'SSR', height: 110, children: <div class="h-full rounded-control bg-[#f6ffed] p-3 text-success">SSR entries</div> }, { key: 'c', data: 'Locale', height: 88, children: <div class="h-full rounded-control bg-[#fffbe6] p-3 text-[#ad6800]">72 locales</div> }, { key: 'd', data: 'Types', height: 64, children: <div class="h-full rounded-control bg-[#fff2f0] p-3 text-error">Type declarations</div> }, { key: 'e', data: 'Tests', height: 92, children: <div class="h-full rounded-control bg-surface-container p-3 text-text">275 tests</div> }]} />
+                  <Masonry columns={{ xs: 2, sm: 3 }} gutter={[12, 12]} items={[{ key: 'a', data: 'API', height: 76, children: <div class="h-full rounded-control bg-[#e6f4ff] p-3 text-primary">API surface</div> }, { key: 'b', data: 'SSR', height: 110, children: <div class="h-full rounded-control bg-[#f6ffed] p-3 text-success">SSR entries</div> }, { key: 'c', data: 'Locale', height: 88, children: <div class="h-full rounded-control bg-[#fffbe6] p-3 text-[#ad6800]">72 locales</div> }, { key: 'd', data: 'Types', height: 64, children: <div class="h-full rounded-control bg-[#fff2f0] p-3 text-error">Type declarations</div> }, { key: 'e', data: 'Tests', height: 92, children: <div class="h-full rounded-control bg-surface-container p-3 text-text">276 tests</div> }]} />
                 </Card>
 
                 <Card title="Splitter">
