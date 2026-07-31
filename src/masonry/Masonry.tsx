@@ -1,4 +1,4 @@
-import { createEffect, createProjection, createSignal, For, merge, omit } from 'solid-js';
+import { createEffect, createProjection, createSignal, For, merge, omit, onSettled } from 'solid-js';
 import type { JSX } from '@solidjs/web';
 import { useConfig } from '../config-provider';
 import type { Breakpoint, Gutter } from '../grid';
@@ -61,14 +61,11 @@ export function Masonry<T = unknown>(inputProps: MasonryProps<T>) {
     () => layout.flatMap(({ column, items }) => items.map(({ item }) => ({ key: item.key, column }))),
     (sortInfo) => { props.onLayoutChange?.(sortInfo); },
   );
-  createEffect(
-    () => true,
-    () => {
-      const resize = () => setViewportWidth(window.innerWidth);
-      window.addEventListener('resize', resize, { passive: true });
-      return () => window.removeEventListener('resize', resize);
-    },
-  );
+  onSettled(() => {
+    const resize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', resize, { passive: true });
+    return () => window.removeEventListener('resize', resize);
+  });
 
   return (
     <div {...others} class={['ads-masonry flex min-w-0 items-start', props.class, props.classNames?.root]} style={{ ...(typeof props.style === 'object' ? props.style : {}), gap: `${gutter(horizontalGutter())}px`, ...props.styles?.root }}>
