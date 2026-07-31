@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, untrack, type Accessor } from 'solid-js';
+import { createEffect, createSignal, onSettled, untrack, type Accessor } from 'solid-js';
 import {
   elementScroll,
   observeElementOffset,
@@ -63,8 +63,7 @@ export function createVirtualList(options: VirtualListOptions): VirtualListContr
       virtualizer._willUpdate();
     },
   );
-  const unmount = virtualizer._didMount();
-  onCleanup(unmount);
+  onSettled(() => virtualizer._didMount());
 
   return {
     items: () => { version(); return virtualizer.getVirtualItems(); },
