@@ -11,6 +11,7 @@ import {
   InputNumber,
   Menu,
   Mentions,
+  Pagination,
   Progress,
   Radio,
   Select,
@@ -36,6 +37,7 @@ function StateMatrix() {
         InputNumber: { controlWidth: 112 },
         Menu: { itemHeight: 37, itemBorderRadius: 7, itemPaddingInline: 17, horizontalItemSelectedBg: '#123abc', horizontalItemSelectedColor: '#fedcba' },
         Mentions: { activeBg: '#f0ffee', inputFontSize: 17, paddingBlock: 9, paddingInline: 18 },
+        Pagination: { itemActiveBg: '#123456', itemActiveColor: '#fedcba', itemInputBg: '#eef7ff', itemSize: 36 },
         Switch: { handleBg: '#ffeecc', handleSize: 20, trackHeight: 24, trackMinWidth: 48 },
         Tabs: { cardBg: '#ddeeff', cardGutter: 6, cardHeight: 38, itemSelectedColor: '#123456', titleFontSize: 15 },
         Slider: { handleColor: '#654321', handleSize: 18, railSize: 8, trackBg: '#abcdef' },
@@ -111,6 +113,7 @@ function StateMatrix() {
               <Progress aria-label="Completed progress" percent={100} />
               <Skeleton active paragraph={{ rows: 2 }} />
               <div class="flex min-h-24 items-center justify-center border border-border-secondary bg-surface"><Spin tip="Loading data" /></div>
+              <Pagination aria-label="State pagination" total={30} defaultCurrent={2} showQuickJumper />
             </div>
           </section>
 

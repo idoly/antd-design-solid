@@ -6,7 +6,7 @@ import { useConfig } from '../config-provider';
 const pagination = tv({
   slots: {
     root: 'ads-pagination flex min-h-8 flex-wrap items-center gap-2 text-sm text-text-secondary',
-    item: 'inline-flex shrink-0 items-center justify-center rounded-control border border-border bg-surface text-text outline-none hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:border-border disabled:text-text-disabled',
+    item: 'ads-pagination-item inline-flex shrink-0 items-center justify-center rounded-control border border-border bg-surface text-text outline-none hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/20 disabled:cursor-not-allowed disabled:border-border disabled:text-text-disabled',
   },
   variants: {
     size: {
@@ -111,7 +111,7 @@ export function Pagination(inputProps: PaginationProps) {
 
   return (
     <Show when={!(props.hideOnSinglePage && pageCount() <= 1)}>
-      <nav {...others} aria-label={props['aria-label'] ?? 'Pagination'} class={styles().root({ class: [props.class as string | undefined, props.classNames?.root] })} style={{ ...(typeof props.style === 'object' ? props.style : {}), ...props.styles?.root }}>
+      <nav {...others} data-size={props.size} aria-label={props['aria-label'] ?? 'Pagination'} class={styles().root({ class: [props.class as string | undefined, props.classNames?.root] })} style={{ ...(typeof props.style === 'object' ? props.style : {}), ...props.styles?.root }}>
         <Show when={props.showTotal}><span class="mr-auto">{props.showTotal?.(props.total, range())}</span></Show>
         {renderItem(current() - 1, 'prev', (
           <button type="button" aria-label={config.locale().Pagination?.prev_page ?? 'Previous page'} disabled={props.disabled || current() <= 1} class={styles().item({ class: props.classNames?.item })} style={props.styles?.item} onClick={() => setPage(current() - 1)}>&lt;</button>

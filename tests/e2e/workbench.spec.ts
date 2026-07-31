@@ -164,6 +164,12 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(mentions).toHaveCSS('padding-left', '18px');
   await expect(mentions).toHaveCSS('font-size', '17px');
   await expect(mentions).toHaveCSS('background-color', 'rgb(240, 255, 238)');
+  const currentPage = page.getByRole('navigation', { name: 'State pagination' }).getByRole('button', { name: 'Page 2' });
+  await expect(currentPage).toHaveCSS('width', '36px');
+  await expect(currentPage).toHaveCSS('height', '36px');
+  await expect(currentPage).toHaveCSS('background-color', 'rgb(18, 52, 86)');
+  await expect(currentPage).toHaveCSS('color', 'rgb(254, 220, 186)');
+  await expect(page.getByRole('textbox', { name: 'Quick jump page' })).toHaveCSS('background-color', 'rgb(238, 247, 255)');
   const checkedSwitch = page.getByRole('switch').first();
   await expect(checkedSwitch).toHaveCSS('min-width', '48px');
   await expect(checkedSwitch).toHaveCSS('height', '24px');
