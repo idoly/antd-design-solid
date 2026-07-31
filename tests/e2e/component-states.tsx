@@ -17,6 +17,7 @@ import {
   Slider,
   Spin,
   Switch,
+  Tabs,
   Tag,
   theme,
 } from '../../src';
@@ -34,6 +35,7 @@ function StateMatrix() {
         InputNumber: { controlWidth: 112 },
         Menu: { itemHeight: 37, itemBorderRadius: 7, itemPaddingInline: 17, horizontalItemSelectedBg: '#123abc', horizontalItemSelectedColor: '#fedcba' },
         Switch: { handleBg: '#ffeecc', handleSize: 20, trackHeight: 24, trackMinWidth: 48 },
+        Tabs: { cardBg: '#ddeeff', cardGutter: 6, cardHeight: 38, itemSelectedColor: '#123456', titleFontSize: 15 },
         Slider: { handleColor: '#654321', handleSize: 18, railSize: 8, trackBg: '#abcdef' },
         Radio: { buttonPaddingInline: 19, buttonSolidCheckedBg: '#123456' },
         Progress: { defaultColor: '#345678', lineBorderRadius: 7, remainingColor: '#ddeeff' },
@@ -90,6 +92,7 @@ function StateMatrix() {
               <Tag color="red">Error</Tag>
             </div>
             <Menu aria-label="Token menu" mode="horizontal" defaultSelectedKeys={['overview']} items={[{ key: 'overview', label: 'Overview' }, { key: 'settings', label: 'Settings' }, { key: 'remove', label: 'Remove', danger: true }, { key: 'locked', label: 'Locked', disabled: true }]} />
+            <Tabs type="card" defaultActiveKey="details" items={[{ key: 'details', label: 'Details', children: 'Release details' }, { key: 'activity', label: 'Activity', children: 'Recent activity' }, { key: 'disabled', label: 'Disabled', disabled: true }]} />
           </section>
 
           <section data-testid="feedback-states" class="space-y-3 border-t border-border pt-4" aria-labelledby="feedback-heading">

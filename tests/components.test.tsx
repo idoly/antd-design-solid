@@ -732,6 +732,62 @@ describe('Ant Design Solid primitives', () => {
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Activity panel');
   });
 
+  it('supports editable, placed, forced, and scrollable Tabs workflows', async () => {
+    const onEdit = vi.fn();
+    const onTabClick = vi.fn();
+    const onTabScroll = vi.fn();
+    render(() => <div>
+      <div data-testid="editable-tabs"><Tabs
+        type="editable-card"
+        defaultActiveKey="overview"
+        tabBarGutter={11}
+        tabBarExtraContent={{ left: <span>Before tabs</span>, right: <span>After tabs</span> }}
+        addIcon="Add"
+        removeIcon="Remove"
+        onEdit={onEdit}
+        onTabClick={onTabClick}
+        items={[{ key: 'overview', label: 'Overview', children: 'Overview card' }, { key: 'locked', label: 'Locked', children: 'Locked card', closable: false }, { key: 'activity', label: 'Activity', children: 'Activity card' }]}
+      /></div>
+      <div data-testid="placed-tabs"><Tabs
+        tabPlacement="start"
+        indicator={{ size: 18, align: 'end' }}
+        destroyInactiveTabPane
+        defaultActiveKey="first"
+        onTabScroll={onTabScroll}
+        items={[{ key: 'first', label: 'First', children: 'Forced first', forceRender: true }, { key: 'second', label: 'Second', children: 'Second panel' }]}
+      /></div>
+    </div>);
+
+    const editable = within(screen.getByTestId('editable-tabs'));
+    expect(editable.getByText('Before tabs')).toBeInTheDocument();
+    expect(editable.getByText('After tabs')).toBeInTheDocument();
+    expect(editable.getByRole('tablist')).toHaveStyle({ gap: '11px' });
+    expect(editable.getByRole('tab', { name: 'Overview' }).parentElement).toHaveClass('ads-tabs-card-tab');
+    expect(editable.getByRole('tab', { name: 'Overview' }).querySelector('.ads-tabs-indicator')).not.toBeInTheDocument();
+    expect(editable.queryByRole('button', { name: 'Remove Locked' })).not.toBeInTheDocument();
+    fireEvent.click(editable.getByRole('button', { name: 'Remove Overview' }));
+    expect(onEdit).toHaveBeenCalledWith('overview', 'remove');
+    expect(onTabClick).not.toHaveBeenCalled();
+    fireEvent.click(editable.getByRole('button', { name: 'Add tab' }));
+    expect(onEdit).toHaveBeenCalledWith(expect.any(MouseEvent), 'add');
+    fireEvent.click(editable.getByRole('tab', { name: 'Activity' }));
+    expect(onTabClick).toHaveBeenCalledWith('activity', expect.any(MouseEvent));
+
+    const placed = within(screen.getByTestId('placed-tabs'));
+    const placedList = placed.getByRole('tablist');
+    expect(placedList).toHaveAttribute('aria-orientation', 'vertical');
+    expect(placed.getByRole('tab', { name: 'First' }).querySelector('.ads-tabs-indicator')).toHaveStyle({ height: '18px', bottom: '0px' });
+    expect(placed.getByText('Forced first')).toBeInTheDocument();
+    expect(placed.queryByText('Second panel')).not.toBeInTheDocument();
+    fireEvent.keyDown(placed.getByRole('tab', { name: 'First' }), { key: 'ArrowDown' });
+    await waitFor(() => expect(placed.getByRole('tab', { name: 'Second' })).toHaveAttribute('aria-selected', 'true'));
+    expect(placed.getByText('Forced first')).not.toBeVisible();
+    expect(placed.getByText('Second panel')).toBeVisible();
+    Object.defineProperty(placedList, 'scrollTop', { value: 20, configurable: true });
+    fireEvent.scroll(placedList);
+    expect(onTabScroll).toHaveBeenCalledWith({ direction: 'bottom' });
+  });
+
   it('registers declarative Tabs.TabPane children', async () => {
     render(() => <Tabs defaultActiveKey="overview"><Tabs.TabPane tab="Overview" tabKey="overview">Overview pane</Tabs.TabPane><Tabs.TabPane tab="Activity" tabKey="activity">Activity pane</Tabs.TabPane></Tabs>);
     expect(await screen.findByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true');
