@@ -1,6 +1,6 @@
 # ant-design-solid
 
-An Ant Design v6 component port for Solid `2.0.0-beta.28`, styled with Tailwind CSS v4 and `tailwind-variants`.
+An Ant Design v6 component port for Solid `2.0.0-beta.29`, styled with Tailwind CSS v4 and `tailwind-variants`.
 
 ## Status
 
@@ -26,7 +26,7 @@ npm run dev
 npm run check
 ```
 
-`--legacy-peer-deps` is currently required because `@solidjs/testing-library` declares stable Solid 2 peer ranges while the runtime remains a prerelease; `vite-plugin-solid@3.0.0-next.20` explicitly supports beta.28. Ordinary local `npm run check` includes the pinned Playwright Chromium desktop/mobile projects. CI additionally runs Firefox and WebKit after installing their Ubuntu dependencies. Fedora cannot directly run Playwright's Ubuntu Firefox or WebKit builds because their GTK, ICU, and media-library ABIs differ, so the locally verified cross-browser gates use rootless Podman with the exact Playwright `1.62.0` Noble image:
+`--legacy-peer-deps` is currently required because `@solidjs/testing-library` declares stable Solid 2 peer ranges while the runtime remains a prerelease; `vite-plugin-solid@3.0.0-next.21` explicitly supports beta.29. Ordinary local `npm run check` includes the pinned Playwright Chromium desktop/mobile projects. CI additionally runs Firefox and WebKit after installing their Ubuntu dependencies. Fedora cannot directly run Playwright's Ubuntu Firefox or WebKit builds because their GTK, ICU, and media-library ABIs differ, so the locally verified cross-browser gates use rootless Podman with the exact Playwright `1.62.0` Noble image:
 
 ```bash
 npm run test:e2e:webkit:container:pull
@@ -92,4 +92,4 @@ Portaled components preserve scoped `ConfigProvider` token values. ConfigProvide
 
 ## Versioning
 
-The package version and Solid peer version are independent. The package is currently `0.1.0`; `solid-js` remains pinned to `2.0.0-beta.28` until the beta API stabilizes.
+The package version and Solid peer version are independent. The package is currently `0.1.0`; `solid-js` remains pinned to `2.0.0-beta.29` until the beta API stabilizes.
