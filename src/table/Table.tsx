@@ -335,8 +335,15 @@ export function Table<RecordType extends object>(inputProps: TableProps<RecordTy
     'onChange', 'class', 'style', 'ref',
   );
   const withColumnDefaults = (column: TableColumn<RecordType>): TableColumn<RecordType> => ({ ...props.column, ...column, children: column.children?.map(withColumnDefaults) });
-  const visibleRootColumns = createMemo(() => rootColumns().map(withColumnDefaults).filter((column) => !column.hidden));
-  const visibleColumns = createMemo(() => visibleRootColumns().flatMap((column) => column.children?.filter((child) => !child.hidden) ?? [column]));
+  const visibleColumn = (column: TableColumn<RecordType>): TableColumn<RecordType> | null => {
+    if (column.hidden) return null;
+    if (!column.children) return column;
+    const children = column.children.map(visibleColumn).filter((child): child is TableColumn<RecordType> => Boolean(child));
+    return children.length ? { ...column, children } : null;
+  };
+  const visibleRootColumns = createMemo(() => rootColumns().map(withColumnDefaults).map(visibleColumn).filter((column): column is TableColumn<RecordType> => Boolean(column)));
+  const leafColumns = (columns: readonly TableColumn<RecordType>[]): TableColumn<RecordType>[] => columns.flatMap((column) => column.children?.length ? leafColumns(column.children) : [column]);
+  const visibleColumns = createMemo(() => leafColumns(visibleRootColumns()));
   const fixedSide = (column: TableColumn<RecordType>): 'left' | 'right' | undefined => column.fixed === true ? 'left' : column.fixed || undefined;
   const numericWidth = (width: number | string | undefined, fallback: number) => typeof width === 'number' ? width : typeof width === 'string' && /^\d+(?:\.\d+)?px$/.test(width) ? Number.parseFloat(width) : fallback;
   const numericColumnWidth = (column: TableColumn<RecordType>) => numericWidth(column.width, 0);
@@ -365,19 +372,30 @@ export function Table<RecordType extends object>(inputProps: TableProps<RecordTy
       : columns.slice(index + 1).filter((item) => fixedSide(item) === 'right').reduce((sum, item) => sum + numericColumnWidth(item), 0));
     return stickyStyle(side, offset, header);
   };
-  const hasColumnGroups = () => visibleRootColumns().some((column) => column.children?.length);
-  const firstHeaderCells = () => {
+  interface HeaderCell { column: TableColumn<RecordType>; index: number; rowSpan?: number; colSpan?: number }
+  const columnDepth = (column: TableColumn<RecordType>): number => column.children?.length ? 1 + Math.max(...column.children.map(columnDepth)) : 1;
+  const headerRows = createMemo(() => {
     const roots = visibleRootColumns();
-    const columns = visibleColumns();
-    const grouped = roots.some((column) => column.children?.length);
-    return roots.map((column) => column.children?.length
-      ? { column: { ...column, sorter: false } as TableColumn<RecordType>, index: columns.indexOf(column.children[0]), rowSpan: 1, colSpan: column.children.filter((child) => !child.hidden).length }
-      : { column, index: columns.indexOf(column), rowSpan: grouped ? 2 : 1, colSpan: undefined });
-  };
-  const secondHeaderCells = () => {
-    const columns = visibleColumns();
-    return visibleRootColumns().flatMap((column) => column.children?.filter((child) => !child.hidden) ?? []).map((column) => ({ column, index: columns.indexOf(column) }));
-  };
+    const leaves = visibleColumns();
+    const depth = roots.length ? Math.max(...roots.map(columnDepth)) : 1;
+    const rows = Array.from({ length: depth }, () => [] as HeaderCell[]);
+    const visit = (columns: readonly TableColumn<RecordType>[], level: number) => {
+      columns.forEach((column) => {
+        const descendants = column.children?.length ? leafColumns(column.children) : [column];
+        const index = leaves.indexOf(descendants[0]);
+        const grouped = Boolean(column.children?.length);
+        const sides = new Set(descendants.map(fixedSide));
+        const inheritedSide = grouped && sides.size === 1 ? [...sides][0] : undefined;
+        const inheritedWidth = grouped ? descendants.reduce((sum, leaf) => sum + numericColumnWidth(leaf), 0) : undefined;
+        const headerColumn = grouped ? { ...column, sorter: false, filters: undefined, fixed: inheritedSide, width: inheritedWidth || column.width } : column;
+        rows[level].push({ column: headerColumn, index, rowSpan: grouped ? 1 : depth - level, colSpan: grouped ? descendants.length : undefined });
+        if (column.children?.length) visit(column.children, level + 1);
+      });
+    };
+    visit(roots, 0);
+    return rows;
+  });
+  const headerDepth = () => headerRows().length;
   const getRowKey = (record: RecordType, index: number): TableKey => {
     if (typeof props.rowKey === 'function') return props.rowKey(record);
     const keyName = (props.rowKey ?? 'key') as keyof RecordType;
@@ -770,12 +788,11 @@ export function Table<RecordType extends object>(inputProps: TableProps<RecordTy
           }}
         >
           <Show when={props.showHeader}><Dynamic component={props.components?.header?.wrapper ?? 'thead'} class={styles().header({ class: [props.sticky ? 'sticky top-0 z-10' : '', semanticClasses().header, semanticClasses()['header.wrapper']] })} style={{ 'background-color': 'var(--ads-table-header-bg, var(--ads-surface-container))', ...semanticStyles().header, ...semanticStyles()['header.wrapper'] }}>
-            <Dynamic component={props.components?.header?.row ?? 'tr'} class={semanticClasses()['header.row']} style={semanticStyles()['header.row']} {...props.onHeaderRow?.(visibleRootColumns(), 0)}>
-              <Show when={props.rowSelection}><th scope="col" rowspan={hasColumnGroups() ? 2 : 1} class={styles().headerCell({ class: semanticClasses().headerCell })} style={{ ...headerTokenStyle(), ...semanticStyles().headerCell, width: typeof props.rowSelection?.columnWidth === 'number' ? `${props.rowSelection.columnWidth}px` : props.rowSelection?.columnWidth ?? 'var(--ads-table-selection-column-width, 32px)', 'text-align': props.rowSelection?.align, ...selectionCellStyle(true) }}><Show when={rowSelectionType() === 'checkbox'} fallback={typeof props.rowSelection?.columnTitle === 'function' ? props.rowSelection.columnTitle(<></>) : props.rowSelection?.columnTitle}>{renderSelectionHeader()}</Show></th></Show>
-              <Show when={props.expandable && props.expandable.showExpandColumn !== false}><th scope="col" rowspan={hasColumnGroups() ? 2 : 1} class={styles().headerCell({ class: semanticClasses().headerCell })} style={{ ...headerTokenStyle(), ...semanticStyles().headerCell, width: typeof props.expandable?.columnWidth === 'number' ? `${props.expandable.columnWidth}px` : props.expandable?.columnWidth ?? '48px', ...expandCellStyle(true) }}>{props.expandable?.columnTitle}</th></Show>
-              <For each={firstHeaderCells()}>{(cell) => renderHeaderCell(cell.column, cell.index, cell.rowSpan, cell.colSpan)}</For>
-            </Dynamic>
-            <Show when={hasColumnGroups()}><Dynamic component={props.components?.header?.row ?? 'tr'} {...props.onHeaderRow?.(visibleColumns(), 1)}><For each={secondHeaderCells()}>{(cell) => renderHeaderCell(cell.column, cell.index)}</For></Dynamic></Show>
+            <For each={headerRows()}>{(row, rowIndex) => <Dynamic component={props.components?.header?.row ?? 'tr'} class={semanticClasses()['header.row']} style={semanticStyles()['header.row']} {...props.onHeaderRow?.(row.map((cell) => cell.column), rowIndex())}>
+              <Show when={rowIndex() === 0 && props.rowSelection}><th scope="col" rowspan={headerDepth()} class={styles().headerCell({ class: semanticClasses().headerCell })} style={{ ...headerTokenStyle(), ...semanticStyles().headerCell, width: typeof props.rowSelection?.columnWidth === 'number' ? `${props.rowSelection.columnWidth}px` : props.rowSelection?.columnWidth ?? 'var(--ads-table-selection-column-width, 32px)', 'text-align': props.rowSelection?.align, ...selectionCellStyle(true) }}><Show when={rowSelectionType() === 'checkbox'} fallback={typeof props.rowSelection?.columnTitle === 'function' ? props.rowSelection.columnTitle(<></>) : props.rowSelection?.columnTitle}>{renderSelectionHeader()}</Show></th></Show>
+              <Show when={rowIndex() === 0 && props.expandable && props.expandable.showExpandColumn !== false}><th scope="col" rowspan={headerDepth()} class={styles().headerCell({ class: semanticClasses().headerCell })} style={{ ...headerTokenStyle(), ...semanticStyles().headerCell, width: typeof props.expandable?.columnWidth === 'number' ? `${props.expandable.columnWidth}px` : props.expandable?.columnWidth ?? '48px', ...expandCellStyle(true) }}>{props.expandable?.columnTitle}</th></Show>
+              <For each={row}>{(cell) => renderHeaderCell(cell.column, cell.index, cell.rowSpan, cell.colSpan)}</For>
+            </Dynamic>}</For>
           </Dynamic></Show>
           <Dynamic component={props.components?.body?.wrapper ?? 'tbody'} class={[semanticClasses().body, semanticClasses()['body.wrapper']]} style={{ ...semanticStyles().body, ...semanticStyles()['body.wrapper'] }}>
             <Show when={virtualPaddingTop() > 0}><tr aria-hidden="true"><td colspan={visibleColumns().length + (props.rowSelection ? 1 : 0) + (props.expandable && props.expandable.showExpandColumn !== false ? 1 : 0)} style={{ height: `${virtualPaddingTop()}px`, padding: 0, border: 0 }} /></tr></Show>

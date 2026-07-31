@@ -1434,6 +1434,49 @@ describe('Ant Design Solid primitives', () => {
     expect(Table.SELECTION_ALL).toBe('SELECT_ALL');
   });
 
+  it('renders recursive Table column groups and prunes fully hidden branches', () => {
+    const { container } = render(() => <Table
+      pagination={false}
+      scroll={{ x: 900 }}
+      dataSource={[{ key: 1, name: 'Ada', team: 'Core', score: 98, action: 'Open', secret: 'x' }]}
+      rowSelection={{ fixed: true, columnWidth: 40 }}
+      expandable={{ fixed: 'left', columnWidth: 32, expandedRowRender: () => 'Details' }}
+      columns={[
+        { title: 'Account', children: [{ title: 'Identity', children: [
+          { dataIndex: 'name', title: 'Name', width: 100, fixed: 'left' },
+          { dataIndex: 'team', title: 'Team', width: 80, fixed: 'left' },
+        ] }] },
+        { dataIndex: 'score', title: 'Score', width: 120 },
+        { title: 'Hidden group', children: [{ dataIndex: 'secret', title: 'Secret', hidden: true }] },
+        { title: 'Actions', children: [{ dataIndex: 'action', title: 'Action', width: 60, fixed: 'right' }] },
+      ]}
+    />);
+
+    const headers = screen.getAllByRole('columnheader');
+    expect(container.querySelectorAll('thead > tr')).toHaveLength(3);
+    expect(screen.queryByRole('columnheader', { name: 'Hidden group' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('columnheader', { name: 'Secret' })).not.toBeInTheDocument();
+    expect(headers[0]).toHaveAttribute('rowspan', '3');
+    expect(headers[1]).toHaveAttribute('rowspan', '3');
+    expect(screen.getByRole('columnheader', { name: 'Account' })).toHaveAttribute('colspan', '2');
+    expect(screen.getByRole('columnheader', { name: 'Account' })).toHaveStyle({ position: 'sticky', left: '72px', width: '180px' });
+    expect(screen.getByRole('columnheader', { name: 'Identity' })).toHaveAttribute('colspan', '2');
+    expect(screen.getByRole('columnheader', { name: 'Identity' })).toHaveStyle({ position: 'sticky', left: '72px', width: '180px' });
+    expect(screen.getByRole('columnheader', { name: 'Score' })).toHaveAttribute('rowspan', '3');
+    expect(screen.getByRole('columnheader', { name: 'Actions' })).toHaveStyle({ position: 'sticky', right: '0px' });
+    expect(screen.getByRole('columnheader', { name: 'Action' })).toHaveAttribute('rowspan', '2');
+    expect(screen.getByRole('columnheader', { name: 'Name' })).toHaveStyle({ position: 'sticky', left: '72px' });
+    expect(screen.getByRole('columnheader', { name: 'Team' })).toHaveStyle({ position: 'sticky', left: '172px' });
+    const cells = screen.getAllByRole('cell');
+    expect(cells).toHaveLength(6);
+    expect(cells[2]).toHaveTextContent('Ada');
+    expect(cells[2]).toHaveStyle({ position: 'sticky', left: '72px' });
+    expect(cells[3]).toHaveTextContent('Core');
+    expect(cells[3]).toHaveStyle({ position: 'sticky', left: '172px' });
+    expect(cells[5]).toHaveTextContent('Open');
+    expect(cells[5]).toHaveStyle({ position: 'sticky', right: '0px' });
+  });
+
   it('applies Table semantic slots and row/header/scroll callbacks', () => {
     let tableRef: TableRef | undefined;
     const onRowClick = vi.fn();
