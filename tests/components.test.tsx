@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { createMemo, createSignal, useContext } from 'solid-js';
 import { render as renderSolid } from '@solidjs/web';
 import type { JSX } from '@solidjs/web';
-import type { AffixRef, CheckboxRef, DatePickerPanelMode, FloatButtonRef, GetProp, GetProps, GetRef, MenuRef, RefSelectProps, TableRef } from '../src';
+import type { AffixRef, CheckboxRef, DatePickerPanelMode, FloatButtonRef, GetProp, GetProps, GetRef, MentionsRef, MenuRef, RefSelectProps, TableRef } from '../src';
 import { Affix, Alert, Anchor, App, AutoComplete, Avatar, Badge, BorderBeam, Breadcrumb, Button, Calendar, Card, Carousel, Cascader, Checkbox, Collapse, ColorPicker, ConfigProvider, DatePicker, Descriptions, Divider, Drawer, Dropdown, Empty, Flex, FloatButton, Form, Grid, Image, Input, InputNumber, Layout, List, Masonry, Menu, Mentions, message, Modal, moveTreeNode, notification, Pagination, Popconfirm, Popover, Progress, QRCode, Radio, Rate, Result, Segmented, Select, Skeleton, Slider, Space, Spin, Splitter, Statistic, Steps, Switch, Table, Tabs, Tag, Timeline, TimePicker, Tooltip, Tour, Transfer, Tree, TreeSelect, Typography, Upload, unstableSetRender, version, Watermark, theme, enUS, zhCN } from '../src';
 
 describe('Ant Design Solid primitives', () => {
@@ -3216,6 +3216,58 @@ describe('Ant Design Solid primitives', () => {
     fireEvent.click(await screen.findByRole('option', { name: 'Ada' }));
     fireEvent.click(screen.getByRole('button', { name: 'Send' }));
     await waitFor(() => expect(onFinish).toHaveBeenCalledWith({ message: '@ada ' }));
+  });
+
+  it('supports Mentions autosize, refs, resize, popup scroll, and semantic functions', async () => {
+    const OriginalResizeObserver = globalThis.ResizeObserver;
+    let notifyResize: (() => void) | undefined;
+    globalThis.ResizeObserver = class {
+      constructor(callback: ResizeObserverCallback) { notifyResize = () => callback([{ contentRect: { width: 320, height: 66 } } as ResizeObserverEntry], this as unknown as ResizeObserver); }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    } as unknown as typeof ResizeObserver;
+    const onFocus = vi.fn();
+    const onBlur = vi.fn();
+    const onResize = vi.fn();
+    const onPopupScroll = vi.fn();
+    let mentionsRef: MentionsRef | undefined;
+    render(() => <Mentions
+      ref={(value) => { mentionsRef = value; }}
+      aria-label="Advanced mentions"
+      autoSize={{ minRows: 2, maxRows: 3 }}
+      size="large"
+      variant="filled"
+      options={[{ value: 'ada', label: 'Ada', style: { color: 'rgb(0, 128, 0)' } }]}
+      classNames={() => ({ root: 'mentions-root-slot', textarea: 'mentions-textarea-slot', popup: 'mentions-popup-slot' })}
+      styles={() => ({ textarea: { 'padding-left': '17px' } })}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      onResize={onResize}
+      onPopupScroll={onPopupScroll}
+    />);
+    const textarea = screen.getByRole('textbox', { name: 'Advanced mentions' });
+    expect(textarea.closest('.ads-mentions-root')).toHaveAttribute('data-size', 'large');
+    expect(textarea.closest('.ads-mentions-root')).toHaveAttribute('data-variant', 'filled');
+    expect(textarea.closest('.ads-mentions-root')).toHaveClass('mentions-root-slot');
+    expect(textarea).toHaveClass('mentions-textarea-slot', 'bg-surface-container');
+    expect(textarea).toHaveStyle({ paddingLeft: '17px' });
+    mentionsRef?.focus();
+    expect(textarea).toHaveFocus();
+    expect(onFocus).toHaveBeenCalled();
+    notifyResize?.();
+    expect(onResize).toHaveBeenCalledWith({ width: 320, height: 66 });
+    fireEvent.input(textarea, { target: { value: '@a\nsecond line', selectionStart: 2 } });
+    expect(textarea).toHaveStyle({ height: '44px' });
+    const option = await screen.findByRole('option', { name: 'Ada' });
+    expect(option).toHaveStyle({ color: 'rgb(0, 128, 0)' });
+    const listbox = screen.getByRole('listbox');
+    fireEvent.scroll(listbox);
+    expect(onPopupScroll).toHaveBeenCalled();
+    mentionsRef?.blur();
+    expect(onBlur).toHaveBeenCalled();
+    await waitFor(() => expect(screen.queryByRole('listbox')).not.toBeInTheDocument());
+    globalThis.ResizeObserver = OriginalResizeObserver;
   });
 
   it('parses mentions with multiple prefixes', () => {

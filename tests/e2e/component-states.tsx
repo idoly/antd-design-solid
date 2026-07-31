@@ -10,6 +10,7 @@ import {
   Input,
   InputNumber,
   Menu,
+  Mentions,
   Progress,
   Radio,
   Select,
@@ -34,6 +35,7 @@ function StateMatrix() {
       components: customTokens ? {
         InputNumber: { controlWidth: 112 },
         Menu: { itemHeight: 37, itemBorderRadius: 7, itemPaddingInline: 17, horizontalItemSelectedBg: '#123abc', horizontalItemSelectedColor: '#fedcba' },
+        Mentions: { activeBg: '#f0ffee', inputFontSize: 17, paddingBlock: 9, paddingInline: 18 },
         Switch: { handleBg: '#ffeecc', handleSize: 20, trackHeight: 24, trackMinWidth: 48 },
         Tabs: { cardBg: '#ddeeff', cardGutter: 6, cardHeight: 38, itemSelectedColor: '#123456', titleFontSize: 15 },
         Slider: { handleColor: '#654321', handleSize: 18, railSize: 8, trackBg: '#abcdef' },
@@ -73,6 +75,7 @@ function StateMatrix() {
               <InputNumber aria-label="Numeric field" defaultValue={42} min={0} max={100} />
               <Select aria-label="Selected option" defaultValue="solid" options={[{ value: 'solid', label: 'Solid 2' }, { value: 'react', label: 'React' }]} />
               <DatePicker.RangePicker aria-label="Release range" showTime defaultValue={[dayjs('2026-07-01T09:00:00'), dayjs('2026-07-03T18:00:00')]} />
+              <Mentions aria-label="Review mentions" placeholder="Mention a reviewer" autoSize={{ minRows: 2, maxRows: 3 }} options={[{ value: 'ada', label: 'Ada' }]} />
             </div>
           </section>
 

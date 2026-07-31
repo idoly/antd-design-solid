@@ -26,14 +26,14 @@ npm run dev
 npm run check
 ```
 
-`--legacy-peer-deps` is currently required because `@solidjs/testing-library` declares stable Solid 2 peer ranges while the runtime remains a prerelease; `vite-plugin-solid@3.0.0-next.20` explicitly supports beta.28. `npm run check` includes Playwright Chromium desktop/mobile and Firefox tests; the host must provide their system libraries. WebKit is enabled with `PLAYWRIGHT_INCLUDE_WEBKIT=1` and is mandatory in Ubuntu CI. Fedora cannot directly run Playwright's Ubuntu WebKit build because its ICU and media-library ABIs differ, so the locally verified WebKit gate uses rootless Podman with the exact Playwright `1.62.0` Noble image:
+`--legacy-peer-deps` is currently required because `@solidjs/testing-library` declares stable Solid 2 peer ranges while the runtime remains a prerelease; `vite-plugin-solid@3.0.0-next.20` explicitly supports beta.28. Ordinary local `npm run check` includes the pinned Playwright Chromium desktop/mobile projects. CI additionally runs Firefox and WebKit after installing their Ubuntu dependencies. Fedora cannot directly run Playwright's Ubuntu Firefox or WebKit builds because their GTK, ICU, and media-library ABIs differ, so the locally verified cross-browser gates use rootless Podman with the exact Playwright `1.62.0` Noble image:
 
 ```bash
 npm run test:e2e:webkit:container:pull
 npm run test:e2e:webkit:container
 ```
 
-Keep the image tag synchronized with the installed Playwright version. The container gates are explicit rather than part of ordinary `npm run check`, avoiding a large image/runtime requirement for every local check. `npm run test:e2e:system` runs the desktop and mobile Chromium projects in the same rootless Podman image, so it does not require a system-installed browser. CI and release workflows set `PLAYWRIGHT_SKIP_SCREENSHOTS=1` because distro font rasterization is not pixel-identical; Chromium screenshot baselines remain enforced on the pinned local baseline host while CI enforces browser behavior, accessibility, performance, layout overflow, and computed CSS.
+Keep the image tag synchronized with the installed Playwright version. The container gates are explicit rather than part of ordinary `npm run check`, avoiding a large image/runtime requirement for every local check. `npm run test:e2e:system` runs the desktop/mobile Chromium and Firefox projects in the same rootless Podman image, so it does not require a system-installed browser. CI and release workflows set `PLAYWRIGHT_SKIP_SCREENSHOTS=1` because distro font rasterization is not pixel-identical; Chromium screenshot baselines remain enforced on the pinned local baseline host while CI enforces browser behavior, accessibility, performance, layout overflow, and computed CSS.
 
 The local component workbench runs at `http://localhost:5173/`.
 

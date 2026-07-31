@@ -159,6 +159,11 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await page.goto('/tests/e2e/component-states.html?tokens=1');
   const inputNumber = page.getByRole('spinbutton', { name: 'Numeric field' }).locator('..');
   await expect(inputNumber).toHaveCSS('width', '112px');
+  const mentions = page.getByRole('textbox', { name: 'Review mentions' });
+  await expect(mentions).toHaveCSS('padding-top', '9px');
+  await expect(mentions).toHaveCSS('padding-left', '18px');
+  await expect(mentions).toHaveCSS('font-size', '17px');
+  await expect(mentions).toHaveCSS('background-color', 'rgb(240, 255, 238)');
   const checkedSwitch = page.getByRole('switch').first();
   await expect(checkedSwitch).toHaveCSS('min-width', '48px');
   await expect(checkedSwitch).toHaveCSS('height', '24px');
