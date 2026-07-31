@@ -333,3 +333,12 @@
 .ads-pagination select { background-color: var(--ads-pagination-item-input-bg, var(--ads-color-surface)); }
 .ads-pagination[data-size="small"] select { top: var(--ads-pagination-mini-options-size-changer-top, 0); }
 @media (min-width: 1024px) { .ads-pagination[data-size="large"] .ads-pagination-item { width: var(--ads-pagination-item-size-lg, 40px); height: var(--ads-pagination-item-size-lg, 40px); } }
+
+.ads-layout { background-color: var(--ads-layout-body-bg, var(--ads-color-surface-layout)); }
+.ads-layout-header { height: var(--ads-layout-header-height, 64px); padding: var(--ads-layout-header-padding, 0 48px); color: var(--ads-layout-header-color, #fff); background-color: var(--ads-layout-header-bg, #001529); }
+.ads-layout-footer { padding: var(--ads-layout-footer-padding, 24px 48px); background-color: var(--ads-layout-footer-bg, var(--ads-layout-body-bg, var(--ads-color-surface-layout))); }
+.ads-layout-sider { background-color: var(--ads-layout-sider-bg, #001529); }
+.ads-layout-sider[data-theme="light"] { background-color: var(--ads-layout-light-sider-bg, var(--ads-color-surface)); }
+.ads-layout-sider-trigger { height: var(--ads-layout-trigger-height, 48px); color: var(--ads-layout-trigger-color, #fff); background-color: var(--ads-layout-trigger-bg, rgba(0, 0, 0, 0.2)); }
+.ads-layout-sider[data-theme="light"] .ads-layout-sider-trigger { color: var(--ads-layout-light-trigger-color, var(--ads-color-text)); background-color: var(--ads-layout-light-trigger-bg, var(--ads-color-surface-container)); }
+.ads-layout-sider-trigger[data-zero-width="true"] { width: var(--ads-layout-zero-trigger-width, 36px); height: var(--ads-layout-zero-trigger-height, 48px); background-color: var(--ads-layout-trigger-bg, #001529); }

@@ -15,8 +15,8 @@ export interface LayoutProps extends Omit<JSX.HTMLAttributes<HTMLElement>, 'styl
 }
 
 export type SiderSemanticName = 'root' | 'body';
-export type SiderSemanticClassNames = Partial<Record<SiderSemanticName, string>>;
-export type SiderSemanticStyles = Partial<Record<SiderSemanticName, JSX.CSSProperties>>;
+export type SiderSemanticClassNames = Partial<Record<SiderSemanticName, string>> | ((info: { props: SiderProps }) => Partial<Record<SiderSemanticName, string>>);
+export type SiderSemanticStyles = Partial<Record<SiderSemanticName, JSX.CSSProperties>> | ((info: { props: SiderProps }) => Partial<Record<SiderSemanticName, JSX.CSSProperties>>);
 
 export interface SiderProps extends Omit<JSX.HTMLAttributes<HTMLElement>, 'onCollapse' | 'style'> {
   breakpoint?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'xxxl';
@@ -99,6 +99,7 @@ export function Sider(inputProps: SiderProps) {
   const numericWidth = () => collapsed() ? props.collapsedWidth : props.width;
   const width = () => typeof numericWidth() === 'number' ? `${numericWidth()}px` : numericWidth();
   const setCollapsed = (next: boolean, type: 'clickTrigger' | 'responsive') => {
+    if (collapsed() === next) return;
     if (props.collapsed === undefined) setInternalCollapsed(next);
     props.onCollapse?.(next, type);
   };
@@ -119,29 +120,33 @@ export function Sider(inputProps: SiderProps) {
   );
 
   const defaultTrigger = () => props.reverseArrow ? (collapsed() ? '<' : '>') : (collapsed() ? '>' : '<');
+  const semanticClasses = () => typeof props.classNames === 'function' ? props.classNames({ props }) : props.classNames ?? {};
+  const semanticStyles = () => typeof props.styles === 'function' ? props.styles({ props }) : props.styles ?? {};
   const siderStyle = (): JSX.CSSProperties => ({
     width: width(),
     'min-width': width(),
     'max-width': width(),
     ...props.style,
-    ...props.styles?.root,
+    ...semanticStyles().root,
   } as JSX.CSSProperties);
   return (
     <aside
       {...others}
-      class={['ads-layout-sider relative shrink-0 transition-[width] duration-[var(--ads-motion-mid)]', props.theme === 'light' ? 'bg-surface text-text' : 'bg-[#001529] text-white', props.class, props.classNames?.root]}
+      class={['ads-layout-sider relative shrink-0 transition-[width] duration-[var(--ads-motion-mid)]', props.theme === 'light' ? 'bg-surface text-text' : 'bg-[#001529] text-white', props.class, semanticClasses().root]}
       style={siderStyle()}
+      data-theme={props.theme}
       data-collapsed={collapsed() ? 'true' : 'false'}
     >
-      <div class={['h-full overflow-hidden', props.classNames?.body]} style={props.styles?.body}>{props.children}</div>
+      <div class={['ads-layout-sider-body h-full overflow-hidden', semanticClasses().body]} style={semanticStyles().body}>{props.children}</div>
       <Show when={props.collapsible && props.trigger !== null}>
         <button
           type="button"
           aria-label={collapsed() ? 'Expand sidebar' : 'Collapse sidebar'}
           aria-expanded={collapsed() ? 'false' : 'true'}
+          data-zero-width={props.collapsedWidth === 0 && collapsed() ? 'true' : undefined}
           class={props.collapsedWidth === 0 && collapsed()
-            ? 'absolute bottom-16 left-full z-10 flex h-12 w-9 items-center justify-center rounded-r-control bg-[#001529] text-white'
-            : 'absolute inset-x-0 bottom-0 flex h-12 items-center justify-center bg-black/20 text-white hover:bg-black/30'}
+            ? 'ads-layout-sider-trigger absolute bottom-16 left-full z-10 flex h-12 w-9 items-center justify-center rounded-r-control bg-[#001529] text-white'
+            : 'ads-layout-sider-trigger absolute inset-x-0 bottom-0 flex h-12 items-center justify-center bg-black/20 text-white hover:bg-black/30'}
           style={props.collapsedWidth === 0 && collapsed() ? props.zeroWidthTriggerStyle : undefined}
           onClick={() => setCollapsed(!collapsed(), 'clickTrigger')}
         >

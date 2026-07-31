@@ -2537,17 +2537,44 @@ describe('Ant Design Solid primitives', () => {
     const onCollapse = vi.fn();
     const { container } = render(() => (
       <Layout>
-        <Layout.Sider collapsible width={240} collapsedWidth={72} onCollapse={onCollapse}>Navigation</Layout.Sider>
+        <Layout.Sider collapsible width={240} collapsedWidth={72} classNames={() => ({ root: 'sider-root', body: 'sider-body' })} styles={() => ({ body: { color: 'rgb(1, 2, 3)' } })} onCollapse={onCollapse}>Navigation</Layout.Sider>
         <Layout.Content>Content</Layout.Content>
       </Layout>
     ));
     await waitFor(() => expect(container.querySelector('.ads-layout')).toHaveClass('flex-row'));
     const sider = container.querySelector('.ads-layout-sider')!;
     expect(sider).toHaveStyle({ width: '240px' });
+    expect(sider).toHaveClass('sider-root');
+    expect(container.querySelector('.ads-layout-sider-body')).toHaveClass('sider-body');
+    expect(container.querySelector('.ads-layout-sider-body')).toHaveStyle({ color: 'rgb(1, 2, 3)' });
 
     fireEvent.click(screen.getByRole('button', { name: 'Collapse sidebar' }));
     await waitFor(() => expect(sider).toHaveStyle({ width: '72px' }));
     expect(onCollapse).toHaveBeenCalledWith(true, 'clickTrigger');
+  });
+
+  it('only reports responsive Layout collapse when the breakpoint state changes', async () => {
+    const onBreakpoint = vi.fn();
+    const onCollapse = vi.fn();
+    let matches = false;
+    let listener: ((event: { matches: boolean }) => void) | undefined;
+    Object.defineProperty(window, 'matchMedia', {
+      configurable: true,
+      value: () => ({
+        get matches() { return matches; },
+        addEventListener: (_type: string, next: (event: { matches: boolean }) => void) => { listener = next; },
+        removeEventListener: () => undefined,
+      }),
+    });
+    render(() => <Layout><Layout.Sider breakpoint="md" onBreakpoint={onBreakpoint} onCollapse={onCollapse}>Navigation</Layout.Sider></Layout>);
+    expect(onBreakpoint).toHaveBeenCalledWith(false);
+    expect(onCollapse).not.toHaveBeenCalled();
+
+    matches = true;
+    listener?.({ matches });
+    await waitFor(() => expect(onCollapse).toHaveBeenCalledWith(true, 'responsive'));
+    listener?.({ matches });
+    expect(onCollapse).toHaveBeenCalledTimes(1);
   });
 
   it('renders Typography heading and editable text semantics', async () => {

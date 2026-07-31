@@ -170,6 +170,14 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(currentPage).toHaveCSS('background-color', 'rgb(18, 52, 86)');
   await expect(currentPage).toHaveCSS('color', 'rgb(254, 220, 186)');
   await expect(page.getByRole('textbox', { name: 'Quick jump page' })).toHaveCSS('background-color', 'rgb(238, 247, 255)');
+  const layoutHeader = page.getByText('Release workspace');
+  await expect(layoutHeader).toHaveCSS('height', '44px');
+  await expect(layoutHeader).toHaveCSS('padding-left', '17px');
+  await expect(layoutHeader).toHaveCSS('color', 'rgb(247, 215, 116)');
+  await expect(layoutHeader).toHaveCSS('background-color', 'rgb(23, 50, 77)');
+  await expect(page.locator('.ads-layout-sider').last()).toHaveCSS('background-color', 'rgb(35, 79, 99)');
+  await expect(page.getByRole('button', { name: 'Collapse sidebar' })).toHaveCSS('height', '34px');
+  await expect(page.getByText('Release status')).toHaveCSS('padding-top', '7px');
   const checkedSwitch = page.getByRole('switch').first();
   await expect(checkedSwitch).toHaveCSS('min-width', '48px');
   await expect(checkedSwitch).toHaveCSS('height', '24px');

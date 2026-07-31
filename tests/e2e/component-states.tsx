@@ -9,6 +9,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Layout,
   Menu,
   Mentions,
   Pagination,
@@ -35,6 +36,7 @@ function StateMatrix() {
       algorithm: dark ? theme.darkAlgorithm : undefined,
       components: customTokens ? {
         InputNumber: { controlWidth: 112 },
+        Layout: { bodyBg: '#eaf2f8', footerBg: '#d5e5f2', footerPadding: '7px 13px', headerBg: '#17324d', headerColor: '#f7d774', headerHeight: 44, headerPadding: '0 17px', siderBg: '#234f63', triggerBg: '#102f3d', triggerColor: '#f7d774', triggerHeight: 34 },
         Menu: { itemHeight: 37, itemBorderRadius: 7, itemPaddingInline: 17, horizontalItemSelectedBg: '#123abc', horizontalItemSelectedColor: '#fedcba' },
         Mentions: { activeBg: '#f0ffee', inputFontSize: 17, paddingBlock: 9, paddingInline: 18 },
         Pagination: { itemActiveBg: '#123456', itemActiveColor: '#fedcba', itemInputBg: '#eef7ff', itemSize: 36 },
@@ -114,6 +116,14 @@ function StateMatrix() {
               <Skeleton active paragraph={{ rows: 2 }} />
               <div class="flex min-h-24 items-center justify-center border border-border-secondary bg-surface"><Spin tip="Loading data" /></div>
               <Pagination aria-label="State pagination" total={30} defaultCurrent={2} showQuickJumper />
+              <Layout class="h-40 overflow-hidden md:col-span-2">
+                <Layout.Header class="flex items-center">Release workspace</Layout.Header>
+                <Layout hasSider>
+                  <Layout.Sider width={112} collapsible>Navigation</Layout.Sider>
+                  <Layout.Content class="p-3">Workspace content</Layout.Content>
+                </Layout>
+                <Layout.Footer>Release status</Layout.Footer>
+              </Layout>
             </div>
           </section>
 
