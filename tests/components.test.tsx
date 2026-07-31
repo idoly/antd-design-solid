@@ -176,9 +176,13 @@ describe('Ant Design Solid primitives', () => {
 
   it('renders Card Meta, Grid, actions, and controlled tab state', async () => {
     const onTabChange = vi.fn();
-    const { container } = render(() => <Card title="Profile" defaultActiveTabKey="details" onTabChange={onTabChange} tabList={[{ key: 'details', label: 'Details' }, { key: 'activity', label: 'Activity' }]} actions={[<Button type="text">Edit profile</Button>, <Button type="text">Share profile</Button>]}><Card.Meta title="Ada Lovelace" description="Owner" /><Card.Grid>Projects</Card.Grid><Card.Grid>Teams</Card.Grid></Card>);
+    const { container } = render(() => <Card title="Profile" defaultActiveTabKey="details" onTabChange={onTabChange} tabProps={{ class: 'card-tab-list', style: { color: 'rgb(1, 2, 3)' } }} classNames={() => ({ root: 'card-root-slot', header: 'card-header-slot', body: 'card-body-slot', title: 'card-title-slot', actions: 'card-actions-slot' })} styles={() => ({ body: { color: 'rgb(4, 5, 6)' } })} tabList={[{ key: 'details', label: 'Details' }, { key: 'activity', label: 'Activity' }]} actions={[<Button type="text">Edit profile</Button>, <Button type="text">Share profile</Button>]}><Card.Meta title="Ada Lovelace" description="Owner" /><Card.Grid>Projects</Card.Grid><Card.Grid>Teams</Card.Grid></Card>);
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument();
     expect(container.querySelectorAll('.ads-card-grid')).toHaveLength(2);
+    expect(container.querySelector('.card-root-slot')).toContainElement(container.querySelector('.card-header-slot'));
+    expect(container.querySelector('.card-header-slot')).toContainElement(container.querySelector('.card-title-slot'));
+    expect(container.querySelector('.card-body-slot')).toHaveStyle({ color: 'rgb(4, 5, 6)' });
+    expect(container.querySelector('.card-tab-list')).toHaveStyle({ color: 'rgb(1, 2, 3)' });
     fireEvent.click(screen.getByRole('tab', { name: 'Activity' }));
     await waitFor(() => expect(screen.getByRole('tab', { name: 'Activity' })).toHaveAttribute('aria-selected', 'true'));
     expect(onTabChange).toHaveBeenCalledWith('activity');

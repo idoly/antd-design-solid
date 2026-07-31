@@ -170,6 +170,21 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(currentPage).toHaveCSS('background-color', 'rgb(18, 52, 86)');
   await expect(currentPage).toHaveCSS('color', 'rgb(254, 220, 186)');
   await expect(page.getByRole('textbox', { name: 'Quick jump page' })).toHaveCSS('background-color', 'rgb(238, 247, 255)');
+  const smallCard = page.getByTestId('state-card-small');
+  await expect(smallCard.locator('.ads-card-header')).toHaveCSS('padding-left', '11px');
+  await expect(smallCard.locator('.ads-card-header-wrapper')).toHaveCSS('min-height', '34px');
+  await expect(smallCard.locator('.ads-card-title')).toHaveCSS('font-size', '15px');
+  await expect(smallCard.locator('.ads-card-body')).toHaveCSS('padding-top', '13px');
+  const stateCard = page.getByTestId('state-card');
+  await expect(stateCard.locator('.ads-card-header')).toHaveCSS('padding-left', '20px');
+  await expect(stateCard.locator('.ads-card-header')).toHaveCSS('background-color', 'rgb(232, 242, 255)');
+  await expect(stateCard.locator('.ads-card-header-wrapper')).toHaveCSS('min-height', '48px');
+  await expect(stateCard.locator('.ads-card-title')).toHaveCSS('font-size', '18px');
+  await expect(stateCard.locator('.ads-card-extra')).toHaveCSS('color', 'rgb(139, 47, 76)');
+  await expect(stateCard.locator('.ads-card-body')).toHaveCSS('padding-top', '19px');
+  await expect(stateCard.locator('.ads-card-tabs')).toHaveCSS('margin-bottom', '-14px');
+  await expect(stateCard.locator('.ads-card-actions')).toHaveCSS('background-color', 'rgb(241, 248, 233)');
+  await expect(stateCard.getByRole('button', { name: 'Approve' })).toHaveCSS('margin-top', '4px');
   const layoutHeader = page.getByText('Release workspace');
   await expect(layoutHeader).toHaveCSS('height', '44px');
   await expect(layoutHeader).toHaveCSS('padding-left', '17px');
@@ -189,12 +204,13 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(selectedMenuItem).toHaveCSS('border-radius', '7px');
   await expect(selectedMenuItem).toHaveCSS('background-color', 'rgb(18, 58, 188)');
   await expect(selectedMenuItem).toHaveCSS('color', 'rgb(254, 220, 186)');
-  const selectedTab = page.getByRole('tab', { name: 'Details' });
+  const choiceStates = page.getByTestId('choice-states');
+  const selectedTab = choiceStates.getByRole('tab', { name: 'Details' });
   await expect(selectedTab).toHaveCSS('color', 'rgb(18, 52, 86)');
   await expect(selectedTab).toHaveCSS('font-size', '15px');
   await expect(selectedTab.locator('..')).toHaveCSS('height', '38px');
-  await expect(page.getByRole('tab', { name: 'Activity' }).locator('..')).toHaveCSS('background-color', 'rgb(221, 238, 255)');
-  await expect(page.getByRole('tablist').last()).toHaveCSS('gap', '6px');
+  await expect(choiceStates.getByRole('tab', { name: 'Activity' }).locator('..')).toHaveCSS('background-color', 'rgb(221, 238, 255)');
+  await expect(choiceStates.getByRole('tablist')).toHaveCSS('gap', '6px');
   const slider = page.getByRole('slider', { name: 'Choice slider' });
   await expect(slider.locator('..').locator('[aria-hidden="true"]')).toHaveCSS('width', '18px');
   await expect(slider.locator('..')).toHaveCSS('height', '8px');
@@ -208,7 +224,7 @@ test('applies numeric component tokens as valid computed CSS values', async ({ p
   await expect(describedAlert).toHaveCSS('padding-top', '18px');
   await expect(describedAlert.locator('[aria-hidden="true"]')).toHaveCSS('width', '26px');
   await expect(page.getByRole('status', { name: 'Loading data' }).locator('.ads-spin')).toHaveCSS('width', '24px');
-  await expect(page.locator('.ads-skeleton .h-4')).toHaveCSS('height', '18px');
+  await expect(page.locator('.ads-skeleton').first().locator('.h-4')).toHaveCSS('height', '18px');
 });
 
 test('keeps light and dark component state matrices free of serious accessibility violations', async ({ page }, testInfo) => {

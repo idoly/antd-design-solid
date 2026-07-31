@@ -3,6 +3,7 @@ import { render } from '@solidjs/web';
 import {
   Alert,
   Button,
+  Card,
   Checkbox,
   ConfigProvider,
   DatePicker,
@@ -35,6 +36,7 @@ function StateMatrix() {
     <ConfigProvider theme={dark || customTokens ? {
       algorithm: dark ? theme.darkAlgorithm : undefined,
       components: customTokens ? {
+        Card: { actionsBg: '#f1f8e9', actionsLiMargin: '4px 0', bodyPadding: 19, bodyPaddingSM: 13, extraColor: '#8b2f4c', headerBg: '#e8f2ff', headerFontSize: 18, headerFontSizeSM: 15, headerHeight: 48, headerHeightSM: 34, headerPadding: 20, headerPaddingSM: 11, tabsMarginBottom: 14 },
         InputNumber: { controlWidth: 112 },
         Layout: { bodyBg: '#eaf2f8', footerBg: '#d5e5f2', footerPadding: '7px 13px', headerBg: '#17324d', headerColor: '#f7d774', headerHeight: 44, headerPadding: '0 17px', siderBg: '#234f63', triggerBg: '#102f3d', triggerColor: '#f7d774', triggerHeight: 34 },
         Menu: { itemHeight: 37, itemBorderRadius: 7, itemPaddingInline: 17, horizontalItemSelectedBg: '#123abc', horizontalItemSelectedColor: '#fedcba' },
@@ -116,6 +118,8 @@ function StateMatrix() {
               <Skeleton active paragraph={{ rows: 2 }} />
               <div class="flex min-h-24 items-center justify-center border border-border-secondary bg-surface"><Spin tip="Loading data" /></div>
               <Pagination aria-label="State pagination" total={30} defaultCurrent={2} showQuickJumper />
+              <Card data-testid="state-card-small" size="small" loading title="Loading card" />
+              <Card data-testid="state-card" class="md:col-span-2" title="Release card" extra="Review" defaultActiveTabKey="summary" tabList={[{ key: 'summary', label: 'Summary' }, { key: 'activity', label: 'Activity' }]} actions={[<Button type="text">Approve</Button>, <Button type="text">Archive</Button>]}>Version 6 compatibility is ready.</Card>
               <Layout class="h-40 overflow-hidden md:col-span-2">
                 <Layout.Header class="flex items-center">Release workspace</Layout.Header>
                 <Layout hasSider>
