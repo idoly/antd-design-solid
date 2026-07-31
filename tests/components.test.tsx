@@ -3169,11 +3169,10 @@ describe('Ant Design Solid primitives', () => {
       <GeneratedPicker
         aria-label="Generated preset date"
         format="YYYY-MM-DD"
-        showTime
+        showTime={{ disabledTime: generatedDateDisabledTime }}
         defaultValue={new Date('2026-05-01T08:00:00Z')}
         pickerValue={new Date('2026-06-01T00:00:00Z')}
         presets={[{ label: 'Generated day', value: new Date('2026-06-03T00:00:00Z') }]}
-        disabledTime={generatedDateDisabledTime}
         cellRender={generatedDateCellRender}
         onChange={onDateChange}
         onSelect={onDateSelect}
@@ -3181,12 +3180,11 @@ describe('Ant Design Solid primitives', () => {
       />
       <GeneratedPicker.RangePicker
         format="YYYY-MM-DD"
-        showTime
+        showTime={{ disabledTime: generatedDisabledTime }}
         defaultValue={[new Date('2026-06-01T08:00:00Z'), new Date('2026-06-02T09:00:00Z')]}
         pickerValue={[new Date('2026-07-01T00:00:00Z'), new Date('2026-08-01T00:00:00Z')]}
         presets={[{ label: 'Generated interval', value: [new Date('2026-07-01T00:00:00Z'), new Date('2026-07-04T00:00:00Z')] }]}
         disabledDate={generatedDisabledDate}
-        disabledTime={generatedDisabledTime}
         cellRender={generatedCellRender}
         onChange={onRangeChange}
         onCalendarChange={onRangeCalendarChange}
@@ -3291,7 +3289,7 @@ describe('Ant Design Solid primitives', () => {
 
   it('combines DatePicker date and time selection while enforcing disabledTime', async () => {
     const onChange = vi.fn();
-    render(() => <DatePicker showTime defaultValue={dayjs('2026-03-01T13:05:06')} defaultPickerValue={dayjs('2026-03-01')} aria-label="Timed date" disabledTime={() => ({ disabledHours: () => [13] })} onChange={onChange} />);
+    render(() => <DatePicker showTime={{ disabledHours: () => [13] }} defaultValue={dayjs('2026-03-01T13:05:06')} defaultPickerValue={dayjs('2026-03-01')} aria-label="Timed date" onChange={onChange} />);
     fireEvent.click(screen.getByRole('textbox', { name: 'Timed date' }));
     fireEvent.click(await screen.findByRole('button', { name: '2026-03-18' }));
     expect(screen.getByRole('button', { name: /^OK$/ })).toBeDisabled();
@@ -3306,9 +3304,8 @@ describe('Ant Design Solid primitives', () => {
     const onChange = vi.fn();
     render(() => <DatePicker
       aria-label="Precise date"
-      showTime={{ showMinute: false, showMillisecond: true, millisecondStep: 5 }}
+      showTime={{ showMinute: false, showMillisecond: true, millisecondStep: 5, disabledTime: () => ({ disabledMilliseconds: (hour, minute, second) => hour === 13 && minute === 5 && second === 6 ? [123] : [] }) }}
       defaultValue={dayjs('2026-03-01T13:05:06.123')}
-      disabledTime={() => ({ disabledMilliseconds: (hour, minute, second) => hour === 13 && minute === 5 && second === 6 ? [123] : [] })}
       onChange={onChange}
     />);
     expect(screen.getByRole('textbox', { name: 'Precise date' })).toHaveValue('2026-03-01 13:05:06.123');
@@ -3508,9 +3505,8 @@ describe('Ant Design Solid primitives', () => {
       disabledMilliseconds: () => type === 'start' && date.date() === 10 && info.from?.date() === 11 ? [111] : type === 'end' && date.date() === 11 && info.from?.date() === 10 ? [222] : [],
     }));
     render(() => <DatePicker.RangePicker
-      showTime={{ showMillisecond: true, millisecondStep: 10 }}
+      showTime={{ showMillisecond: true, millisecondStep: 10, disabledTime }}
       defaultValue={[dayjs('2026-02-10T08:00:00.111'), dayjs('2026-02-11T09:00:00.222')]}
-      disabledTime={disabledTime}
       onChange={onChange}
     />);
 

@@ -40,6 +40,11 @@ export interface DatePickerShowTime {
   minuteStep?: number;
   secondStep?: number;
   millisecondStep?: number;
+  disabledHours?: DatePickerDisabledTime['disabledHours'];
+  disabledMinutes?: DatePickerDisabledTime['disabledMinutes'];
+  disabledSeconds?: DatePickerDisabledTime['disabledSeconds'];
+  disabledTime?: (date: Dayjs) => DatePickerDisabledTime;
+  changeOnScroll?: boolean;
 }
 export interface DatePickerLocale { lang?: { placeholder?: string; yearPlaceholder?: string; monthPlaceholder?: string; weekPlaceholder?: string; shortWeekDays?: string[]; shortMonths?: string[]; weekStartsOn?: number; firstWeekContainsDate?: number } }
 export interface DatePickerComponents { input?: (props: JSX.InputHTMLAttributes<HTMLInputElement>) => JSX.Element; date?: (props: { children?: JSX.Element }) => JSX.Element; week?: (props: { children?: JSX.Element }) => JSX.Element; month?: (props: { children?: JSX.Element }) => JSX.Element; quarter?: (props: { children?: JSX.Element }) => JSX.Element; year?: (props: { children?: JSX.Element }) => JSX.Element; time?: (props: { children?: JSX.Element }) => JSX.Element }
@@ -111,9 +116,10 @@ export interface DatePickerProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   onOk?: (date: Dayjs | readonly Dayjs[]) => void;
 }
 
-export interface RangePickerShowTime extends Omit<DatePickerShowTime, 'defaultOpenValue' | 'defaultValue'> {
+export interface RangePickerShowTime extends Omit<DatePickerShowTime, 'defaultOpenValue' | 'defaultValue' | 'disabledTime'> {
   defaultOpenValue?: readonly [Dayjs, Dayjs];
   defaultValue?: readonly [Dayjs, Dayjs];
+  disabledTime?: (date: Dayjs, type: 'start' | 'end', info: { from?: Dayjs }) => DatePickerDisabledTime;
 }
 
 export interface RangePickerPreset { label: JSX.Element; value: readonly [Dayjs | (() => Dayjs), Dayjs | (() => Dayjs)] | (() => readonly [Dayjs, Dayjs]) }
@@ -375,11 +381,19 @@ export function DatePicker(inputProps: DatePickerProps) {
     const confirmRequired = props.needConfirm ?? Boolean(props.showTime || props.multiple);
     if (confirmRequired) { pendingValue = next; setDraft(next); } else { change(next); setOpen(false); }
   };
+  const timeLimitsFor = (date: Dayjs): DatePickerDisabledTime | undefined => {
+    if (props.disabledTime) return props.disabledTime(date);
+    if (typeof props.showTime !== 'object') return undefined;
+    if (props.showTime.disabledTime) return props.showTime.disabledTime(date);
+    const limits: DatePickerDisabledTime = { disabledHours: props.showTime.disabledHours, disabledMinutes: props.showTime.disabledMinutes, disabledSeconds: props.showTime.disabledSeconds };
+    return limits.disabledHours || limits.disabledMinutes || limits.disabledSeconds ? limits : undefined;
+  };
   const isConfirmationDisabled = (next: DatePickerValue) => {
     const dates = isDateArray(next) ? next : next ? [next] : [];
-    return dates.length === 0 || dates.some((date) => isDisabledTimeValue(date, props.disabledTime?.(date)));
+    return dates.length === 0 || dates.some((date) => isDisabledTimeValue(date, timeLimitsFor(date)));
   };
-  const confirmationDisabled = () => Boolean(props.disabledTime) && isConfirmationDisabled(draft());
+  const hasTimeLimits = () => Boolean(props.disabledTime || typeof props.showTime === 'object' && (props.showTime.disabledTime || props.showTime.disabledHours || props.showTime.disabledMinutes || props.showTime.disabledSeconds));
+  const confirmationDisabled = () => hasTimeLimits() && isConfirmationDisabled((draft(), pendingValue));
   const confirm = () => { const next = pendingValue; if (!next || (isDateArray(next) && next.length === 0) || isConfirmationDisabled(next)) return; change(next); props.onOk?.(next); setOpen(false); };
   const selectPanel = (date: Dayjs, current = panelPicker()) => {
     if (current === 'year' && props.picker !== 'year') { const next = props.picker === 'quarter' ? 'quarter' : props.picker === 'month' ? 'month' : props.picker; setView(date); setPanelPicker(next); return next; }
@@ -391,7 +405,7 @@ export function DatePicker(inputProps: DatePickerProps) {
   const updateTime = (part: TimeUnit, raw: number): boolean => {
     if (!Number.isInteger(raw) || raw < 0 || raw > timeMaximum(part)) return false;
     const current = (isDateArray(pendingValue) ? pendingValue.at(-1) : pendingValue) ?? draftValues().at(-1) ?? values().at(-1) ?? dayjs();
-    const limits = props.disabledTime?.(current);
+    const limits = timeLimitsFor(current);
     if (part === 'hour' && limits?.disabledHours?.().includes(raw)) return false;
     if (part === 'minute' && limits?.disabledMinutes?.(current.hour()).includes(raw)) return false;
     if (part === 'second' && limits?.disabledSeconds?.(current.hour(), current.minute()).includes(raw)) return false;
@@ -505,7 +519,14 @@ export function RangePicker(inputProps: RangePickerProps) {
   };
   const allowEmptyPart = (index: 0 | 1) => typeof props.allowEmpty === 'boolean' ? props.allowEmpty : Boolean(props.allowEmpty?.[index]);
   const rangeComplete = (next: [Dayjs | null, Dayjs | null]) => Boolean((next[0] && next[1]) || (next[0] && allowEmptyPart(1)) || (next[1] && allowEmptyPart(0)));
-  const rangeConfirmationDisabled = (next: [Dayjs | null, Dayjs | null]) => !rangeComplete(next) || next.some((date, index) => date && isDisabledTimeValue(date, props.disabledTime?.(date, index === 0 ? 'start' : 'end', { from: next[index === 0 ? 1 : 0] ?? undefined })));
+  const rangeTimeLimitsFor = (date: Dayjs, part: 'start' | 'end', from?: Dayjs): DatePickerDisabledTime | undefined => {
+    if (props.disabledTime) return props.disabledTime(date, part, { from });
+    if (typeof props.showTime !== 'object') return undefined;
+    if (props.showTime.disabledTime) return props.showTime.disabledTime(date, part, { from });
+    const limits: DatePickerDisabledTime = { disabledHours: props.showTime.disabledHours, disabledMinutes: props.showTime.disabledMinutes, disabledSeconds: props.showTime.disabledSeconds };
+    return limits.disabledHours || limits.disabledMinutes || limits.disabledSeconds ? limits : undefined;
+  };
+  const rangeConfirmationDisabled = (next: [Dayjs | null, Dayjs | null]) => !rangeComplete(next) || next.some((date, index) => date && isDisabledTimeValue(date, rangeTimeLimitsFor(date, index === 0 ? 'start' : 'end', next[index === 0 ? 1 : 0] ?? undefined)));
   const commitRange = (next: [Dayjs | null, Dayjs | null]) => {
     if (rangeConfirmationDisabled(next)) return;
     props.onChange?.(next, stringsFor(next));
@@ -541,7 +562,7 @@ export function RangePicker(inputProps: RangePickerProps) {
     const index = part === 'start' ? 0 : 1;
     const current = value();
     const date = current[index] ?? defaultRangeTime(part) ?? dayjs();
-    const limits = props.disabledTime?.(date, part, { from: current[index === 0 ? 1 : 0] ?? undefined });
+    const limits = rangeTimeLimitsFor(date, part, current[index === 0 ? 1 : 0] ?? undefined);
     if (unit === 'hour' && limits?.disabledHours?.().includes(raw)) return false;
     if (unit === 'minute' && limits?.disabledMinutes?.(date.hour()).includes(raw)) return false;
     if (unit === 'second' && limits?.disabledSeconds?.(date.hour(), date.minute()).includes(raw)) return false;
@@ -576,7 +597,7 @@ export function RangePicker(inputProps: RangePickerProps) {
     }
     const parsed = parseRangeInput(text);
     const opposite = current[index === 0 ? 1 : 0] ?? undefined;
-    const invalid = !parsed || props.disabledDate?.(parsed, { from: opposite, type: props.picker }) || isDisabledTimeValue(parsed, parsed ? props.disabledTime?.(parsed, part, { from: opposite }) : undefined);
+    const invalid = !parsed || props.disabledDate?.(parsed, { from: opposite, type: props.picker }) || isDisabledTimeValue(parsed, parsed ? rangeTimeLimitsFor(parsed, part, opposite) : undefined);
     if (invalid) {
       if (!props.preserveInvalidOnBlur) updateRangeInputText((texts) => { const next = [...texts] as [string | undefined, string | undefined]; next[index] = undefined; return next; });
       return false;
@@ -640,7 +661,7 @@ export interface GeneratedPickerProps<Value> extends Omit<DatePickerProps, 'valu
   maxDate?: Value;
   disabledDate?: (value: Value, info: { type: PickerMode }) => boolean;
   disabledTime?: (value: Value) => DatePickerDisabledTime;
-  showTime?: boolean | (Omit<DatePickerShowTime, 'defaultOpenValue' | 'defaultValue'> & { defaultOpenValue?: Value; defaultValue?: Value });
+  showTime?: boolean | (Omit<DatePickerShowTime, 'defaultOpenValue' | 'defaultValue' | 'disabledTime'> & { defaultOpenValue?: Value; defaultValue?: Value; disabledTime?: (value: Value) => DatePickerDisabledTime });
   cellRender?: (value: Value, info: DatePickerCellRenderInfo) => JSX.Element;
   dateRender?: (value: Value, today: Value) => JSX.Element;
   presets?: readonly { label: JSX.Element; value: Value | (() => Value) }[];
@@ -658,7 +679,7 @@ export interface GeneratedRangePickerProps<Value> extends Omit<RangePickerProps,
   maxDate?: Value;
   disabledDate?: (value: Value, info: { from?: Value; type: PickerMode }) => boolean;
   disabledTime?: (value: Value, type: 'start' | 'end', info: { from?: Value }) => DatePickerDisabledTime;
-  showTime?: boolean | (Omit<RangePickerShowTime, 'defaultOpenValue' | 'defaultValue'> & { defaultOpenValue?: readonly [Value, Value]; defaultValue?: readonly [Value, Value] });
+  showTime?: boolean | (Omit<RangePickerShowTime, 'defaultOpenValue' | 'defaultValue' | 'disabledTime'> & { defaultOpenValue?: readonly [Value, Value]; defaultValue?: readonly [Value, Value]; disabledTime?: (value: Value, type: 'start' | 'end', info: { from?: Value }) => DatePickerDisabledTime });
   cellRender?: (value: Value, info: DatePickerCellRenderInfo) => JSX.Element;
   dateRender?: (value: Value, today: Value) => JSX.Element;
   presets?: readonly { label: JSX.Element; value: readonly [Value | (() => Value), Value | (() => Value)] | (() => readonly [Value, Value]) }[];
@@ -674,10 +695,12 @@ export function generatePicker<Value>(adapter: PickerDateAdapter<Value>) {
     const mapValue = (value: Value | readonly Value[] | null | undefined): DatePickerValue | undefined => value === undefined ? undefined : value === null ? null : Array.isArray(value) ? value.map((item) => adapter.toDayjs(item as Value)) : adapter.toDayjs(value as Value);
     const restoreValue = (value: DatePickerValue): Value | readonly Value[] | null => value === null ? null : isDateArray(value) ? value.map(adapter.fromDayjs) : adapter.fromDayjs(value);
     const presets = props.presets?.map((preset) => ({ label: preset.label, value: () => adapter.toDayjs(typeof preset.value === 'function' ? (preset.value as () => Value)() : preset.value) }));
+    const nestedDisabledTime = typeof props.showTime === 'object' ? props.showTime.disabledTime : undefined;
     const showTime = typeof props.showTime === 'object' ? {
       ...props.showTime,
       defaultOpenValue: props.showTime.defaultOpenValue === undefined ? undefined : adapter.toDayjs(props.showTime.defaultOpenValue),
       defaultValue: props.showTime.defaultValue === undefined ? undefined : adapter.toDayjs(props.showTime.defaultValue),
+      disabledTime: nestedDisabledTime ? (date: Dayjs) => nestedDisabledTime(adapter.fromDayjs(date)) : undefined,
     } : props.showTime;
     return <DatePicker
       {...mapped}
@@ -706,10 +729,12 @@ export function generatePicker<Value>(adapter: PickerDateAdapter<Value>) {
     const restore = (value: [Dayjs | null, Dayjs | null]) => value.map((item) => item ? adapter.fromDayjs(item) : null) as [Value | null, Value | null];
     const restorePicker = (value: [Dayjs, Dayjs]) => value.map(adapter.fromDayjs) as [Value, Value];
     const presets = props.presets?.map((preset) => ({ label: preset.label, value: () => { const range = typeof preset.value === 'function' ? preset.value() : preset.value; const start = typeof range[0] === 'function' ? (range[0] as () => Value)() : range[0]; const end = typeof range[1] === 'function' ? (range[1] as () => Value)() : range[1]; return [adapter.toDayjs(start), adapter.toDayjs(end)] as const; } }));
+    const nestedDisabledTime = typeof props.showTime === 'object' ? props.showTime.disabledTime : undefined;
     const showTime = typeof props.showTime === 'object' ? {
       ...props.showTime,
       defaultOpenValue: props.showTime.defaultOpenValue?.map(adapter.toDayjs) as [Dayjs, Dayjs] | undefined,
       defaultValue: props.showTime.defaultValue?.map(adapter.toDayjs) as [Dayjs, Dayjs] | undefined,
+      disabledTime: nestedDisabledTime ? (date: Dayjs, type: 'start' | 'end', info: { from?: Dayjs }) => nestedDisabledTime(adapter.fromDayjs(date), type, { from: info.from ? adapter.fromDayjs(info.from) : undefined }) : undefined,
     } : props.showTime;
     return <RangePicker
       {...mapped}
