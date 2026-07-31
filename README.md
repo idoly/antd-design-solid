@@ -33,25 +33,38 @@ npm run test:e2e:webkit:container:pull
 npm run test:e2e:webkit:container
 ```
 
-Keep the image tag synchronized with the installed Playwright version. The container gate is explicit rather than part of ordinary `npm run check`, avoiding a large image/runtime requirement for every local check. `npm run test:e2e:system` additionally verifies the server-installed `/usr/sbin/chromium-browser`; override `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` when it is installed elsewhere. CI and release workflows set `PLAYWRIGHT_SKIP_SCREENSHOTS=1` because distro font rasterization is not pixel-identical; Chromium screenshot baselines remain enforced on the pinned local baseline host while CI enforces browser behavior, accessibility, performance, layout overflow, and computed CSS.
+Keep the image tag synchronized with the installed Playwright version. The container gates are explicit rather than part of ordinary `npm run check`, avoiding a large image/runtime requirement for every local check. `npm run test:e2e:system` runs the desktop and mobile Chromium projects in the same rootless Podman image, so it does not require a system-installed browser. CI and release workflows set `PLAYWRIGHT_SKIP_SCREENSHOTS=1` because distro font rasterization is not pixel-identical; Chromium screenshot baselines remain enforced on the pinned local baseline host while CI enforces browser behavior, accessibility, performance, layout overflow, and computed CSS.
 
 The local component workbench runs at `http://localhost:5173/`.
 
 ## Usage
 
 ```tsx
-import { App, Button, ConfigProvider, Form, Input, message } from 'ant-design-solid';
-import 'ant-design-solid/styles.css';
+import {
+  App,
+  Button,
+  ConfigProvider,
+  Form,
+  Input,
+  message,
+} from "ant-design-solid";
+import "ant-design-solid/styles.css";
 
 export function WorkspaceForm() {
   return (
-    <ConfigProvider theme={{ token: { colorPrimary: '#1677ff' } }}>
+    <ConfigProvider theme={{ token: { colorPrimary: "#1677ff" } }}>
       <App>
-        <Form onFinish={() => message.success('Saved')}>
-          <Form.Item name="workspace" label="Workspace" rules={[{ required: true }]}>
+        <Form onFinish={() => message.success("Saved")}>
+          <Form.Item
+            name="workspace"
+            label="Workspace"
+            rules={[{ required: true }]}
+          >
             <Input />
           </Form.Item>
-          <Button type="primary" htmlType="submit">Save</Button>
+          <Button type="primary" htmlType="submit">
+            Save
+          </Button>
         </Form>
       </App>
     </ConfigProvider>
@@ -64,9 +77,9 @@ The package is precompiled with Tailwind. Consumers do not need to scan package 
 Component subpaths resolve to the same shared runtime, so contexts and service singletons are not duplicated:
 
 ```tsx
-import Button, { type ButtonProps } from 'ant-design-solid/button';
-import Select, { type SelectProps } from 'ant-design-solid/select';
-import theme from 'ant-design-solid/theme';
+import Button, { type ButtonProps } from "ant-design-solid/button";
+import Select, { type SelectProps } from "ant-design-solid/select";
+import theme from "ant-design-solid/theme";
 ```
 
 Input components bind automatically to the nearest named `Form.Item`. Form rules support required, type, length, range, pattern, whitespace, and custom async validation. Form supports nested name paths, dynamic `Form.List`, Provider events, `useForm`, `useFormInstance`, `useWatch`, and `Form.Item.useStatus`.
