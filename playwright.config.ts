@@ -14,6 +14,7 @@ const crossBrowserProjects = executablePath ? [] : [
 export default defineConfig({
   testDir: './tests/e2e',
   fullyParallel: true,
+  retries: process.env.CI ? 1 : 0,
   reporter: 'line',
   use: {
     baseURL: 'http://127.0.0.1:5173',

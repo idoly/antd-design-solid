@@ -2,6 +2,12 @@
 
 Notable changes to `@idoly/ant-design-solid` are documented here. Until the public API stabilizes, minor and patch releases may contain compatibility changes called out in this file.
 
+## 0.2.1 - 2026-08-01
+
+### Changed
+
+- Retry a failed Playwright test once in CI while keeping local runs fail-fast. Persistent browser failures still block releases.
+
 ## 0.2.0 - 2026-08-01
 
 ### Added
