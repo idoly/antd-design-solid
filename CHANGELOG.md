@@ -2,6 +2,13 @@
 
 Notable changes to `@idoly/ant-design-solid` are documented here. Until the public API stabilizes, minor and patch releases may contain compatibility changes called out in this file.
 
+## 0.2.2 - 2026-08-01
+
+### Changed
+
+- Enforce absolute virtual-table timing and heap budgets only in an explicitly controlled benchmark environment; shared CI runners continue to verify virtualization behavior and DOM bounds.
+- Split CI and release checks into individually visible audit, typecheck, test, build, and browser steps for actionable failure reporting.
+
 ## 0.2.1 - 2026-08-01
 
 ### Changed

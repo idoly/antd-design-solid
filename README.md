@@ -195,4 +195,4 @@ Spread all supplied trigger props so positioning, ARIA linkage, hover/focus/clic
 
 ## Versioning
 
-The package version and Solid peer version are independent. The package is currently `0.2.1`; `solid-js` remains pinned to `2.0.0-beta.29` until the beta API stabilizes.
+The package version and Solid peer version are independent. The package is currently `0.2.2`; `solid-js` remains pinned to `2.0.0-beta.29` until the beta API stabilizes.

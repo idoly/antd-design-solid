@@ -95,13 +95,18 @@ test('virtualizes 10,000 Table rows under real browser scrolling and updates', a
   test.skip(testInfo.project.name !== 'desktop', 'The performance budget uses the stable desktop viewport.');
   await page.goto('/tests/e2e/virtual-table.html');
   await expect(page.locator('body')).toHaveAttribute('data-ready', 'true');
+  const enforcePerformanceBudget = process.env.PLAYWRIGHT_ENFORCE_PERFORMANCE_BUDGET === '1';
   const mountMs = Number(await page.locator('body').getAttribute('data-mount-ms'));
   const readyMs = Number(await page.locator('body').getAttribute('data-ready-ms'));
-  expect(mountMs).toBeLessThan(1500);
-  expect(readyMs).toBeLessThan(2000);
-  const cdp = await context.newCDPSession(page);
-  await cdp.send('HeapProfiler.collectGarbage');
-  const heapBefore = await page.evaluate(() => (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize ?? 0);
+  if (enforcePerformanceBudget) {
+    expect(mountMs).toBeLessThan(1500);
+    expect(readyMs).toBeLessThan(2000);
+  }
+  const cdp = enforcePerformanceBudget ? await context.newCDPSession(page) : undefined;
+  await cdp?.send('HeapProfiler.collectGarbage');
+  const heapBefore = enforcePerformanceBudget
+    ? await page.evaluate(() => (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize ?? 0)
+    : 0;
 
   const table = page.locator('.ads-table');
   const viewport = table.locator(':scope > .overflow-auto');
@@ -138,10 +143,12 @@ test('virtualizes 10,000 Table rows under real browser scrolling and updates', a
   await page.getByRole('button', { name: 'Reverse rows' }).click();
   await expect.poll(async () => Math.abs(await viewport.evaluate((element) => element.scrollTop) - offset)).toBeLessThanOrEqual(3);
   await expect(table.getByText(/Record /).first()).toBeVisible();
-  await cdp.send('HeapProfiler.collectGarbage');
-  const heapAfter = await page.evaluate(() => (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize ?? 0);
-  expect(heapAfter).toBeLessThan(192 * 1024 * 1024);
-  if (heapBefore > 0) expect(heapAfter - heapBefore).toBeLessThan(64 * 1024 * 1024);
+  if (enforcePerformanceBudget) {
+    await cdp?.send('HeapProfiler.collectGarbage');
+    const heapAfter = await page.evaluate(() => (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize ?? 0);
+    expect(heapAfter).toBeLessThan(192 * 1024 * 1024);
+    if (heapBefore > 0) expect(heapAfter - heapBefore).toBeLessThan(64 * 1024 * 1024);
+  }
 });
 
 for (const mode of ['light', 'dark'] as const) {

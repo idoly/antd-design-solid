@@ -24,7 +24,11 @@ jobs:
       - run: npm ci --legacy-peer-deps
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm run audit:antd
-      - run: npm run check
+      - run: npm run audit:tokens
+      - run: npm run typecheck
+      - run: npm run test:strict
+      - run: npm run build
+      - run: npm run test:e2e
         env:
           PLAYWRIGHT_INCLUDE_WEBKIT: '1'
           PLAYWRIGHT_SKIP_SCREENSHOTS: '1'

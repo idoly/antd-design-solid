@@ -1,6 +1,6 @@
 {
   "name": "@idoly/ant-design-solid",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Ant Design v6 components for Solid 2",
   "repository": {
     "type": "git",
@@ -76,7 +76,7 @@
     "test:strict": "node scripts/check-solid-diagnostics.mjs",
     "test:watch": "vitest",
     "test:e2e": "if [ -n \"$CI\" ]; then playwright test --workers=1; else playwright test --project=desktop --project=mobile --workers=1; fi",
-    "test:e2e:system": "podman run --rm --ipc=host -v \"$PWD:/work:Z\" -w /work -e CI=1 -e PLAYWRIGHT_SKIP_SCREENSHOTS=1 mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --project=desktop --project=mobile --project=firefox --workers=1",
+    "test:e2e:system": "podman run --rm --ipc=host -v \"$PWD:/work:Z\" -w /work -e CI=1 -e PLAYWRIGHT_SKIP_SCREENSHOTS=1 -e PLAYWRIGHT_ENFORCE_PERFORMANCE_BUDGET=1 mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --project=desktop --project=mobile --project=firefox --workers=1",
     "test:e2e:webkit:container:pull": "podman pull mcr.microsoft.com/playwright:v1.62.0-noble",
     "test:e2e:webkit:container": "podman run --rm --ipc=host -v \"$PWD:/work:Z\" -w /work -e CI=1 -e PLAYWRIGHT_INCLUDE_WEBKIT=1 mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --project=webkit --workers=1",
     "test:e2e:update": "playwright test --workers=1 --update-snapshots",
