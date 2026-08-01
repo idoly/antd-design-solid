@@ -14,7 +14,6 @@ export default defineConfig({
       entry: { index: 'src/bundle.ts', ...componentEntries },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
-      cssFileName: 'ant-design-solid',
     },
     emptyOutDir: true,
     rollupOptions: {

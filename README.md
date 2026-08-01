@@ -52,7 +52,12 @@ import {
   Input,
   message,
 } from "@idoly/ant-design-solid";
-import "@idoly/ant-design-solid/styles.css";
+import "@idoly/ant-design-solid/base.css";
+import "@idoly/ant-design-solid/app/style.css";
+import "@idoly/ant-design-solid/button/style.css";
+import "@idoly/ant-design-solid/form/style.css";
+import "@idoly/ant-design-solid/input/style.css";
+import "@idoly/ant-design-solid/message/style.css";
 
 export function WorkspaceForm() {
   return (
@@ -78,7 +83,18 @@ export function WorkspaceForm() {
 
 The package is precompiled with Tailwind. Consumers do not need to scan package sources in their Tailwind configuration. Conditional exports provide a client bundle for browser builds and a server-compiled bundle for Solid SSR.
 
-Component subpaths resolve to the same shared runtime, so contexts and service singletons are not duplicated:
+Load the shared reset/token layer exactly once, then import styles for the components in use:
+
+```tsx
+import "@idoly/ant-design-solid/base.css";
+import "@idoly/ant-design-solid/button/style.css";
+import "@idoly/ant-design-solid/select/style.css";
+import "@idoly/ant-design-solid/tooltip/style.css";
+```
+
+No aggregate stylesheet is published. `base.css` contains reset, theme declarations, and high-frequency shared utilities; component styles contain the remaining dependency-specific rules, so `base.css` is required.
+
+Component subpaths resolve to the same shared runtime, so contexts and service singletons are not duplicated. Prefer subpaths in small applications so the client and SSR graphs do not load unrelated component implementations or optional dependencies such as `dayjs` and `qrcode`:
 
 ```tsx
 import Button, { type ButtonProps } from "@idoly/ant-design-solid/button";
@@ -86,14 +102,97 @@ import Select, { type SelectProps } from "@idoly/ant-design-solid/select";
 import theme from "@idoly/ant-design-solid/theme";
 ```
 
+JavaScript and CSS both support component-level loading. Component styles are generated from the public entry's transitive source dependencies, so compound components such as BackTop include the FloatButton, Badge, and Tooltip utilities they require.
+
 Input components bind automatically to the nearest named `Form.Item`. Form rules support required, type, length, range, pattern, whitespace, and custom async validation. Form supports nested name paths, dynamic `Form.List`, Provider events, `useForm`, `useFormInstance`, `useWatch`, and `Form.Item.useStatus`.
 
 Compatibility-style compound APIs are implemented, including declarative Select/AutoComplete/Mentions options, Menu and Tree child nodes, Tabs.TabPane, Cascader.Panel, Table columns/groups/summary, DatePicker shortcuts and generators, Grid.useBreakpoint, Statistic.Timer, and Tooltip.UniqueProvider.
 
-All component subpaths provide Ant-compatible default exports and named exports. Browser and SSR subpaths share the same ConfigContext and service singletons. The package also provides `reset.css` and the complete official locale directory, for example `import frFR from '@idoly/ant-design-solid/locale/fr_FR'`.
+All component subpaths provide Ant-compatible default exports and named exports. Browser and SSR subpaths share the same ConfigContext and service singletons. The package provides the complete official locale directory, for example `import frFR from '@idoly/ant-design-solid/locale/fr_FR'`.
 
 Portaled components preserve scoped `ConfigProvider` token values. ConfigProvider accepts flat legacy tokens or `{ token, algorithm, components }`; component token overrides produce nested, CSP-aware scoped variables. `theme` exports default, dark, and compact algorithms plus `useToken` and `getDesignToken`. Floating controls use Floating UI for collision-aware positioning. `App.useApp()` exposes message, notification, and modal services from component context. `Modal.confirm/info/success/error/warning`, `Modal.destroyAll()`, and `Modal.useModal()` share the same imperative service implementation.
 
+## Reactive themes
+
+Pass a memoized theme config to make Solid signals update global and component tokens without remounting children:
+
+```tsx
+import { createMemo, createSignal } from "solid-js";
+import { Button, ConfigProvider, theme } from "@idoly/ant-design-solid";
+
+export function ThemeControls() {
+  const [dark, setDark] = createSignal(false);
+  const [primary, setPrimary] = createSignal("#1677ff");
+  const config = createMemo(() => ({
+    token: { colorPrimary: primary() },
+    algorithm: dark() ? theme.darkAlgorithm : undefined,
+    components: {
+      Button: { focusRing: `0 0 0 3px ${primary()}33` },
+      Tooltip: { colorBg: dark() ? "#f5f5f5" : "#111111", colorText: dark() ? "#111111" : "#ffffff" },
+    },
+  }));
+
+  return (
+    <ConfigProvider theme={config()}>
+      <Button onClick={() => setDark(!dark())}>Toggle theme</Button>
+      <input type="color" value={primary()} onInput={(event) => setPrimary(event.currentTarget.value)} />
+    </ConfigProvider>
+  );
+}
+```
+
+Component token names are typed and emitted as stable `--ads-<component>-<token>` variables inside the provider scope. Button, Tooltip, and FloatButton expose state variables including focus rings, hover colors, and active transforms.
+
+## Overlay state and portals
+
+`open` plus `onOpenChange` is the controlled contract. `defaultOpen` selects uncontrolled state. Drawer and Modal use `onClose`; Tooltip, Popover, Dropdown, Select, and DatePicker use `onOpenChange` or their documented compatibility alias.
+
+```tsx
+const [open, setOpen] = createSignal(false);
+
+<Tooltip title="Account settings" open={open()} onOpenChange={setOpen} trigger="click">
+  <Button>Account</Button>
+</Tooltip>
+```
+
+`ConfigProvider.getPopupContainer` establishes the default portal host, while a component `getPopupContainer` prop takes precedence. Resolve DOM containers lazily and only in the browser. The package ships separate Solid SSR entries and does not access a configured portal container until the component mounts; browser and SSR entries share public types and hydration markup contracts. Modal and Drawer restore focus to the previously active element when their focus-management options are enabled.
+
+## Semantic DOM
+
+For native controls such as Button and FloatButton, `class`, `style`, and native HTML attributes target the primary interactive element. Complex components expose `classNames` and `styles` for stable internal slots; consult the exported semantic types when their root and primary element differ:
+
+| Component | Stable slots |
+| --- | --- |
+| Button | `root`, `icon`, `content` |
+| FloatButton / BackTop | `root`, `trigger`, `icon`, `content` |
+| Tooltip | `root`, `container`, `arrow` |
+| Drawer | `root`, `mask`, `section`, `header`, `title`, `extra`, `close`, `body`, `footer`, `dragger` |
+| Modal | `root`, `mask`, `wrapper`, `container`, `header`, `title`, `close`, `body`, `footer` |
+| Collapse | `root`, `header`, `icon`, `title`, `body` |
+
+The exported `*SemanticClassNames` and `*SemanticStyles` types are the authoritative slot list for each component. FloatButton's `root` is the stable outer layout node and `trigger` is the actual `button` or `a`; `class`, `style`, `data-*`, ARIA attributes, and `ref.nativeElement` all target that trigger.
+
+Tooltip keeps its compatibility wrapper for ordinary children. Use `triggerRender` when a grid/flex item must remain the direct layout child:
+
+```tsx
+<Tooltip
+  title="Pin item"
+  triggerRender={(triggerProps) => (
+    <button {...triggerProps} type="button" aria-label="Pin item">Pin</button>
+  )}
+/>
+```
+
+Spread all supplied trigger props so positioning, ARIA linkage, hover/focus/click handling, and the native ref remain attached.
+
+## React antd differences
+
+- Components are Solid functions and accept Solid JSX/events; React elements, hooks, and `cloneElement` patterns do not apply.
+- `triggerRender` is the no-wrapper Tooltip API instead of React-style child cloning.
+- Imperative services render through the Solid service host and `App` context.
+- Advanced parity status and deliberate gaps are maintained in [COMPATIBILITY.md](./COMPATIBILITY.md).
+- Component styles are available only through `@idoly/ant-design-solid/<component>/style.css` and require one `base.css` import.
+
 ## Versioning
 
-The package version and Solid peer version are independent. The package is currently `0.1.0`; `solid-js` remains pinned to `2.0.0-beta.29` until the beta API stabilizes.
+The package version and Solid peer version are independent. The package is currently `0.2.0`; `solid-js` remains pinned to `2.0.0-beta.29` until the beta API stabilizes.

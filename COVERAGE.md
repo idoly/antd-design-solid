@@ -98,6 +98,6 @@ These do not represent additional visual component implementations. All componen
 
 - `locale`: LocaleProvider/useLocale plus 72 official locale data subpaths, consumed by component defaults
 - `theme`: exported with useToken, getDesignToken, and default/dark/compact algorithms
-- `style`, `styles.css`, and `reset.css`: package stylesheet entries
+- `base.css` and `<component>/style.css`: shared reset/tokens plus generated component-level styles for all 76 public component and alias entries
 - `version`: package metadata
 - `row`, `col`, `back-top`, `qrcode`, and kebab-case directories: aliases for the component families above

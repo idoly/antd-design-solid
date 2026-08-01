@@ -253,8 +253,8 @@ export default function App() {
                 </Card>
                 <Card title="Release code">
                   <div class="flex flex-col items-center gap-3">
-                    <QRCode type="svg" value="https://example.com/releases/0.1.0" />
-                    <Typography.Text copyable>release/0.1.0</Typography.Text>
+                    <QRCode type="svg" value="https://example.com/releases/0.2.0" />
+                    <Typography.Text copyable>release/0.2.0</Typography.Text>
                     <Avatar.Group max={3}><Avatar>A</Avatar><Avatar>G</Avatar><Avatar>M</Avatar><Avatar>B</Avatar></Avatar.Group>
                   </div>
                 </Card>
@@ -266,7 +266,7 @@ export default function App() {
 
               <div class="grid gap-5 xl:grid-cols-2">
                 <Card title="Release details">
-                  <Descriptions bordered column={2} items={[{ label: 'Package', children: 'ant-design-solid' }, { label: 'Version', children: <Tag color="blue">0.1.0</Tag> }, { label: 'Runtime', children: 'Solid 2 beta' }, { label: 'Status', children: <Badge status="success" text="Ready" /> }, { label: 'Distribution', children: 'Client, SSR, declarations, and locale packs', span: 2 }]} />
+                  <Descriptions bordered column={2} items={[{ label: 'Package', children: 'ant-design-solid' }, { label: 'Version', children: <Tag color="blue">0.2.0</Tag> }, { label: 'Runtime', children: 'Solid 2 beta' }, { label: 'Status', children: <Badge status="success" text="Ready" /> }, { label: 'Distribution', children: 'Client, SSR, declarations, locale packs, and component styles', span: 2 }]} />
                   <Divider orientation="start">Activity</Divider>
                   <Timeline items={[{ children: 'Build completed', color: 'green' }, { children: '280 tests passed', color: 'green' }, { children: 'Package verified', color: 'blue' }]} pending="Awaiting publish" />
                 </Card>
@@ -302,7 +302,7 @@ export default function App() {
                 <Divider />
                 <div class="flex flex-wrap gap-3">
                   <Button onClick={() => message.success('Changes saved')}>Message</Button>
-                  <Button onClick={() => notification.success({ message: 'Deployment complete', description: 'Version 0.1.0 is ready to publish.' })}>Notification</Button>
+                  <Button onClick={() => notification.success({ message: 'Deployment complete', description: 'Version 0.2.0 is ready to publish.' })}>Notification</Button>
                   <Popover title="Deployment" content="Last verified a few seconds ago."><Button>Popover</Button></Popover>
                   <Tooltip title="Runs the full verification pipeline"><Button>Tooltip</Button></Tooltip>
                   <Button onClick={() => Modal.confirm({ title: 'Publish changes', content: 'Publish this workspace configuration?' })}>Confirm dialog</Button>

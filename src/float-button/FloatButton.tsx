@@ -6,7 +6,7 @@ import { Tooltip } from '../tooltip';
 import type { FloatButtonRef } from '../compat-types';
 import { useConfig } from '../config-provider';
 
-export type FloatButtonSemanticName = 'root' | 'icon' | 'content';
+export type FloatButtonSemanticName = 'root' | 'trigger' | 'icon' | 'content';
 export type FloatButtonSemanticClassNames = Partial<Record<FloatButtonSemanticName, string>>;
 export type FloatButtonSemanticStyles = Partial<Record<FloatButtonSemanticName, JSX.CSSProperties>>;
 
@@ -47,26 +47,23 @@ function FloatButtonRoot(inputProps: FloatButtonProps) {
   let nativeElement: HTMLButtonElement | HTMLAnchorElement | undefined;
   const props = merge({ type: 'default' as const, shape: 'circle' as const }, config.componentDefaults('floatButton') as Partial<FloatButtonProps>, inputProps);
   props.ref?.({ get nativeElement() { return nativeElement ?? null; } });
-  const buttonProps = omit(props, 'type', 'shape', 'icon', 'description', 'tooltip', 'href', 'target', 'badge', 'classNames', 'styles', 'class', 'onClick', 'ref');
-  const visual = () => (
-    <Badge {...props.badge}>
-      <span class={[
-        'ads-float-button inline-flex size-10 items-center justify-center overflow-hidden border text-sm shadow-popup outline-none transition-colors focus-visible:ring-2 focus-visible:ring-primary/20',
-        props.shape === 'circle' ? 'rounded-full' : 'rounded-surface',
-        props.type === 'primary' ? 'border-primary bg-primary text-white hover:bg-primary-hover' : 'border-border-secondary bg-surface text-text hover:text-primary',
-        props.description ? 'flex-col gap-0.5 px-1 text-[10px] leading-3' : '',
-        props.class,
-        props.classNames?.root,
-      ]} style={props.styles?.root}>
-        <Show when={props.icon}><span aria-hidden="true" class={['inline-flex text-base', props.classNames?.icon]} style={props.styles?.icon}>{props.icon}</span></Show>
-        <Show when={props.description}><span class={['max-w-full truncate', props.classNames?.content]} style={props.styles?.content}>{props.description}</span></Show>
-      </span>
-    </Badge>
-  );
+  const buttonProps = omit(props, 'type', 'shape', 'icon', 'description', 'tooltip', 'href', 'target', 'badge', 'classNames', 'styles', 'class', 'style', 'onClick', 'ref');
+  const triggerClass = () => [
+    'ads-float-button inline-flex size-10 items-center justify-center overflow-hidden border text-sm outline-none transition-[background-color,border-color,box-shadow,color,transform] duration-[var(--ads-motion-fast)]',
+    props.shape === 'circle' ? 'rounded-full' : 'rounded-surface',
+    props.description ? 'flex-col gap-0.5 px-1 text-[10px] leading-3' : '',
+    props.class,
+    props.classNames?.trigger,
+  ];
+  const content = () => <>
+    <Show when={props.icon}><span aria-hidden="true" class={['inline-flex text-base', props.classNames?.icon]} style={props.styles?.icon}>{props.icon}</span></Show>
+    <Show when={props.description}><span class={['max-w-full truncate', props.classNames?.content]} style={props.styles?.content}>{props.description}</span></Show>
+  </>;
   const control = () => props.href
-    ? <a {...buttonProps as JSX.AnchorHTMLAttributes<HTMLAnchorElement>} ref={(element) => { nativeElement = element; }} href={props.href} target={props.target} class="inline-flex" onClick={props.onClick}>{visual()}</a>
-    : <button {...buttonProps} ref={(element) => { nativeElement = element; }} type="button" class="inline-flex" onClick={props.onClick}>{visual()}</button>;
-  return props.tooltip ? <Tooltip title={props.tooltip} placement="left" trigger={['hover', 'focus']}>{control()}</Tooltip> : control();
+    ? <a {...buttonProps as JSX.AnchorHTMLAttributes<HTMLAnchorElement>} ref={(element) => { nativeElement = element; }} href={props.href} target={props.target} data-type={props.type} class={triggerClass()} style={{ ...(typeof props.style === 'object' ? props.style : {}), ...props.styles?.trigger }} onClick={props.onClick}>{content()}</a>
+    : <button {...buttonProps} ref={(element) => { nativeElement = element; }} type="button" data-type={props.type} class={triggerClass()} style={{ ...(typeof props.style === 'object' ? props.style : {}), ...props.styles?.trigger }} onClick={props.onClick}>{content()}</button>;
+  const root = () => <span class={['ads-float-button-root inline-flex', props.classNames?.root]} style={props.styles?.root}><Badge {...props.badge}>{control()}</Badge></span>;
+  return props.tooltip ? <Tooltip title={props.tooltip} placement="left" trigger={['hover', 'focus']}>{root()}</Tooltip> : root();
 }
 
 export function FloatButtonGroup(inputProps: FloatButtonGroupProps) {

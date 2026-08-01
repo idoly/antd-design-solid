@@ -110,15 +110,23 @@ test('virtualizes 10,000 Table rows under real browser scrolling and updates', a
 
   await page.evaluate(() => window.virtualTableRef?.scrollTo({ index: 7000, align: 'start' }));
   await expect.poll(async () => Number(await table.locator('tbody tr[data-index]').first().getAttribute('data-index'))).toBeGreaterThan(6500);
+  await expect.poll(async () => {
+    const before = await viewport.evaluate((element) => element.scrollTop);
+    await page.waitForTimeout(50);
+    const after = await viewport.evaluate((element) => element.scrollTop);
+    return Math.abs(after - before);
+  }).toBeLessThanOrEqual(3);
   const offset = await viewport.evaluate((element) => element.scrollTop);
   expect(offset).toBeGreaterThan(300_000);
 
-  await table.getByRole('button', { name: 'Expand row' }).first().click();
+  const targetRow = table.locator('tbody tr[data-index="7000"]');
+  await expect(targetRow).toBeVisible();
+  await targetRow.getByRole('button', { name: 'Expand row' }).click();
   const expanded = table.locator('.ads-table-expanded-row');
   await expect(expanded).toBeVisible();
   expect(await expanded.evaluate((element) => element.getBoundingClientRect().height)).toBeGreaterThan(70);
   expect(await table.locator('tbody tr[data-index]').count()).toBeLessThan(50);
-  await table.getByRole('button', { name: 'Collapse row' }).first().click();
+  await targetRow.getByRole('button', { name: 'Collapse row' }).click();
   await expect(expanded).toHaveCount(0);
   await expect.poll(async () => Math.abs(await viewport.evaluate((element) => element.scrollTop) - offset)).toBeLessThanOrEqual(3);
 

@@ -215,6 +215,32 @@ describe('Ant Design Solid primitives', () => {
     expect(container.firstElementChild).toHaveStyle({ '--ads-color-primary': '#123456' });
   });
 
+  it('maps interactive component tokens to public CSS variables', () => {
+    const { container } = render(() => (
+      <ConfigProvider theme={{ components: {
+        Button: { focusRing: '0 0 0 3px #ff0000', activeTransform: 'translateY(1px)' },
+        FloatButton: { defaultHoverBg: '#eeeeee', focusRing: '0 0 0 3px #00ff00' },
+        Tooltip: { colorBg: '#112233', colorText: '#ffffff', maxWidth: 320 },
+      } }}>
+        <Button>Token button</Button>
+        <FloatButton aria-label="Token float" />
+        <Tooltip title="Token tooltip" open><Button>Token trigger</Button></Tooltip>
+      </ConfigProvider>
+    ));
+    const css = container.querySelector('style')?.textContent ?? '';
+    expect(css).toContain('--ads-button-focus-ring:0 0 0 3px #ff0000');
+    expect(css).toContain('--ads-button-active-transform:translateY(1px)');
+    expect(css).toContain('--ads-float-button-default-hover-bg:#eeeeee');
+    expect(css).toContain('--ads-float-button-focus-ring:0 0 0 3px #00ff00');
+    expect(css).toContain('--ads-tooltip-color-bg:#112233');
+    expect(css).toContain('--ads-tooltip-color-text:#ffffff');
+    expect(screen.getByRole('tooltip')).toHaveStyle({
+      backgroundColor: 'var(--ads-tooltip-color-bg, rgba(0, 0, 0, 0.85))',
+      color: 'var(--ads-tooltip-color-text, #fff)',
+      maxWidth: 'var(--ads-tooltip-max-width, 250px)',
+    });
+  });
+
   it('applies ConfigProvider locale across component families', async () => {
     render(() => <ConfigProvider locale={zhCN}><Empty /><Select aria-label="Localized select" open /><Modal open title="标题">内容</Modal><DatePicker aria-label="Localized date" /><Pagination total={30} /><QRCode value="locale" status="expired" /><Form validateTrigger="onBlur"><Form.Item name="account" label="账户" rules={[{ required: true }]}><Input aria-label="Localized form field" /></Form.Item></Form></ConfigProvider>);
     expect(screen.getAllByText('暂无数据').length).toBeGreaterThan(0);
@@ -595,13 +621,16 @@ describe('Ant Design Solid primitives', () => {
   it('maps FloatButton, Mentions, Splitter, and Image semantic slots', async () => {
     const { container } = render(() => (
       <>
-        <FloatButton icon={<span>+</span>} description="Create" classNames={{ root: 'float-root-slot', icon: 'float-icon-slot', content: 'float-content-slot' }} />
+        <FloatButton icon={<span>+</span>} description="Create" class="native-float-class" classNames={{ root: 'float-root-slot', trigger: 'float-trigger-slot', icon: 'float-icon-slot', content: 'float-content-slot' }} styles={{ trigger: { color: 'rgb(1, 2, 3)' } }} />
         <Mentions defaultValue="@" allowClear options={[{ value: 'solid', label: 'Solid' }]} classNames={{ root: 'mentions-root-slot', textarea: 'mentions-textarea-slot', suffix: 'mentions-suffix-slot', popup: 'mentions-popup-slot' }} />
         <Splitter classNames={{ root: 'splitter-root-slot', panel: 'splitter-panel-slot', dragger: 'splitter-dragger-slot' }}><Splitter.Panel>Left</Splitter.Panel><Splitter.Panel>Right</Splitter.Panel></Splitter>
         <Image src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="Preview source" preview={{ visible: true }} classNames={{ root: 'image-root-slot', image: 'image-image-slot', cover: 'image-cover-slot', 'popup.root': 'image-popup-root-slot', 'popup.mask': 'image-popup-mask-slot', 'popup.body': 'image-popup-body-slot', 'popup.footer': 'image-popup-footer-slot', 'popup.actions': 'image-popup-actions-slot', 'popup.close': 'image-popup-close-slot' }} />
       </>
     ));
-    expect(container.querySelector('.float-root-slot')).toContainElement(container.querySelector('.float-icon-slot'));
+    expect(container.querySelector('.float-root-slot')).toContainElement(container.querySelector('.float-trigger-slot'));
+    expect(container.querySelector('.float-trigger-slot')).toContainElement(container.querySelector('.float-icon-slot'));
+    expect(container.querySelector('.float-trigger-slot')).toHaveClass('native-float-class');
+    expect(container.querySelector('.float-trigger-slot')).toHaveStyle({ color: 'rgb(1, 2, 3)' });
     expect(container.querySelector('.float-content-slot')).toHaveTextContent('Create');
     expect(container.querySelector('.mentions-root-slot')).toContainElement(container.querySelector('.mentions-textarea-slot'));
     expect(container.querySelector('.mentions-root-slot')).toContainElement(container.querySelector('.mentions-suffix-slot'));
@@ -712,7 +741,7 @@ describe('Ant Design Solid primitives', () => {
     function TokenReader() { const result = theme.useToken(); return <span>{result.token.colorPrimary}</span>; }
     render(() => <ConfigProvider theme={{ colorPrimary: '#abcdef' }}><TokenReader /></ConfigProvider>);
     expect(screen.getByText('#abcdef')).toBeInTheDocument();
-    expect(version).toBe('0.1.0');
+    expect(version).toBe('0.2.0');
   });
 
   it('switches tabs with click and keyboard while skipping disabled items', async () => {
@@ -2294,6 +2323,24 @@ describe('Ant Design Solid primitives', () => {
     await waitFor(() => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument());
   });
 
+  it('renders a Tooltip trigger without a layout wrapper', async () => {
+    const { container } = render(() => (
+      <Tooltip
+        title="Direct trigger"
+        trigger="click"
+        triggerRender={(triggerProps) => <button {...triggerProps} type="button" data-testid="direct-tooltip-trigger">Open direct tooltip</button>}
+      />
+    ));
+    const trigger = screen.getByTestId('direct-tooltip-trigger');
+    expect(trigger).toHaveClass('ads-tooltip-trigger');
+    expect(container.querySelector('.ads-tooltip-trigger')).toBe(trigger);
+    expect(trigger.parentElement).toBe(container);
+    fireEvent.click(trigger);
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent('Direct trigger');
+    expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
+  });
+
   it('toggles a click-triggered tooltip and reports open changes', async () => {
     const onOpenChange = vi.fn();
     render(() => <Tooltip title="Details" trigger="click" onOpenChange={onOpenChange}><Button>Info</Button></Tooltip>);
@@ -3160,6 +3207,28 @@ describe('Ant Design Solid primitives', () => {
     await waitFor(() => expect(dialog.querySelector('img')).toHaveAttribute('src', '/two.png'));
     fireEvent.click(screen.getByRole('button', { name: 'Close preview' }));
     await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Image preview' })).not.toBeInTheDocument());
+  });
+
+  it('forwards FloatButton attributes, class, style, slots, and ref to stable nodes', () => {
+    let floatRef: FloatButtonRef | undefined;
+    const { container } = render(() => (
+      <FloatButton
+        ref={(value) => { floatRef = value; }}
+        aria-label="Forwarded float"
+        data-action="create"
+        class="shared-tool-button"
+        style={{ opacity: 0.75 }}
+        classNames={{ root: 'float-root', trigger: 'float-trigger' }}
+        styles={{ root: { display: 'inline-flex' }, trigger: { color: 'rgb(1, 2, 3)' } }}
+      />
+    ));
+    const button = screen.getByRole('button', { name: 'Forwarded float' });
+    expect(button).toHaveClass('ads-float-button', 'shared-tool-button', 'float-trigger');
+    expect(button).toHaveAttribute('data-action', 'create');
+    expect(button).toHaveAttribute('type', 'button');
+    expect(button).toHaveStyle({ opacity: '0.75', color: 'rgb(1, 2, 3)' });
+    expect(container.querySelector('.float-root')).toContainElement(button);
+    expect(floatRef?.nativeElement).toBe(button);
   });
 
   it('opens and closes FloatButton groups', async () => {

@@ -1,6 +1,6 @@
 {
   "name": "@idoly/ant-design-solid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Ant Design v6 components for Solid 2",
   "repository": {
     "type": "git",
@@ -15,7 +15,8 @@
     "**/*.css"
   ],
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md"
   ],
   "main": "./dist/ssr/index.js",
   "module": "./dist/index.js",
@@ -28,10 +29,9 @@
       "import": "./dist/ssr/index.js",
       "default": "./dist/ssr/index.js"
     },
-    "./styles.css": "./dist/ant-design-solid.css",
-    "./reset.css": "./dist/ant-design-solid.css",
-    "./dist/reset.css": "./dist/ant-design-solid.css",
-    "./style": "./dist/ant-design-solid.css",
+    "./base.css": "./dist/styles/base.css",
+    "./*/style": "./dist/styles/*.css",
+    "./*/style.css": "./dist/styles/*.css",
     "./back-top": {
       "types": "./dist/entries/back-top.d.ts",
       "browser": "./dist/entries/back-top.js",
@@ -70,7 +70,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite build --config vite.locale.config.ts && vite build --config vite.ssr.config.ts && node scripts/generate-ssr-entries.mjs && tsc -p tsconfig.build.json && node scripts/fix-declaration-specifiers.mjs",
+    "build": "vite build && node scripts/generate-component-styles.mjs && vite build --config vite.locale.config.ts && vite build --config vite.ssr.config.ts && tsc -p tsconfig.build.json && node scripts/fix-declaration-specifiers.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:strict": "node scripts/check-solid-diagnostics.mjs",
@@ -85,6 +85,7 @@
     "prepublishOnly": "npm run check && npm run check:package",
     "audit:antd": "node scripts/audit-antd.mjs 6.5.2",
     "tokens:update": "node scripts/generate-antd-token-inventory.mjs",
+    "styles:update": "node scripts/generate-component-styles.mjs",
     "audit:tokens": "node scripts/generate-antd-token-inventory.mjs --check"
   },
   "peerDependencies": {
@@ -106,11 +107,14 @@
     "@playwright/test": "^1.62.0",
     "@solidjs/testing-library": "^1.0.0-beta.2",
     "@solidjs/web": "2.0.0-beta.29",
+    "@tailwindcss/node": "^4.3.3",
+    "@tailwindcss/oxide": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/qrcode": "^1.5.6",
     "babel-preset-solid": "2.0.0-beta.29",
     "jsdom": "^27.4.0",
+    "postcss": "^8.5.25",
     "solid-js": "2.0.0-beta.29",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
@@ -119,7 +123,7 @@
     "vitest": "^4.1.0"
   },
   "engines": {
-    "node": ">=24"
+    "node": ">=20.19.0"
   },
   "keywords": [
     "ant-design",

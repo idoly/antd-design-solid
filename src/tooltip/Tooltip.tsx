@@ -26,9 +26,13 @@ export type TooltipSemanticName = 'root' | 'container' | 'arrow';
 export type TooltipSemanticClassNames = Partial<Record<TooltipSemanticName, string>>;
 export type TooltipSemanticStyles = Partial<Record<TooltipSemanticName, JSX.CSSProperties>>;
 
+export interface TooltipTriggerProps extends JSX.HTMLAttributes<HTMLElement> {
+  ref: (element: HTMLElement) => void;
+}
+
 export interface TooltipProps extends Omit<JSX.HTMLAttributes<HTMLSpanElement>, 'title' | 'content' | 'children'> {
   title?: JSX.Element;
-  children: JSX.Element;
+  children?: JSX.Element;
   placement?: Placement;
   open?: boolean;
   defaultOpen?: boolean;
@@ -39,6 +43,7 @@ export interface TooltipProps extends Omit<JSX.HTMLAttributes<HTMLSpanElement>, 
   trigger?: 'hover' | 'focus' | 'click' | readonly ('hover' | 'focus' | 'click')[];
   getPopupContainer?: (trigger: HTMLElement) => HTMLElement;
   overlayClass?: string;
+  triggerRender?: (props: TooltipTriggerProps) => JSX.Element;
   onOpenChange?: (open: boolean) => void;
   classNames?: TooltipSemanticClassNames;
   styles?: TooltipSemanticStyles;
@@ -57,7 +62,7 @@ export function Tooltip(inputProps: TooltipProps) {
   const [internalOpen, setInternalOpen] = createSignal(Boolean(props.defaultOpen), { ownedWrite: true });
   const uid = createUniqueId();
   const tooltipId = `${uid}-tooltip`;
-  let triggerRef: HTMLSpanElement | undefined;
+  let triggerRef: HTMLElement | undefined;
   let popupRef: HTMLDivElement | undefined;
   let arrowRef: HTMLSpanElement | undefined;
   let openTimer: ReturnType<typeof setTimeout> | undefined;
@@ -65,7 +70,7 @@ export function Tooltip(inputProps: TooltipProps) {
   const others = omit(
     props,
     'title', 'children', 'placement', 'open', 'defaultOpen', 'mouseEnterDelay',
-    'mouseLeaveDelay', 'color', 'zIndex', 'trigger', 'getPopupContainer', 'overlayClass',
+    'mouseLeaveDelay', 'color', 'zIndex', 'trigger', 'getPopupContainer', 'overlayClass', 'triggerRender',
     'onOpenChange', 'classNames', 'styles', 'class', 'aria-describedby',
   );
   const isOpen = () => Boolean(props.title) && (props.open ?? internalOpen());
@@ -99,6 +104,20 @@ export function Tooltip(inputProps: TooltipProps) {
     props.onOpenChange?.(false);
   });
   onCleanup(() => { clearTimers(); unregisterUnique?.(); });
+
+  const triggerProps = (): TooltipTriggerProps => ({
+    ...others,
+    ref: (element) => { triggerRef = element; },
+    class: ['ads-tooltip-trigger', props.class].filter(Boolean).join(' '),
+    get 'aria-describedby'() { return isOpen() ? tooltipId : props['aria-describedby']; },
+    onPointerEnter: scheduleOpen,
+    onPointerLeave: scheduleClose,
+    onFocusIn: () => { if (hasTrigger('focus')) setOpen(true); },
+    onFocusOut: (event) => {
+      if (hasTrigger('focus') && !event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
+    },
+    onClick: () => { if (hasTrigger('click')) setOpen(!isOpen()); },
+  });
 
   createEffect(
     () => isOpen(),
@@ -147,32 +166,22 @@ export function Tooltip(inputProps: TooltipProps) {
 
   return (
     <>
-      <span
-        {...others}
-        ref={triggerRef}
-        class={['ads-tooltip-trigger inline-flex min-w-0', props.class]}
-        aria-describedby={isOpen() ? tooltipId : props['aria-describedby']}
-        onPointerEnter={scheduleOpen}
-        onPointerLeave={scheduleClose}
-        onFocusIn={() => { if (hasTrigger('focus')) setOpen(true); }}
-        onFocusOut={(event) => {
-          if (hasTrigger('focus') && !event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
-        }}
-        onClick={() => { if (hasTrigger('click')) setOpen(!isOpen()); }}
-      >
-        {props.children}
-      </span>
+      <Show when={props.triggerRender} fallback={<span {...triggerProps()} class={['ads-tooltip-trigger inline-flex min-w-0', props.class]}>{props.children}</span>}>
+        {(renderTrigger) => renderTrigger()(triggerProps())}
+      </Show>
       <Show when={isOpen()}>
         <Portal mount={triggerRef && props.getPopupContainer?.(triggerRef)}>
           <div
             ref={popupRef}
             id={tooltipId}
             role="tooltip"
-            class={['ads-root ads-tooltip ads-tooltip-theme', config.themeScopeClass(), 'fixed z-[1070] max-w-[250px] rounded-control px-2 py-1.5 text-xs leading-5 text-white shadow-popup', props.overlayClass, props.classNames?.root]}
+            class={['ads-root ads-tooltip ads-tooltip-theme', config.themeScopeClass(), 'fixed rounded-control px-2 py-1.5 text-xs leading-5 shadow-popup', props.overlayClass, props.classNames?.root]}
             style={{
               ...tokenToCssVariables(config.theme()),
-              'z-index': props.zIndex,
-              'background-color': props.color ?? 'rgba(0, 0, 0, 0.85)',
+              'z-index': props.zIndex ?? 'var(--ads-tooltip-z-index-popup, 1070)',
+              'max-width': 'var(--ads-tooltip-max-width, 250px)',
+              color: 'var(--ads-tooltip-color-text, #fff)',
+              'background-color': props.color ?? 'var(--ads-tooltip-color-bg, rgba(0, 0, 0, 0.85))',
               'font-family': 'var(--ads-font-family)',
               ...props.styles?.root,
             }}

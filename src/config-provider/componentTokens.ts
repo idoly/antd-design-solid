@@ -15,7 +15,7 @@ export interface ComponentTokenNameMap {
   "Badge": "dotSize" | "indicatorHeight" | "indicatorHeightSM" | "indicatorZIndex" | "paddingInline" | "statusSize" | "textFontSize" | "textFontSizeSM" | "textFontWeight";
   "BorderBeam": never;
   "Breadcrumb": "iconFontSize" | "itemColor" | "lastItemColor" | "linkColor" | "linkHoverColor" | "separatorColor" | "separatorMargin";
-  "Button": "contentFontSize" | "contentFontSizeLG" | "contentFontSizeSM" | "dangerColor" | "dangerShadow" | "dashedBgDisabled" | "defaultActiveBg" | "defaultActiveBorderColor" | "defaultActiveColor" | "defaultBg" | "defaultBgDisabled" | "defaultBorderColor" | "defaultColor" | "defaultGhostBorderColor" | "defaultGhostColor" | "defaultHoverBg" | "defaultHoverBorderColor" | "defaultHoverColor" | "defaultShadow" | "fontWeight" | "ghostBg" | "iconGap" | "linkHoverBg" | "onlyIconSize" | "onlyIconSizeLG" | "onlyIconSizeSM" | "paddingInline" | "paddingInlineLG" | "paddingInlineSM" | "primaryColor" | "primaryShadow" | "solidTextColor" | "textHoverBg" | "textTextActiveColor" | "textTextColor" | "textTextHoverColor";
+  "Button": "contentFontSize" | "contentFontSizeLG" | "contentFontSizeSM" | "dangerColor" | "dangerShadow" | "dashedBgDisabled" | "defaultActiveBg" | "defaultActiveBorderColor" | "defaultActiveColor" | "defaultBg" | "defaultBgDisabled" | "defaultBorderColor" | "defaultColor" | "defaultGhostBorderColor" | "defaultGhostColor" | "defaultHoverBg" | "defaultHoverBorderColor" | "defaultHoverColor" | "defaultShadow" | "fontWeight" | "ghostBg" | "iconGap" | "linkHoverBg" | "onlyIconSize" | "onlyIconSizeLG" | "onlyIconSizeSM" | "paddingInline" | "paddingInlineLG" | "paddingInlineSM" | "primaryColor" | "primaryShadow" | "solidTextColor" | "textHoverBg" | "textTextActiveColor" | "textTextColor" | "textTextHoverColor" | "focusRing" | "activeTransform";
   "Calendar": "fullBg" | "fullPanelBg" | "itemActiveBg" | "miniContentHeight" | "monthControlWidth" | "yearControlWidth";
   "Card": "actionsBg" | "actionsLiMargin" | "bodyPadding" | "bodyPaddingSM" | "extraColor" | "headerBg" | "headerFontSize" | "headerFontSizeSM" | "headerHeight" | "headerHeightSM" | "headerPadding" | "headerPaddingSM" | "tabsMarginBottom";
   "Carousel": "arrowOffset" | "arrowSize" | "dotActiveWidth" | "dotGap" | "dotHeight" | "dotOffset" | "dotWidth";
@@ -31,7 +31,7 @@ export interface ComponentTokenNameMap {
   "Dropdown": "paddingBlock" | "zIndexPopup";
   "Empty": never;
   "Flex": never;
-  "FloatButton": never;
+  "FloatButton": "defaultBg" | "defaultColor" | "defaultBorderColor" | "defaultHoverBg" | "defaultHoverColor" | "defaultHoverBorderColor" | "primaryBg" | "primaryColor" | "primaryHoverBg" | "primaryActiveBg" | "focusRing" | "boxShadow" | "activeTransform";
   "Form": "inlineItemMarginBottom" | "itemMarginBottom" | "labelColonMarginInlineEnd" | "labelColonMarginInlineStart" | "labelColor" | "labelFontSize" | "labelHeight" | "labelRequiredMarkColor" | "verticalLabelMargin" | "verticalLabelPadding";
   "Grid": never;
   "Icon": never;
@@ -69,7 +69,7 @@ export interface ComponentTokenNameMap {
   "Tag": "defaultBg" | "defaultColor" | "solidTextColor";
   "Timeline": "dotBg" | "dotBorderWidth" | "dotSize" | "itemPaddingBottom" | "tailColor" | "tailWidth";
   "TimePicker": never;
-  "Tooltip": "maxWidth" | "zIndexPopup";
+  "Tooltip": "maxWidth" | "zIndexPopup" | "colorBg" | "colorText";
   "Tour": "closeBtnSize" | "primaryNextBtnHoverBg" | "primaryPrevBtnBg" | "zIndexPopup";
   "Transfer": "headerHeight" | "itemHeight" | "itemPaddingBlock" | "listHeight" | "listWidth" | "listWidthLG";
   "Tree": "directoryNodeSelectedBg" | "directoryNodeSelectedColor" | "indentSize" | "nodeHoverBg" | "nodeHoverColor" | "nodeSelectedBg" | "nodeSelectedColor" | "switcherSize" | "titleHeight";
