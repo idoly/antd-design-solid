@@ -2343,6 +2343,7 @@ describe('Ant Design Solid primitives', () => {
     fireEvent.click(trigger);
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toHaveTextContent('Direct trigger');
+    expect(tooltip).toHaveClass('pointer-events-none');
     expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
   });
 
@@ -3220,6 +3221,7 @@ describe('Ant Design Solid primitives', () => {
       <FloatButton
         ref={(value) => { floatRef = value; }}
         aria-label="Forwarded float"
+        tooltip="Create item"
         data-action="create"
         class="shared-tool-button"
         style={{ opacity: 0.75 }}
@@ -3232,7 +3234,10 @@ describe('Ant Design Solid primitives', () => {
     expect(button).toHaveAttribute('data-action', 'create');
     expect(button).toHaveAttribute('type', 'button');
     expect(button).toHaveStyle({ opacity: '0.75', color: 'rgb(1, 2, 3)' });
-    expect(container.querySelector('.float-root')).toContainElement(button);
+    const root = container.querySelector('.float-root');
+    expect(root).toContainElement(button);
+    expect(root).toHaveClass('ads-tooltip-trigger');
+    expect(container.querySelector('.ads-tooltip-trigger')).toBe(root);
     expect(floatRef?.nativeElement).toBe(button);
   });
 

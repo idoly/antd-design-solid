@@ -17,6 +17,7 @@ function ComponentStylesFixture() {
           <Button>Show tooltip</Button>
         </Tooltip>
         <FloatButton aria-label="Split CSS float" icon="+" />
+        <FloatButton.BackTop aria-label="Positioned back top" visibilityHeight={0} duration={0} tooltip="Positioned back top tooltip" classNames={{ root: 'positioned-back-top-root' }} styles={{ root: { position: 'fixed', right: '40px', bottom: '40px' } }} />
       </main>
     </ConfigProvider>
   );

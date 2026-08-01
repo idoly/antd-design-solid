@@ -13,9 +13,21 @@ test('renders component-level CSS without the full stylesheet', async ({ page })
   await expect(floatButton).toHaveCSS('width', '40px');
   await expect(floatButton).toHaveCSS('height', '40px');
 
+  const backTop = page.getByRole('button', { name: 'Positioned back top' });
+  await backTop.hover();
+  const backTopTooltip = page.getByRole('tooltip', { name: 'Positioned back top tooltip' });
+  await expect(backTopTooltip).toBeVisible();
+  await expect(backTopTooltip).toHaveCSS('pointer-events', 'none');
+  const [backTopBox, backTopTooltipBox] = await Promise.all([backTop.boundingBox(), backTopTooltip.boundingBox()]);
+  expect(backTopBox).not.toBeNull();
+  expect(backTopTooltipBox).not.toBeNull();
+  expect(backTopTooltipBox!.x + backTopTooltipBox!.width).toBeLessThan(backTopBox!.x);
+  expect(Math.abs(backTopTooltipBox!.y + backTopTooltipBox!.height / 2 - (backTopBox!.y + backTopBox!.height / 2))).toBeLessThan(2);
+
   await page.getByRole('button', { name: 'Show tooltip' }).click();
-  await expect(page.getByRole('tooltip')).toHaveText('Split CSS tooltip');
-  await expect(page.getByRole('tooltip')).toHaveCSS('position', 'fixed');
+  const splitTooltip = page.getByRole('tooltip', { name: 'Split CSS tooltip' });
+  await expect(splitTooltip).toHaveText('Split CSS tooltip');
+  await expect(splitTooltip).toHaveCSS('position', 'fixed');
 
   expect(await page.evaluate(() => ({
     bodyMargin: getComputedStyle(document.body).margin,

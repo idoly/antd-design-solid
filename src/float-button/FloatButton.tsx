@@ -2,7 +2,7 @@ import { createEffect, createSignal, merge, omit, Show } from 'solid-js';
 import type { JSX } from '@solidjs/web';
 import { CloseIcon, PlusIcon, UpIcon } from '../_internal/icons';
 import { Badge, type BadgeProps } from '../badge';
-import { Tooltip } from '../tooltip';
+import { Tooltip, type TooltipTriggerProps } from '../tooltip';
 import type { FloatButtonRef } from '../compat-types';
 import { useConfig } from '../config-provider';
 
@@ -62,8 +62,8 @@ function FloatButtonRoot(inputProps: FloatButtonProps) {
   const control = () => props.href
     ? <a {...buttonProps as JSX.AnchorHTMLAttributes<HTMLAnchorElement>} ref={(element) => { nativeElement = element; }} href={props.href} target={props.target} data-type={props.type} class={triggerClass()} style={{ ...(typeof props.style === 'object' ? props.style : {}), ...props.styles?.trigger }} onClick={props.onClick}>{content()}</a>
     : <button {...buttonProps} ref={(element) => { nativeElement = element; }} type="button" data-type={props.type} class={triggerClass()} style={{ ...(typeof props.style === 'object' ? props.style : {}), ...props.styles?.trigger }} onClick={props.onClick}>{content()}</button>;
-  const root = () => <span class={['ads-float-button-root inline-flex', props.classNames?.root]} style={props.styles?.root}><Badge {...props.badge}>{control()}</Badge></span>;
-  return props.tooltip ? <Tooltip title={props.tooltip} placement="left" trigger={['hover', 'focus']}>{root()}</Tooltip> : root();
+  const root = (tooltipTriggerProps?: TooltipTriggerProps) => <span {...tooltipTriggerProps} class={['ads-float-button-root inline-flex', tooltipTriggerProps?.class, props.classNames?.root]} style={props.styles?.root}><Badge {...props.badge}>{control()}</Badge></span>;
+  return props.tooltip ? <Tooltip title={props.tooltip} placement="left" trigger={['hover', 'focus']} triggerRender={root} /> : root();
 }
 
 export function FloatButtonGroup(inputProps: FloatButtonGroupProps) {

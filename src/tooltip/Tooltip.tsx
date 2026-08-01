@@ -180,7 +180,7 @@ export function Tooltip(inputProps: TooltipProps) {
             ref={popupRef}
             id={tooltipId}
             role="tooltip"
-            class={['ads-root ads-tooltip ads-tooltip-theme', config.themeScopeClass(), 'fixed rounded-control px-2 py-1.5 text-xs leading-5 shadow-popup', props.overlayClass, props.classNames?.root]}
+            class={['ads-root ads-tooltip ads-tooltip-theme', config.themeScopeClass(), 'pointer-events-none fixed rounded-control px-2 py-1.5 text-xs leading-5 shadow-popup', props.overlayClass, props.classNames?.root]}
             style={{
               ...tokenToCssVariables(config.theme()),
               'z-index': props.zIndex ?? 'var(--ads-tooltip-z-index-popup, 1070)',
@@ -190,8 +190,6 @@ export function Tooltip(inputProps: TooltipProps) {
               'font-family': 'var(--ads-font-family)',
               ...props.styles?.root,
             }}
-            onPointerEnter={() => { if (closeTimer) clearTimeout(closeTimer); }}
-            onPointerLeave={scheduleClose}
           >
             <div class={props.classNames?.container} style={props.styles?.container}>{props.title}</div>
             <span ref={arrowRef} aria-hidden="true" class={['absolute size-1.5 rotate-45 bg-[inherit]', props.classNames?.arrow]} style={props.styles?.arrow} />

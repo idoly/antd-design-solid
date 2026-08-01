@@ -2,6 +2,13 @@
 
 Notable changes to `@idoly/ant-design-solid` are documented here. Until the public API stabilizes, minor and patch releases may contain compatibility changes called out in this file.
 
+## Unreleased
+
+### Fixed
+
+- Anchor FloatButton and BackTop tooltips directly to their semantic root so fixed-positioned controls keep correct tooltip placement without an extra trigger wrapper.
+- Keep non-interactive Tooltip popups from intercepting pointer input intended for their trigger or nearby controls.
+
 ## 0.2.4 - 2026-08-01
 
 ### Fixed

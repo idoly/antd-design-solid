@@ -183,7 +183,9 @@ Tooltip keeps its compatibility wrapper for ordinary children. Use `triggerRende
 />
 ```
 
-Spread all supplied trigger props so positioning, ARIA linkage, hover/focus/click handling, and the native ref remain attached.
+Spread all supplied trigger props so positioning, ARIA linkage, hover/focus/click handling, and the native ref remain attached. FloatButton and BackTop apply this direct-root behavior internally, including when their semantic root uses fixed positioning.
+
+Tooltip popups are non-interactive and do not receive pointer input, so they cannot cover or block their trigger. Use Popover when the floating content contains links, buttons, or other interactive controls.
 
 ## React antd differences
 
