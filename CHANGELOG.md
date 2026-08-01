@@ -2,6 +2,12 @@
 
 Notable changes to `@idoly/ant-design-solid` are documented here. Until the public API stabilizes, minor and patch releases may contain compatibility changes called out in this file.
 
+## 0.2.3 - 2026-08-01
+
+### Changed
+
+- Keep large-component DOM and behavior checks in every unit-test run while moving absolute jsdom render-time assertions to the explicit `npm run test:performance` benchmark.
+
 ## 0.2.2 - 2026-08-01
 
 ### Changed

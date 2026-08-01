@@ -1,6 +1,6 @@
 {
   "name": "@idoly/ant-design-solid",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Ant Design v6 components for Solid 2",
   "repository": {
     "type": "git",
@@ -74,6 +74,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:strict": "node scripts/check-solid-diagnostics.mjs",
+    "test:performance": "COMPONENT_TEST_ENFORCE_PERFORMANCE_BUDGET=1 vitest run",
     "test:watch": "vitest",
     "test:e2e": "if [ -n \"$CI\" ]; then playwright test --workers=1; else playwright test --project=desktop --project=mobile --workers=1; fi",
     "test:e2e:system": "podman run --rm --ipc=host -v \"$PWD:/work:Z\" -w /work -e CI=1 -e PLAYWRIGHT_SKIP_SCREENSHOTS=1 -e PLAYWRIGHT_ENFORCE_PERFORMANCE_BUDGET=1 mcr.microsoft.com/playwright:v1.62.0-noble npx playwright test --project=desktop --project=mobile --project=firefox --workers=1",
