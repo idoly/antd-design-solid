@@ -1,5 +1,5 @@
 import { arrow, autoUpdate, computePosition, flip, offset, shift, type Placement } from '@floating-ui/dom';
-import { createContext, createEffect, createSignal, createUniqueId, merge, omit, onCleanup, Show, useContext } from 'solid-js';
+import { createContext, createEffect, createMemo, createSignal, createUniqueId, merge, omit, onCleanup, Show, useContext } from 'solid-js';
 import { Portal } from '@solidjs/web';
 import type { JSX } from '@solidjs/web';
 import { tokenToCssVariables } from '../config-provider/theme';
@@ -164,11 +164,16 @@ export function Tooltip(inputProps: TooltipProps) {
     },
   );
 
+  const triggerNode = createMemo(() => {
+    const renderTrigger = props.triggerRender;
+    return renderTrigger
+      ? renderTrigger(triggerProps())
+      : <span {...triggerProps()} class={['ads-tooltip-trigger inline-flex min-w-0', props.class]}>{props.children}</span>;
+  });
+
   return (
     <>
-      <Show when={props.triggerRender} fallback={<span {...triggerProps()} class={['ads-tooltip-trigger inline-flex min-w-0', props.class]}>{props.children}</span>}>
-        {(renderTrigger) => renderTrigger()(triggerProps())}
-      </Show>
+      {triggerNode()}
       <Show when={isOpen()}>
         <Portal mount={triggerRef && props.getPopupContainer?.(triggerRef)}>
           <div

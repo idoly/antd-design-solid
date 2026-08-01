@@ -746,7 +746,7 @@ describe('Ant Design Solid primitives', () => {
     function TokenReader() { const result = theme.useToken(); return <span>{result.token.colorPrimary}</span>; }
     render(() => <ConfigProvider theme={{ colorPrimary: '#abcdef' }}><TokenReader /></ConfigProvider>);
     expect(screen.getByText('#abcdef')).toBeInTheDocument();
-    expect(version).toBe('0.2.3');
+    expect(version).toBe('0.2.4');
   });
 
   it('switches tabs with click and keyboard while skipping disabled items', async () => {

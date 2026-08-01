@@ -2,6 +2,12 @@
 
 Notable changes to `@idoly/ant-design-solid` are documented here. Until the public API stabilizes, minor and patch releases may contain compatibility changes called out in this file.
 
+## 0.2.4 - 2026-08-01
+
+### Fixed
+
+- Render wrapper-free Tooltip triggers inside a tracked memo so Solid 2 updates reactive trigger renderers without `STRICT_READ_UNTRACKED` diagnostics.
+
 ## 0.2.3 - 2026-08-01
 
 ### Changed
